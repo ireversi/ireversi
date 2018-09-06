@@ -4,6 +4,9 @@
   "description": "My breathtaking Nuxt.js project",
   "author": "m_mitsuhide",
   "private": true,
+  "engines": {
+    "node": ">=8.11"
+  },
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
