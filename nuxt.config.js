@@ -1,4 +1,5 @@
 const pkg = require('./package');
+require('dotenv').config();
 
 module.exports = {
   mode: 'spa',
@@ -43,8 +44,12 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
+    baseURL: process.env.AXIOS_BASE,
   },
 
+  env: {
+    KIDO_PATH: process.env.KIDO_PATH,
+  },
   /*
   ** Build configuration
   */
