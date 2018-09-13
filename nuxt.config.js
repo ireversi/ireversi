@@ -49,6 +49,7 @@ module.exports = {
 
   env: {
     KIDO_PATH: process.env.KIDO_PATH,
+    MATSUDA_PATH: process.env.MATSUDA_PATH,
   },
   /*
   ** Build configuration
