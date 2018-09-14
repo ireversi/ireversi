@@ -26,4 +26,14 @@ module.exports = {
       },
     },
   ],
+  globals: {
+    // Jest's variables
+    jest: false,
+    jestTimeout: false,
+    beforeAll: false,
+    afterAll: false,
+    test: false,
+    it: false,
+    expect: false,
+  },
 };
