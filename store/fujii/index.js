@@ -1,16 +1,15 @@
 export const state = () => ({
-  counter: 0,
   mypath: process.env.FUJII_PATH,
   board: null,
   number: 4,
-  currentUser: 1,
+  currentUser: 2,
   grid: 21,
+  xHalf: 0,
+  yHalf: 0,
 });
 
+
 export const mutations = {
-  increment(state) {
-    state.counter += 1;
-  },
   setBoard(state, board) {
     state.board = board;
   },
@@ -19,6 +18,21 @@ export const mutations = {
   },
   zoomin(state) {
     state.grid -= 2;
+  },
+  changeCurrentUser(state, n) {
+    state.currentUser = n;
+  },
+  moveRight(state) {
+    state.xHalf += 1;
+  },
+  moveLeft(state) {
+    state.xHalf -= 1;
+  },
+  moveUp(state) {
+    state.yHalf += 1;
+  },
+  moveDown(state) {
+    state.yHalf -= 1;
   },
 };
 
