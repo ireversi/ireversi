@@ -48,6 +48,7 @@ module.exports = {
   },
 
   env: {
+    FUJII_PATH: process.env.FUJII_PATH,
     KIDO_PATH: process.env.KIDO_PATH,
     MATSUDA_PATH: process.env.MATSUDA_PATH,
   },
