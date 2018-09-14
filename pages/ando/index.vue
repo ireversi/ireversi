@@ -8,13 +8,12 @@
           :key="i"
           :style="`width: ${100 / grid}%`"
         >
-          <!-- <div @click="send(i)"> -->
           <div @click="changeColor(i); send(i)">
             <div
               class="piece"
               v-if="getUserId(i)"
               :style="judgeCurrentUserPiece(i)
-                ? `background-color: ${colors[i]}; color: #444`
+                ? `background-color: ${colors[i] || '#fff'}; color: #444`
                 : 'background-color: #444; color: #ccc'"
             >
               {{ getUserId(i).userId || getUserId(i).userid || getUserId(i).user_id }}
@@ -37,8 +36,6 @@
       @select="changeColorIndex"
     />
   </div>
-                <!-- :style="`
-                background-color: ${colors[i]}`" -->
 </template>
 
 <script>
@@ -51,45 +48,25 @@ export default {
     UserSelector,
     ColorPalette,
   },
-  // async asyncData({ app }) {
-  //   const mypath = process.env.ANDO_PATH;
-  //   const board = await app.$axios.$get(`${mypath}/board`);
-  //   // console.log(board)
-  //   return {
-  //     mypath,
-  //     board,
-  //   };
-  // },
   async fetch({ store }) {
     await store.dispatch('ando/index/getBoard');
   },
-  data() {
-    const grid = 31;
-    const colors = [];
-
-    for (let i = 0; i < grid ** 2; i += 1) {
-      colors.push('#fff');
-    }
-
-    return {
-      grid,
-      colors,
-      colorList: ['#f00', '#0f0', '#00f', '#fff'],
-      currentColorIndex: 2,
-      number: 16,
-      currentUser: 1,
-    };
-  },
   mounted() {
-    setInterval(async () => {
-      // this.board = await this.$axios.$get(`${this.mypath}/board`);
-    }, 1000);
+    // setInterval(async () => {
+    //   this.board = await this.$axios.$get(`${this.mypath}/board`);
+    // }, 1000);
   },
   computed: {
     ...mapState('ando/index', [
       'counter',
       'mypath',
       'board',
+      'grid',
+      'number',
+      'currentUser',
+      'colors',
+      'colorList',
+      'currentColorIndex',
     ]),
     getUserId() {
       return function test(i) {
@@ -106,7 +83,12 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('ando/index', ['increment']),
+    ...mapMutations('ando/index', [
+      'increment',
+      'changeCurrentUser',
+      'changeColorIndex',
+      'changeColor',
+    ]),
     ...mapActions('ando/index', ['putPiece']),
     async send(i) {
       const x = ((i - 1) % this.grid) - Math.floor(this.grid / 2);
@@ -119,25 +101,7 @@ export default {
       params.append('userid', this.currentUser);
       params.append('user_id', this.currentUser);
 
-      // this.board = await this.$axios.$post(`${this.mypath}/piece`, params, {
-      //   headers: {
-      //     'Content-Type': 'application/x-www-form-urlencoded',
-      //   },
-      // });
       this.putPiece(params);
-    },
-    changeColor(i) {
-      // this.colors[i] = '#f00'; // 色変わらない→this直下までしか差分を監視していない
-      const newColors = [...this.colors];
-      newColors[i] = this.colorList[this.currentColorIndex];
-      this.colors = newColors;
-    },
-    changeCurrentUser(index) {
-      this.currentUser = index;
-    },
-    changeColorIndex(index) {
-      // console.log(index);
-      this.currentColorIndex = index;
     },
   },
 };

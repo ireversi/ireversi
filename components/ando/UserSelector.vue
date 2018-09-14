@@ -19,16 +19,10 @@ export default {
   },
   methods: {
     changeCurrent(n) {
-      console.log(n);
       this.$emit('change', n);
     },
   },
 };
-
-// :style="`
-//                 backgroud: #ccc;
-//                 border-color: ${setBorderColor(n, current)}
-//             `"
 </script>
 
 <style scoped>
