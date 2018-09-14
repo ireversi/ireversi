@@ -20,7 +20,7 @@
       </div>
     </div>
     <UserSelector
-     :current="currentUser"
+     :currentUser="currentUser"
      :number="number"
      @change="changeCurrentUser"
     />
@@ -38,35 +38,44 @@
 <script>
 import UserSelector from '~/components/kai/UserSelector.vue';
 import ZoomSelector from '~/components/kai/ZoomSelector.vue';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   components: {
     UserSelector,
     ZoomSelector,
   },
-  async asyncData({ app }) {
-    const mypath = process.env.KAI_PATH;
-    const board = await app.$axios.$get(`${mypath}/board`);
-    // const move = [5, ];
-    return {
-      mypath,
-      board,
-      number: 16,
-      currentUser: 13,
-      // move,
-    };
+  fetch({ store }) {
+    return store.dispatch('kai/index/getBoard');
   },
-  data() {
-    const grid = 31;
-    const number = 10;
-    const zoomList = [-4, -2, 2, 4];
-    return {
-      grid,
-      number,
-      zoomList,
-    };
+  methods: {
+    ...mapMutations('kai/index', ['changeCurrentUser', 'zoomGrid']),
+    ...mapActions('kai/index', ['postPiece']),
+    async send(i) {
+      const half = Math.floor(this.grid / 2);
+      const x = ((i - 1) % this.grid) - half;
+      const y = half - Math.floor((i - 1) / this.grid);
+
+      const params = new URLSearchParams();
+      params.append('x', x);
+      params.append('y', y);
+      params.append('userId', this.currentUser);
+
+      this.postPiece(params);
+    },
+    // selectMove(n) {
+    //   this.
+    // },
   },
   computed: { // computed: データによって一意の値を返すもの
+    ...mapState('kai/index', [
+      'mypath',
+      'board',
+      'number',
+      'grid',
+      'currentUser',
+      'zoomList',
+    ]),
     getUserId() {
       return (i) => {
         const half = Math.floor(this.grid / 2);
@@ -141,37 +150,16 @@ export default {
       };
     },
   },
-  methods: {
-    async send(i) {
-      const half = Math.floor(this.grid / 2);
-      const x = ((i - 1) % this.grid) - half;
-      const y = half - Math.floor((i - 1) / this.grid);
-
-      const params = new URLSearchParams();
-      params.append('x', x);
-      params.append('y', y);
-      params.append('userId', this.currentUser);
-
-      this.board = await this.$axios.$post(`${this.mypath}/playing`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
-    },
-    changeCurrentUser(n) {
-      this.currentUser = n;
-    },
-    zoomGrid(n) {
-      this.grid = this.grid + n;
-    },
-    // selectMove(n) {
-    //   this.
-    // },
-  },
 };
 </script>
 
 <style scoped>
+.test-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  padding: 10px 30px;
+}
 .main {
   position: fixed;
   top: 0;
