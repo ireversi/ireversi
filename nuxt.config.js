@@ -47,6 +47,8 @@ module.exports = {
     baseURL: process.env.AXIOS_BASE,
   },
   env: {
+    FUJII_PATH: process.env.FUJII_PATH,
+    KIDO_PATH: process.env.KIDO_PATH,
     KAI_PATH: process.env.KAI_PATH,
   },
   /*
