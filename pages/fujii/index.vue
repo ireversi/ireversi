@@ -22,19 +22,22 @@
       <UserSelector
         :number="number"
         :current="currentUser"
-        @change="changeCurrentUser"/>
+      />
       <div class="users">
         <div
           v-for="n in number"
           :key="n"
           :style="currentUser === n ? `background: #f77` : ''"
-          @click="currentUser = n"
+          @click="changeCurrentUser(n)"
         >{{ n }}</div>
       </div>
 
-      <button class="test-btn" @click="increment">{{ counter }}</button>
       <button class="minus-btn" @click="zoomout"> - </button>
       <button class="plus-btn" @click="zoomin"> + </button>
+      <button class="btn up" @click="moveUp"> ↑ </button>
+      <button class="btn right" @click="moveRight"> → </button>
+      <button class="btn down" @click="moveDown"> ↓ </button>
+      <button class="btn left" @click="moveLeft"> ← </button>
     </div>
       <!-- <div>{{ JSON.stringify(board) }}</div> -->
 </template>
@@ -65,12 +68,14 @@ export default {
       'number',
       'currentUser',
       'grid',
+      'xHalf',
+      'yHalf',
     ]),
     getUserId() {
       return (i) => {
         const half = Math.floor(this.grid / 2);
-        const x = ((i - 1) % this.grid) - half;
-        const y = half - Math.floor((i - 1) / (this.grid));
+        const x = ((i - 1) % this.grid) - half + this.xHalf;
+        const y = half + this.yHalf - Math.floor((i - 1) / (this.grid));
         return (this.board.find(el => el.x === x && el.y === y) || {}).userId;
       };
     },
@@ -84,8 +89,8 @@ export default {
         ];
 
         const half = Math.floor(this.grid / 2);
-        const x = ((i - 1) % this.grid) - half;
-        const y = half - Math.floor((i - 1) / (this.grid));
+        const x = ((i - 1) % this.grid) - half + this.xHalf;
+        const y = half + this.yHalf - Math.floor((i - 1) / (this.grid));
         const targetUser = this.currentUser;
         const updatePieces = []; // めくるための空の配列
 
@@ -144,12 +149,12 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('fujii/index', ['increment', 'zoomout', 'zoomin']),
+    ...mapMutations('fujii/index', ['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown']),
     ...mapActions('fujii/index', ['putPiece']),
     async send(i) {
       const half = Math.floor(this.grid / 2);
-      const x = ((i - 1) % this.grid) - half;
-      const y = half - Math.floor((i - 1) / (this.grid));
+      const x = ((i - 1) % this.grid) - half + this.xHalf;
+      const y = half + this.yHalf - Math.floor((i - 1) / (this.grid));
 
       const params = new URLSearchParams();
       params.append('x', x);
@@ -158,20 +163,39 @@ export default {
 
       this.putPiece(params);
     },
-    changeCurrentUser(n) {
-      this.currentUser = n;
-    },
   },
 };
 </script>
 
 <style scoped>
-.test-btn {
+.btn {
   position:fixed;
+}
+
+.up {
+  top: 20px;
+  left: 50%;
+  padding: 10px 30px;
+}
+
+.left {
+  top: 50%;
+  left: 20px;
+  padding: 30px 10px;
+}
+
+.down {
   bottom: 20px;
   left: 50%;
   padding: 10px 30px;
 }
+
+.right {
+  top: 50%;
+  right: 20px;
+  padding: 30px 10px;
+}
+
 .minus-btn {
   position:fixed;
   bottom: 20px;
