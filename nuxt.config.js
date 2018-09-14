@@ -49,6 +49,7 @@ module.exports = {
 
   env: {
     KIDO_PATH: process.env.KIDO_PATH,
+    KIMURA_PATH: process.env.KIMURA_PATH,
   },
   /*
   ** Build configuration
