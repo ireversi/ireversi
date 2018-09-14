@@ -31,40 +31,41 @@
           @click="currentUser = n"
         >{{ n }}</div>
       </div>
+
+      <button class="test-btn" @click="increment">{{ counter }}</button>
+      <button class="minus-btn" @click="zoomout"> - </button>
+      <button class="plus-btn" @click="zoomin"> + </button>
     </div>
       <!-- <div>{{ JSON.stringify(board) }}</div> -->
 </template>
 
 <script>
 import UserSelector from '~/components/fujii/UserSelector.vue';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   components: {
     UserSelector,
   },
-  async asyncData({ app }) {
-    const mypath = process.env.FUJII_PATH;
-    const board = await app.$axios.$get(`${mypath}/board`);
-    return {
-      mypath,
-      board,
-      number: 8,
-      currentUser: 2,
-    };
-  },
-  data() {
-    const grid = 21;
-    return {
-      grid,
-    };
+
+  async fetch({ store }) {
+    await store.dispatch('fujii/index/getBoard');
   },
 
   mounted() {
     setInterval(async () => {
-      this.board = await this.$axios.$get(`${this.mypath}/board`);
+      // this.board = await this.$axios.$get(`${this.mypath}/board`);
     }, 1000);
   },
   computed: {
+    ...mapState('fujii/index', [
+      'counter',
+      'mypath',
+      'board',
+      'number',
+      'currentUser',
+      'grid',
+    ]),
     getUserId() {
       return (i) => {
         const half = Math.floor(this.grid / 2);
@@ -138,12 +139,13 @@ export default {
         if (updatePieces.length > 0 && !exist) {
           return '#ff0';
         }
-
         return '';
       };
     },
   },
   methods: {
+    ...mapMutations('fujii/index', ['increment', 'zoomout', 'zoomin']),
+    ...mapActions('fujii/index', ['putPiece']),
     async send(i) {
       const half = Math.floor(this.grid / 2);
       const x = ((i - 1) % this.grid) - half;
@@ -154,11 +156,7 @@ export default {
       params.append('y', y);
       params.append('userId', this.currentUser);
 
-      this.board = await this.$axios.$post(`${this.mypath}/playing`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
+      this.putPiece(params);
     },
     changeCurrentUser(n) {
       this.currentUser = n;
@@ -168,6 +166,24 @@ export default {
 </script>
 
 <style scoped>
+.test-btn {
+  position:fixed;
+  bottom: 20px;
+  left: 50%;
+  padding: 10px 30px;
+}
+.minus-btn {
+  position:fixed;
+  bottom: 20px;
+  left: 70%;
+  padding: 10px 30px;
+}
+.plus-btn {
+  position:fixed;
+  bottom: 20px;
+  left: 80%;
+  padding: 10px 30px;
+}
 .main {
   position:fixed;
   top:0;
