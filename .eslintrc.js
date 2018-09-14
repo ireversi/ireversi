@@ -21,8 +21,15 @@ module.exports = {
     {
       files: ['*.{js,vue}'],
       rules: {
-        'import/no-unresolved': false,
-        'import/no-extraneous-dependencies': false,
+        'import/no-unresolved': 0,
+        'import/no-extraneous-dependencies': 0,
+      },
+    },
+    {
+      files: ['store/**/*.js'],
+      rules: {
+        'no-shadow': 0,
+        'no-param-reassign': 0,
       },
     },
     {
