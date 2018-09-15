@@ -43,13 +43,13 @@ module.exports = {
   ** Axios module configuration
   */
   axios: {
-    // See https://github.com/nuxt-community/axios-module#options
+  // See https://github.com/nuxt-community/axios-module#options
     baseURL: process.env.AXIOS_BASE,
   },
-
   env: {
     FUJII_PATH: process.env.FUJII_PATH,
     KIDO_PATH: process.env.KIDO_PATH,
+    KAI_PATH: process.env.KAI_PATH,
     ANDO_PATH: process.env.ANDO_PATH,
   },
   /*

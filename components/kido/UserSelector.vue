@@ -15,7 +15,6 @@ export default {
   props: ['number', 'current'],
   methods: {
     changeCurrent(n) {
-      // console.log(n);
       this.$emit('change', n);
     },
   },
