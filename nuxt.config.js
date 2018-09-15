@@ -50,6 +50,7 @@ module.exports = {
     FUJII_PATH: process.env.FUJII_PATH,
     KIDO_PATH: process.env.KIDO_PATH,
     KAI_PATH: process.env.KAI_PATH,
+    ANDO_PATH: process.env.ANDO_PATH,
   },
   /*
   ** Build configuration
