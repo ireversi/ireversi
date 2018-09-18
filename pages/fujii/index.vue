@@ -160,7 +160,6 @@ export default {
       params.append('x', x);
       params.append('y', y);
       params.append('userId', this.currentUser);
-
       this.putPiece(params);
     },
   },

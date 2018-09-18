@@ -1,7 +1,7 @@
 export const state = () => ({
   mypath: process.env.FUJII_PATH,
   board: null,
-  number: 8,
+  number: 4,
   currentUser: 2,
   grid: 21,
   xHalf: 0,
@@ -50,8 +50,12 @@ export const actions = {
     commit('setBoard', board);
   },
   async resetGame({ commit, state }) {
-    if (window.confirm('本当にいいんですね？')) {
-      await this.$axios.$delete(`${state.mypath}/playing`);
+    const keyword = prompt('キーを入れて下さい');
+
+    if (keyword === 'deleteAll') {
+      const params = new URLSearchParams();
+      params.append('keyword', keyword);
+      await this.$axios.$delete(`${state.mypath}/playing`, { data: params });
       const board = await this.$axios.$get(`${state.mypath}/board`);
       commit('setBoard', board);
     }
