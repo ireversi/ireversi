@@ -30,18 +30,17 @@
 
 <script>
 import UserSelector from '~/components/matsuda/UserSelector.vue';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   components: {
     UserSelector,
   },
-  async asyncData({ app }) {
-    const mypath = process.env.MATSUDA_PATH;
-    const board = await app.$axios.$get(`${mypath}/board`);
-
+  fetch({ store }) {
+    return store.dispatch('matsuda/index/getBoard');
+  },
+  data() {
     return {
-      mypath,
-      board,
       grid: 29,
       number: 16,
       currentUser: 1,
@@ -53,6 +52,10 @@ export default {
     }, 2000);
   },
   computed: {
+    ...mapState('matsuda/index', [
+      'mypath',
+      'board',
+    ]),
     getUserId() {
       return (i) => {
         const half = Math.floor(this.grid / 2);
@@ -134,6 +137,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions('matsuda/index', ['putPiece']),
     async send(i) {
       const half = Math.floor(this.grid / 2);
       const x = ((i - 1) % this.grid) - half;
@@ -144,11 +148,7 @@ export default {
       params.append('y', y);
       params.append('userid', this.currentUser);
 
-      this.board = await this.$axios.$post(`${this.mypath}/piece`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
+      this.putPiece(params);
     },
     changeCurrentUser(n) {
       this.currentUser = n;

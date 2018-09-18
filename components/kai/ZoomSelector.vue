@@ -1,37 +1,35 @@
 <template>
-  <div class="users">
+  <div class="zoomTab">
     <div
-      v-for="n in number"
-      :key="n"
-      :style="current === n ? 'background: #f77' : ''"
-      @click="changeCurrentUser(n)"
-    > {{ n }}</div>
+     v-for="n in zoomList"
+     :key="n"
+     @click="changeGrid(n)"
+    >{{ n }}</div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['number', 'current'],
+  props: ['zoomList'],
   methods: {
-    changeCurrentUser(n) {
-      this.$emit('change', n);
+    changeGrid(n) {
+      this.$emit('zoomer', n);
     },
   },
 };
 </script>
 
 <style>
-.users {
-  position:fixed;
-  bottom:0;
-  left:0;
+.zoomTab {
+  position: fixed;
+  bottom: 0;
+  right: 0;
   background: #fff;
   width: 100px;
 }
-
-.users > div {
+.zoomTab > div {
   box-sizing: border-box;
-  width: 50px;
+  width: 50%;
   height: 50px;
   border-radius: 5px;
   border: 2px solid #555;
@@ -40,5 +38,8 @@ export default {
   align-items: center;
   font-size: 150%;
   cursor: pointer;
+}
+.zoomTab > div:hover {
+  background: #fff;
 }
 </style>
