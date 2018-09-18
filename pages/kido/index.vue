@@ -14,28 +14,26 @@
         </div>
       </div>
     </div>
+  <ZoomOut :grid='grid' @zoomOut='zoomOut'/>
+  <ZoomIn :grid='grid' @zoomIn='zoomIn'/>
   <UserSelector :number='number' :current='currentUser' @change='changeCurrentUser'/>
   </div>
 </template>
 
 <script>
 import UserSelector from '~/components/kido/UserSelector.vue';
+import ZoomIn from '~/components/kido/ZoomIn.vue';
+import ZoomOut from '~/components/kido/ZoomOut.vue';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   components: {
     UserSelector,
+    ZoomIn,
+    ZoomOut,
   },
-  async asyncData({ app }) {
-    const mypath = process.env.KIDO_PATH;
-    const board = await app.$axios.$get(`${mypath}/board`);
-    // console.log(board);
-    return {
-      mypath,
-      board,
-      grid: 19,
-      number: 8,
-      currentUser: 1,
-    };
+  async fetch({ store }) {
+    await store.dispatch('kido/index/getBoard');
   },
   // mounted() {
   //   setInterval(async () => {
@@ -43,6 +41,13 @@ export default {
   //   }, 1000);
   // },
   computed: {
+    ...mapState('kido/index', [
+      'mypath',
+      'board',
+      'grid',
+      'number',
+      'currentUser',
+    ]),
     getUserId() {
       return (i) => {
         const xaxis = ((i - 1) % this.grid) - (Math.ceil(this.grid / 2)) + 1;
@@ -50,7 +55,8 @@ export default {
         for (let j = 0; j < this.board.length; j += 1) {
           const piece = this.board[j];
           if (piece.x === xaxis && piece.y === yaxis) {
-            return piece.userid;
+            // return piece.userid; // kido
+            return piece.userId; // fujii
           }
         }
         return false;
@@ -58,23 +64,17 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('kido/index', ['changeCurrentUser', 'zoomIn', 'zoomOut']),
+    ...mapActions('kido/index', ['putPiece']),
     async send(i) {
       const xaxis = ((i - 1) % this.grid) - (Math.ceil(this.grid / 2)) + 1;
       const yaxis = ((Math.ceil(this.grid / 2)) - Math.floor((i - 1) / this.grid) + 1);
       const params = new URLSearchParams();
       params.append('x', xaxis);
       params.append('y', yaxis);
-      // params.append('userid', 100);
-      params.append('userid', this.currentUser);
-
-      this.board = await this.$axios.$post(`${this.mypath}/piece`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
-    },
-    changeCurrentUser(n) {
-      this.currentUser = n;
+      params.append('userId', this.currentUser);
+      // this.board = await this.$axios.$post(`${this.mypath}/piece`, params, { // kido
+      this.putPiece(params); // fujii
     },
   },
 };
@@ -129,6 +129,23 @@ export default {
   color: #444;
   font-size:120%;
   font-weight:bold;
+}
+
+.white {
+  background: white;
+  color: #444;
+}
+
+.black {
+  background: black;
+  color: #fff;
+}
+
+.test-btn{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  padding:10px 30px;
 }
 
 </style>
