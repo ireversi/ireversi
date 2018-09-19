@@ -33,13 +33,11 @@
 </template>
 
 <script>
-import ColorPallette from '~/components/kimura/ColorPallette.vue';
 import UserPanel from '~/components/kimura/UserPanel.vue';
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   components: {
-    ColorPallette,
     UserPanel,
   },
   async fetch({ store }) {
