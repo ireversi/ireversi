@@ -12,67 +12,46 @@
             <div
               class="piece"
               v-if="getUserId(i)"
-              :style="`background-color: ${colors[i]}`"
+              :style="`background-color: #fff`"
               >{{ getUserId(i) }}</div>
           </div>
         </div>
       </div>
     </div>
-    <ColorPallette
-      :list="colorList"
-      :current="currentColorIndex"
-      @select="changeColorIndex"
-    />
     <UserPanel
       :list="UserList"
       :current="currentUserIndex"
       @select="changeUserIndex"
     />
+    <button class="test-btn-zoomin" @click="zoomIn">+</button>
+    <button class="test-btn-zoomout" @click="zoomOut">-</button>
   </div>
 </template>
 
 <script>
 import ColorPallette from '~/components/kimura/ColorPallette.vue';
 import UserPanel from '~/components/kimura/UserPanel.vue';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   components: {
     ColorPallette,
     UserPanel,
   },
-
-  async asyncData({ app }) {
-    const mypath = process.env.KIMURA_PATH;
-    const board = await app.$axios.$get(`${mypath}/board`);
-    return {
-      board,
-      mypath,
-    };
-  },
-  data() {
-    const grid = 15;
-    const colors = [];
-    for (let i = 0; i < grid ** 2; i += 1) {
-      colors.push('#fff');
-    }
-
-    const users = [];
-    // for (let i = 0; i < this.board.length; i += 1) {
-
-    // }
-
-    return {
-      grid,
-      colors,
-      colorList: ['#f00', '#0f0', '#00f', '#fff'],
-      currentColorIndex: 1,
-      users,
-      UserList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      currentUserIndex: 1,
-    };
+  async fetch({ store }) {
+    return store.dispatch('kimura/index/getBoard');
   },
 
   computed: {
+    ...mapState('kimura/index', [
+      'counter',
+      'mypath',
+      'board',
+      'grid',
+      'UserList',
+      'colorList',
+      'currentUserIndex',
+    ]),
     getUserId() {
       return (i) => {
         const n = i;
@@ -92,17 +71,14 @@ export default {
     },
   },
   methods: {
-    changeColor(i) {
-      const newColors = [...this.colors];
-      newColors[i] = this.colorList[this.currentColorIndex];
-      this.colors = newColors;
-    },
-    changeColorIndex(index) {
-      this.currentColorIndex = index;
-    },
-    changeUserIndex(index) {
-      this.currentUserIndex = index;
-    },
+    ...mapMutations('kimura/index', [
+      'increment',
+      'setColors',
+      'changeUserIndex',
+      'zoomIn',
+      'zoomOut',
+    ]),
+    ...mapActions('kimura/index', ['putsPiece']),
     async putPiece(i) {
       const n = i;
       const halfLength = Math.floor(this.grid / 2);
@@ -116,17 +92,25 @@ export default {
       params.append('y', y);
       params.append('userId', userId);
 
-      this.board = await this.$axios.$post(`${this.mypath}/piece`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
+      this.putsPiece(params);
     },
   },
 };
 </script>
 
 <style>
+.test-btn-zoomin{
+  position:fixed;
+  bottom:20px;
+  left:48%;
+  padding:10pt;
+}
+.test-btn-zoomout{
+  position:fixed;
+  bottom:20px;
+  left:52%;
+  padding:10pt;
+}
 .main{
   position:fixed;
   top:0;

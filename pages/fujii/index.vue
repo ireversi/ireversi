@@ -6,7 +6,10 @@
             class="cell"
             v-for="i in Math.pow(grid, 2)"
             :key="i"
-            :style="`width: ${100/grid}%; background:${putAbleCheck(i)}`"
+            :style="
+            `width: ${100/grid}%;
+            background:${putAbleCheck(i)};
+            cursor: ${putAbleCheck(i) ? 'pointer' : ''}`"
           >
             <div @click="send(i)">
               <div
@@ -22,59 +25,62 @@
       <UserSelector
         :number="number"
         :current="currentUser"
-        @change="changeCurrentUser"/>
-      <div class="users">
-        <div
-          v-for="n in number"
-          :key="n"
-          :style="currentUser === n ? `background: #f77` : ''"
-          @click="currentUser = n"
-        >{{ n }}</div>
-      </div>
+        @change="changeCurrentUser"
+      />
+
+      <button class="reset btn" @click="resetGame"> reset </button>
+      <button class="minus btn" @click="zoomout"> - </button>
+      <button class="plus btn" @click="zoomin"> + </button>
+      <button class="btn up" @click="moveUp"> ↑ </button>
+      <button class="btn right" @click="moveRight"> → </button>
+      <button class="btn down" @click="moveDown"> ↓ </button>
+      <button class="btn left" @click="moveLeft"> ← </button>
     </div>
       <!-- <div>{{ JSON.stringify(board) }}</div> -->
 </template>
 
 <script>
 import UserSelector from '~/components/fujii/UserSelector.vue';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   components: {
     UserSelector,
   },
-  async asyncData({ app }) {
-    const mypath = process.env.FUJII_PATH;
-    const board = await app.$axios.$get(`${mypath}/board`);
-    return {
-      mypath,
-      board,
-      number: 8,
-      currentUser: 2,
-    };
-  },
-  data() {
-    const grid = 21;
-    return {
-      grid,
-    };
+
+  async fetch({ store }) {
+    await store.dispatch('fujii/index/getBoard');
   },
 
   mounted() {
     setInterval(async () => {
-      this.board = await this.$axios.$get(`${this.mypath}/board`);
+      // this.board = await this.$axios.$get(`${this.mypath}/board`);
     }, 1000);
   },
   computed: {
+    ...mapState('fujii/index', [
+      'counter',
+      'mypath',
+      'board',
+      'number',
+      'currentUser',
+      'grid',
+      'xHalf',
+      'yHalf',
+    ]),
     getUserId() {
       return (i) => {
         const half = Math.floor(this.grid / 2);
-        const x = ((i - 1) % this.grid) - half;
-        const y = half - Math.floor((i - 1) / (this.grid));
+        const x = ((i - 1) % this.grid) - half + this.xHalf;
+        const y = half + this.yHalf - Math.floor((i - 1) / (this.grid));
         return (this.board.find(el => el.x === x && el.y === y) || {}).userId;
       };
     },
     putAbleCheck() {
       return (i) => {
+        if (this.board.length === 0) {
+          return '#ff0';
+        }
         const adjacentPieces = [
           [0, 1], [1, 0], [0, -1], [-1, 0],
         ];
@@ -83,8 +89,8 @@ export default {
         ];
 
         const half = Math.floor(this.grid / 2);
-        const x = ((i - 1) % this.grid) - half;
-        const y = half - Math.floor((i - 1) / (this.grid));
+        const x = ((i - 1) % this.grid) - half + this.xHalf;
+        const y = half + this.yHalf - Math.floor((i - 1) / (this.grid));
         const targetUser = this.currentUser;
         const updatePieces = []; // めくるための空の配列
 
@@ -138,36 +144,79 @@ export default {
         if (updatePieces.length > 0 && !exist) {
           return '#ff0';
         }
-
         return '';
       };
     },
   },
   methods: {
+    ...mapMutations('fujii/index', ['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown']),
+    ...mapActions('fujii/index', ['putPiece', 'resetGame']),
     async send(i) {
       const half = Math.floor(this.grid / 2);
-      const x = ((i - 1) % this.grid) - half;
-      const y = half - Math.floor((i - 1) / (this.grid));
+      const x = ((i - 1) % this.grid) - half + this.xHalf;
+      const y = half + this.yHalf - Math.floor((i - 1) / (this.grid));
 
       const params = new URLSearchParams();
       params.append('x', x);
       params.append('y', y);
       params.append('userId', this.currentUser);
-
-      this.board = await this.$axios.$post(`${this.mypath}/playing`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
-    },
-    changeCurrentUser(n) {
-      this.currentUser = n;
+      this.putPiece(params);
     },
   },
 };
 </script>
 
 <style scoped>
+.btn {
+  position:fixed;
+  cursor: pointer;
+}
+.btn:hover {
+  background: #f77;
+  color: #fff;
+}
+
+.up {
+  top: 20px;
+  left: 50%;
+  padding: 10px 30px;
+}
+
+.left {
+  top: 50%;
+  left: 20px;
+  padding: 30px 10px;
+}
+
+.down {
+  bottom: 20px;
+  left: 50%;
+  padding: 10px 30px;
+}
+
+.right {
+  top: 50%;
+  right: 20px;
+  padding: 30px 10px;
+}
+
+.minus {
+  bottom: 20px;
+  left: 70%;
+  padding: 10px 30px;
+}
+.plus {
+  bottom: 20px;
+  left: 80%;
+  padding: 10px 30px;
+}
+
+.reset {
+  bottom: 20px;
+  left: 30%;
+  padding: 10px 30px;
+}
+
 .main {
   position:fixed;
   top:0;

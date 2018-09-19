@@ -1,27 +1,25 @@
+
+
 export const state = () => ({
-  counter: 0,
-  mypath: process.env.KIMURA_PATH,
+  mypath: process.env.KIDO_PATH,
   board: null,
-  grid: 15,
-  UserList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-  currentUserIndex: 1,
+  grid: 23,
+  number: 8,
+  currentUser: 1,
 });
 
 export const mutations = {
-  increment(state) {
-    state.counter += 1;
-  },
   setBoard(state, board) {
     state.board = board;
   },
-  changeUserIndex(state, index) {
-    state.currentUserIndex = index;
+  zoomIn(state, grid) {
+    state.grid = grid - 2;
   },
-  zoomIn(state) {
-    state.grid -= 3;
+  zoomOut(state, grid) {
+    state.grid = grid + 2;
   },
-  zoomOut(state) {
-    state.grid += 3;
+  changeCurrentUser(state, currentUser) {
+    state.currentUser = currentUser;
   },
 };
 
@@ -30,8 +28,8 @@ export const actions = {
     const board = await this.$axios.$get(`${state.mypath}/board`);
     commit('setBoard', board);
   },
-  async putsPiece({ state, commit }, params) {
-    const board = await this.$axios.$post(`${state.mypath}/piece`, params, {
+  async putPiece({ commit, state }, params) {
+    const board = await this.$axios.$post(`${state.mypath}/playing`, params, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
