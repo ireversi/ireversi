@@ -23,6 +23,10 @@
       :current="currentUserIndex"
       @select="changeUserIndex"
     />
+    <button class="slideUp" @click="slideUp">↑</button>
+    <button class="slideRight" @click="slideRight">→</button>
+    <button class="slideDown" @click="slideDown">↓</button>
+    <button class="slideLeft" @click="slideLeft">←</button>
     <button class="test-btn-zoomin" @click="zoomIn">+</button>
     <button class="test-btn-zoomout" @click="zoomOut">-</button>
   </div>
@@ -51,18 +55,21 @@ export default {
       'UserList',
       'colorList',
       'currentUserIndex',
+      'xSlide',
+      'ySlide',
     ]),
     getUserId() {
       return (i) => {
-        const n = i;
+        const halfLength = Math.floor(this.grid / 2);
+        const xHalf = halfLength + this.xSlide;
+        const yHalf = halfLength + this.ySlide;
         let ans = 0;
+        const targetX = ((i - 1) % this.grid) - halfLength + xHalf;
+        const targetY = halfLength + yHalf - Math.floor((i - 1) / (this.grid));
         for (let k = 0; k < this.board.length; k += 1) {
           const xPoint = this.board[k].x;
           const yPoint = this.board[k].y;
-          const halfLength = Math.floor(this.grid / 2);
-          const origin = halfLength * this.grid + halfLength + 1;
-          const target = origin - (this.grid * yPoint) + xPoint;
-          if (target === n) {
+          if (targetX === xPoint && targetY === yPoint) {
             ans = this.board[k].userId;
           }
         }
@@ -77,12 +84,16 @@ export default {
       'changeUserIndex',
       'zoomIn',
       'zoomOut',
+      'slideUp',
+      'slideRight',
+      'slideDown',
+      'slideLeft',
     ]),
     ...mapActions('kimura/index', ['putsPiece']),
     async putPiece(i) {
       const n = i;
       const halfLength = Math.floor(this.grid / 2);
-      const origin = halfLength * this.grid + halfLength + 1;
+      const origin = (halfLength * this.grid) + (halfLength + 1);
       const x = (n % this.grid) - (origin % this.grid);
       const y = Math.floor((origin + halfLength - n) / this.grid);
       const userId = this.currentUserIndex;
@@ -102,13 +113,37 @@ export default {
 .test-btn-zoomin{
   position:fixed;
   bottom:20px;
-  left:48%;
+  left:45%;
   padding:10pt;
 }
 .test-btn-zoomout{
   position:fixed;
   bottom:20px;
-  left:52%;
+  left:55%;
+  padding:10pt;
+}
+.slideUp{
+  position:fixed;
+  top:20px;
+  left:50%;
+  padding:10pt;
+}
+.slideRight{
+  position:fixed;
+  top:50%;
+  right:20px;
+  padding:10pt;
+}
+.slideDown{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  padding:10pt;
+}
+.slideLeft{
+  position:fixed;
+  top:50%;
+  left:20px;
   padding:10pt;
 }
 .main{

@@ -5,6 +5,8 @@ export const state = () => ({
   grid: 15,
   UserList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   currentUserIndex: 1,
+  xSlide: 0,
+  ySlide: 0,
 });
 
 export const mutations = {
@@ -22,6 +24,18 @@ export const mutations = {
   },
   zoomOut(state) {
     state.grid += 3;
+  },
+  slideUp(state) {
+    state.ySlide -= 3;
+  },
+  slideRight(state) {
+    state.xSlide += 3;
+  },
+  slideDown(state) {
+    state.ySlide += 3;
+  },
+  slideLeft(state) {
+    state.xSlide -= 3;
   },
 };
 
