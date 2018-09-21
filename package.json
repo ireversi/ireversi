@@ -14,7 +14,7 @@
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint:fix": "npm run lint -- --fix",
-    "test": "jest --silent",
+    "test": "jest",
     "test:watch": "npm t -- --watch"
   },
   "dependencies": {

@@ -1,13 +1,8 @@
-const { Nuxt, Builder } = require('nuxt');
-const config = require('./nuxt.config.js');
+const { Builder } = require('nuxt');
+const setup = require('./setup.js');
 
-module.exports = {
-  setup: async () => {
-    const nuxt = new Nuxt(config);
-    await new Builder(nuxt).build();
-    return nuxt;
-  },
-  teardown: async (nuxt) => {
-    await nuxt.close();
-  },
+module.exports = async () => {
+  const nuxt = setup();
+  await new Builder(nuxt).build();
+  nuxt.close();
 };
