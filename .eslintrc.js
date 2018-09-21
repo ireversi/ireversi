@@ -37,9 +37,6 @@ module.exports = {
       env: {
         jest: true,
       },
-      globals: {
-        jestTimeout: false,
-      },
     },
   ],
 };
