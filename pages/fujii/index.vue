@@ -6,7 +6,10 @@
             class="cell"
             v-for="i in Math.pow(grid, 2)"
             :key="i"
-            :style="`width: ${100/grid}%; background:${putAbleCheck(i)}`"
+            :style="
+            `width: ${100/grid}%;
+            background:${putAbleCheck(i)};
+            cursor: ${putAbleCheck(i) ? 'pointer' : ''}`"
           >
             <div @click="send(i)">
               <div
@@ -22,18 +25,12 @@
       <UserSelector
         :number="number"
         :current="currentUser"
+        @change="changeCurrentUser"
       />
-      <div class="users">
-        <div
-          v-for="n in number"
-          :key="n"
-          :style="currentUser === n ? `background: #f77` : ''"
-          @click="changeCurrentUser(n)"
-        >{{ n }}</div>
-      </div>
 
-      <button class="minus-btn" @click="zoomout"> - </button>
-      <button class="plus-btn" @click="zoomin"> + </button>
+      <button class="reset btn" @click="resetGame"> reset </button>
+      <button class="minus btn" @click="zoomout"> - </button>
+      <button class="plus btn" @click="zoomin"> + </button>
       <button class="btn up" @click="moveUp"> ↑ </button>
       <button class="btn right" @click="moveRight"> → </button>
       <button class="btn down" @click="moveDown"> ↓ </button>
@@ -81,6 +78,9 @@ export default {
     },
     putAbleCheck() {
       return (i) => {
+        if (this.board.length === 0) {
+          return '#ff0';
+        }
         const adjacentPieces = [
           [0, 1], [1, 0], [0, -1], [-1, 0],
         ];
@@ -150,7 +150,7 @@ export default {
   },
   methods: {
     ...mapMutations('fujii/index', ['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown']),
-    ...mapActions('fujii/index', ['putPiece']),
+    ...mapActions('fujii/index', ['putPiece', 'resetGame']),
     async send(i) {
       const half = Math.floor(this.grid / 2);
       const x = ((i - 1) % this.grid) - half + this.xHalf;
@@ -160,7 +160,6 @@ export default {
       params.append('x', x);
       params.append('y', y);
       params.append('userId', this.currentUser);
-
       this.putPiece(params);
     },
   },
@@ -170,6 +169,11 @@ export default {
 <style scoped>
 .btn {
   position:fixed;
+  cursor: pointer;
+}
+.btn:hover {
+  background: #f77;
+  color: #fff;
 }
 
 .up {
@@ -196,18 +200,23 @@ export default {
   padding: 30px 10px;
 }
 
-.minus-btn {
-  position:fixed;
+.minus {
   bottom: 20px;
   left: 70%;
   padding: 10px 30px;
 }
-.plus-btn {
-  position:fixed;
+.plus {
   bottom: 20px;
   left: 80%;
   padding: 10px 30px;
 }
+
+.reset {
+  bottom: 20px;
+  left: 30%;
+  padding: 10px 30px;
+}
+
 .main {
   position:fixed;
   top:0;

@@ -4,7 +4,7 @@
       v-for="n in number"
       :key="n"
       :style="current === n ? 'background: #f77' : ''"
-      @click="changeCurrent(n)"
+      @click="changeCurrentUser(n)"
     > {{ n }}</div>
   </div>
 </template>
@@ -13,7 +13,7 @@
 export default {
   props: ['number', 'current'],
   methods: {
-    changeCurrent(n) {
+    changeCurrentUser(n) {
       this.$emit('change', n);
     },
   },
