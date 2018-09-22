@@ -1,13 +1,5 @@
-const setup = require('./setup.js');
+const { nuxt } = require('./setup.js');
 const { testComponent } = require('./nuxt.config.js');
-
-let nuxt;
-beforeAll(() => {
-  nuxt = setup();
-});
-afterAll(() => {
-  nuxt.close();
-});
 
 describe('Example: Vuex test', () => {
   it('Get state', async () => {
