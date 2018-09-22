@@ -6,6 +6,8 @@ export const state = () => ({
   grid: 21,
   xHalf: 0,
   yHalf: 0,
+  initX: 0,
+  initY: 0,
 });
 
 
@@ -33,6 +35,35 @@ export const mutations = {
   },
   moveDown(state) {
     state.yHalf -= 1;
+  },
+  setInitPos(state, e) { // touchstart
+    state.initX = e.changedTouches[0].clientX;
+    state.initY = e.changedTouches[0].clientY;
+  },
+  gridMove(state, e) { // touchsmove
+    const mouseX = e.changedTouches[0].clientX;
+    const mouseY = e.changedTouches[0].clientY;
+
+    // x座標のスワイプ
+    if (Math.floor(mouseX - state.initX) > 0) {
+      state.xHalf += 1;
+    } else if (Math.floor(mouseX - state.initX < 0)) {
+      state.xHalf -= 1;
+    }
+
+    // y軸のスワイプ
+    if (Math.floor(mouseY - state.initY) > 0) {
+      state.yHalf += 1;
+    } else if (Math.floor(mouseY - state.initY) < 0) {
+      state.yHalf -= 1;
+    }
+
+    state.initX = mouseX;
+    state.initY = mouseY;
+  },
+  resetInitPos(state) { // touchend
+    state.initX = 0;
+    state.initY = 0;
   },
 };
 
