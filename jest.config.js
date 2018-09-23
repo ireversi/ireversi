@@ -1,4 +1,5 @@
 module.exports = {
   testEnvironment: 'node',
-  globals: { jestTimeout: 10000 },
+  globalSetup: '<rootDir>/tests/build.js',
+  globalTeardown: '<rootDir>/tests/teardown.js',
 };
