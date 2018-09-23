@@ -44,15 +44,20 @@ module.exports = {
   */
   axios: {
   // See https://github.com/nuxt-community/axios-module#options
-    baseURL: process.env.AXIOS_BASE,
   },
   env: {
+    IS_MOCKING: process.env.IS_MOCKING,
+    MOCKING_PORT: process.env.MOCKING_PORT,
+    AXIOS_BASE: process.env.AXIOS_BASE,
     FUJII_PATH: process.env.FUJII_PATH,
     KIDO_PATH: process.env.KIDO_PATH,
     MATSUDA_PATH: process.env.MATSUDA_PATH,
     KIMURA_PATH: process.env.KIMURA_PATH,
     KAI_PATH: process.env.KAI_PATH,
     ANDO_PATH: process.env.ANDO_PATH,
+  },
+  router: {
+    middleware: 'baseURL',
   },
   /*
   ** Build configuration
