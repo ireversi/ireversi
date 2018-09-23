@@ -37,7 +37,7 @@ export default {
     UserSelector,
   },
   fetch({ store }) {
-    return store.dispatch('matsuda/index/getBoard');
+    return store.dispatch('practice/matsuda/index/getBoard');
   },
   data() {
     return {
@@ -52,7 +52,7 @@ export default {
     }, 2000);
   },
   computed: {
-    ...mapState('matsuda/index', [
+    ...mapState('practice/matsuda/index', [
       'mypath',
       'board',
     ]),
@@ -137,7 +137,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('matsuda/index', ['putPiece']),
+    ...mapActions('practice/matsuda/index', ['putPiece']),
     async send(i) {
       const half = Math.floor(this.grid / 2);
       const x = ((i - 1) % this.grid) - half;
