@@ -52,7 +52,7 @@ export default {
   },
 
   async fetch({ store }) {
-    await store.dispatch('fujii/index/getBoard');
+    await store.dispatch('practice/fujii/index/getBoard');
   },
 
   mounted() {
@@ -61,7 +61,7 @@ export default {
     }, 1000);
   },
   computed: {
-    ...mapState('fujii/index', [
+    ...mapState('practice/fujii/index', [
       'counter',
       'mypath',
       'board',
@@ -152,8 +152,8 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('fujii/index', ['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown', 'setInitPos', 'gridMove', 'resetInitPos']),
-    ...mapActions('fujii/index', ['putPiece', 'resetGame']),
+    ...mapMutations('practice/fujii/index', ['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown', 'setInitPos', 'gridMove', 'resetInitPos']),
+    ...mapActions('practice/fujii/index', ['putPiece', 'resetGame']),
     async send(i) {
       const half = Math.floor(this.grid / 2);
       const x = ((i - 1) % this.grid) - half + this.xHalf;
