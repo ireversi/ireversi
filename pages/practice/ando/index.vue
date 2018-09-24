@@ -49,7 +49,7 @@ export default {
     ColorPalette,
   },
   async fetch({ store }) {
-    await store.dispatch('ando/index/getBoard');
+    await store.dispatch('practice/ando/index/getBoard');
   },
   mounted() {
     // setInterval(async () => {
@@ -57,7 +57,7 @@ export default {
     // }, 1000);
   },
   computed: {
-    ...mapState('ando/index', [
+    ...mapState('practice/ando/index', [
       'counter',
       'mypath',
       'board',
@@ -83,13 +83,13 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('ando/index', [
+    ...mapMutations('practice/ando/index', [
       'increment',
       'changeCurrentUser',
       'changeColorIndex',
       'changeColor',
     ]),
-    ...mapActions('ando/index', ['putPiece']),
+    ...mapActions('practice/ando/index', ['putPiece']),
     async send(i) {
       const x = ((i - 1) % this.grid) - Math.floor(this.grid / 2);
       const y = this.grid - 1 - (Math.floor(this.grid / 2) + Math.floor((i - 1) / this.grid));
