@@ -70,15 +70,11 @@ export const actions = {
     });
     commit('setBoard', board);
   },
-  async resetGame({ commit, state }) {
-    const keyword = prompt('キーを入れて下さい'); // eslint-disable-line no-alert
-
-    if (keyword === 'deleteAll') {
-      const params = new URLSearchParams();
-      params.append('keyword', keyword);
-      await this.$axios.$delete(`${state.mypath}/playing`, { data: params });
-      const board = await this.$axios.$get(`${state.mypath}/board`);
-      commit('setBoard', board);
-    }
+  async resetGame({ commit, state }, keyword) {
+    const params = new URLSearchParams();
+    params.append('keyword', keyword);
+    await this.$axios.$delete(`${state.mypath}/playing`, { data: params });
+    const board = await this.$axios.$get(`${state.mypath}/board`);
+    commit('setBoard', board);
   },
 };
