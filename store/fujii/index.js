@@ -47,7 +47,6 @@ export const mutations = {
     const mouseY = e.changedTouches[0].clientY;
     const cellWidth = window.innerWidth / state.grid;
 
-    // x座標のスワイプ
     state.xHalf = state.initX - Math.floor((mouseX - state.initPosX) / cellWidth);
     state.yHalf = state.initY + Math.floor((mouseY - state.initPosY) / cellWidth);
   },
