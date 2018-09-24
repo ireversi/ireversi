@@ -71,7 +71,7 @@ export const actions = {
     commit('setBoard', board);
   },
   async resetGame({ commit, state }) {
-    const keyword = prompt('キーを入れて下さい');
+    const keyword = prompt('キーを入れて下さい'); // eslint-disable-line no-alert
 
     if (keyword === 'deleteAll') {
       const params = new URLSearchParams();
