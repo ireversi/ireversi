@@ -1,5 +1,4 @@
 export const state = () => ({
-  counter: 0,
   mypath: process.env.ANDO_PATH,
   board: null,
   grid: 35,
