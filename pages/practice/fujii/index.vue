@@ -31,7 +31,8 @@
         @change="changeCurrentUser"
       />
 
-      <button class="reset btn" @click="resetGame"> reset </button>
+      <ResetButton />
+
       <button class="minus btn" @click="zoomout"> - </button>
       <button class="plus btn" @click="zoomin"> + </button>
       <button class="btn up" @click="moveUp"> ↑ </button>
@@ -39,16 +40,17 @@
       <button class="btn down" @click="moveDown"> ↓ </button>
       <button class="btn left" @click="moveLeft"> ← </button>
     </div>
-      <!-- <div>{{ JSON.stringify(board) }}</div> -->
 </template>
 
 <script>
 import UserSelector from '~/components/fujii/UserSelector.vue';
+import ResetButton from '~/components/fujii/ResetButton.vue';
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   components: {
     UserSelector,
+    ResetButton,
   },
 
   async fetch({ store }) {
@@ -173,6 +175,7 @@ export default {
 .btn {
   position:fixed;
   cursor: pointer;
+  background: #fff;
 }
 .btn:hover {
   background: #f77;
