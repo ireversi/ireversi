@@ -42,7 +42,7 @@ export default {
     border: 2px solid #333;
     display: inline-flex;
     justify-content: center;
-    align-content: center;
+    align-items: center;
     cursor: pointer;
 }
 

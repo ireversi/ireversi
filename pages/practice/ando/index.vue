@@ -6,9 +6,12 @@
           class="cell"
           v-for="i in Math.pow(grid, 2)"
           :key="i"
-          :style="`width: ${100 / grid}%`"
+          :style="`width: ${100 / grid}%;`"
         >
-          <div @click="changeColor(i); send(i)">
+          <div
+            @click="changeColor(i); send(i)"
+            :style="`background-color:${judgePlaceable(i) ? '#ff0' : ''}`"
+          >
             <div
               class="piece"
               v-if="getUserId(i)"
@@ -29,7 +32,12 @@
       @change="changeCurrentUser"
 
     />
-    <button class="test-btn" @click="increment">{{ counter }}</button>
+    <button class="select-btn up-btn" @click="moveUp"> ↑ </button>
+    <button class="select-btn right-btn" @click="moveRight"> → </button>
+    <button class="select-btn down-btn" @click="moveDown"> ↓ </button>
+    <button class="select-btn left-btn" @click="moveLeft"> ← </button>
+    <button class="select-btn zoom-out" @click="zoomOut"> - </button>
+    <button class="select-btn zoom-in" @click="zoomIn"> + </button>
     <color-palette
       :list="colorList"
       :current="currentColorIndex"
@@ -56,6 +64,10 @@ export default {
     //   this.board = await this.$axios.$get(`${this.mypath}/board`);
     // }, 1000);
   },
+  data() {
+    return {
+    };
+  },
   computed: {
     ...mapState('practice/ando/index', [
       'counter',
@@ -67,24 +79,101 @@ export default {
       'colors',
       'colorList',
       'currentColorIndex',
+      'centerPosition',
     ]),
+    getNavState() {
+      return this.$store.state.navState;
+    },
     getUserId() {
-      return function test(i) {
+      return (i) => {
         const result = this.board.find(
-          p => p.x === ((i - 1) % this.grid) - Math.floor(this.grid / 2)
+          p => p.x === ((i - 1) % this.grid) - Math.floor(this.grid / 2) + this.centerPosition.x
             && p.y === this.grid - 1 - (Math.floor(this.grid / 2)
-                        + Math.floor((i - 1) / this.grid)),
+                        + Math.floor((i - 1) / this.grid)) + this.centerPosition.y,
         );
         return result || false;
       };
     },
     judgeCurrentUserPiece() {
-      return i => this.getUserId(i).userid === this.currentUser;
+      return i => this.getUserId(i).userId === this.currentUser
+                  || this.getUserId(i).userid === this.currentUser
+                  || this.getUserId(i).user_id === this.currentUser;
+    },
+    judgePlaceable() {
+      return (i) => {
+        if (this.board.length === 0) {
+          return true;
+        }
+        const adjacentPieces = [
+          [0, 1], [1, 0], [0, -1], [-1, 0],
+        ];
+        const adjacents = [
+          ...adjacentPieces, [1, 1], [1, -1], [-1, -1], [-1, 1],
+        ];
+
+        const x = ((i - 1) % this.grid) - Math.floor(this.grid / 2) + this.centerPosition.x;
+        const y = this.grid - 1 - (Math.floor(this.grid / 2) + Math.floor((i - 1) / this.grid))
+                  + this.centerPosition.y;
+        const updatePieces = [];
+
+        for (let j = 0; j < adjacents.length; j += 1) {
+          const adj = adjacents[j];
+          const candidates = [];
+          let target = this.board.find(p => p.x === x + adj[0] && p.y === y + adj[1]);
+          let flag = false;
+          let n = 1;
+
+          while (target) {
+            if (target.userId === this.currentUser
+                || target.userid === this.currentUser
+                || target.user_id === this.currentUser) {
+              flag = true;
+              break;
+            } else {
+              candidates.push(target);
+              n += 1;
+              /* eslint-disable-next-line no-loop-func */
+              target = this.board.find(e => e.x === x + adj[0] * n && e.y === y + adj[1] * n);
+            }
+          }
+          if (flag) {
+            updatePieces.push(...candidates);
+          }
+        }
+        const exist = this.board.find(e => e.x === x && e.y === y);
+
+        if (!this.board.find(p => p.userId === this.currentUser
+                                   || p.userid === this.currentUser
+                                   || p.user_id === this.currentUser)) {
+          let existBy = false;
+
+          for (let k = 0; k < 4; k += 1) {
+            const adj = adjacentPieces[k];
+
+            if (this.board.find(el => el.x === x + adj[0] && el.y === y + adj[1])) {
+              existBy = true;
+              break;
+            }
+          }
+          if (existBy && !exist) {
+            return true;
+          }
+        }
+        if (updatePieces.length > 0 && !exist) {
+          return true;
+        }
+        return false;
+      };
     },
   },
   methods: {
     ...mapMutations('practice/ando/index', [
-      'increment',
+      'moveUp',
+      'moveRight',
+      'moveDown',
+      'moveLeft',
+      'zoomOut',
+      'zoomIn',
       'changeCurrentUser',
       'changeColorIndex',
       'changeColor',
@@ -108,12 +197,41 @@ export default {
 </script>
 
 <style scoped>
-.test-btn {
+.select-btn {
   position: fixed;
+  padding: 10px;
+  width: 50px;
+  height: 50px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ccc;
+  border: 2px solid #ccc;
+  background-color: #333;
+  cursor: pointer;
+}
+.up-btn {
+  top: 20px;
+  left: 50%;
+}
+.right-btn {
+  right: 20px;
+  top: 50%;
+}
+.down-btn {
   bottom: 20px;
   left: 50%;
-  padding: 10px;
-  background-color: #ccc;
+}
+.left-btn {
+  left: 120px;
+  top: 50%;
+}
+.zoom-out {
+  bottom: 20px;
+  left: 40%;
+}
+.zoom-in {
+  bottom: 20px;
+  left: 60%;
 }
 
 .main {
