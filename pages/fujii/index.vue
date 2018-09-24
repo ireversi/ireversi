@@ -1,6 +1,9 @@
 <template>
     <div class="main">
-      <div class="board">
+      <div class="board"
+      @touchstart="setInitPos($event)"
+      @touchmove="gridMove($event)"
+      @touchend="resetInitPos">
         <div>
           <div
             class="cell"
@@ -149,7 +152,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('fujii/index', ['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown']),
+    ...mapMutations('fujii/index', ['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown', 'setInitPos', 'gridMove', 'resetInitPos']),
     ...mapActions('fujii/index', ['putPiece', 'resetGame']),
     async send(i) {
       const half = Math.floor(this.grid / 2);
