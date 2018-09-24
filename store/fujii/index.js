@@ -4,10 +4,12 @@ export const state = () => ({
   number: 4,
   currentUser: 2,
   grid: 21,
-  xHalf: 0,
+  xHalf: 0, // grid描写更新変数
   yHalf: 0,
-  initX: 0,
+  initX: 0, // mousemove時のxHalf起点情報
   initY: 0,
+  initPosX: 0, // mouseXの起点情報
+  initPosY: 0,
 });
 
 
@@ -37,33 +39,22 @@ export const mutations = {
     state.yHalf -= 1;
   },
   setInitPos(state, e) { // touchstart
-    state.initX = e.changedTouches[0].clientX;
-    state.initY = e.changedTouches[0].clientY;
+    state.initPosX = e.changedTouches[0].clientX;
+    state.initPosY = e.changedTouches[0].clientY;
   },
   gridMove(state, e) { // touchsmove
     const mouseX = e.changedTouches[0].clientX;
     const mouseY = e.changedTouches[0].clientY;
+    const cellWidth = window.innerWidth / state.grid;
 
     // x座標のスワイプ
-    if (Math.floor(mouseX - state.initX) > 0) {
-      state.xHalf += 1;
-    } else if (Math.floor(mouseX - state.initX < 0)) {
-      state.xHalf -= 1;
-    }
-
-    // y軸のスワイプ
-    if (Math.floor(mouseY - state.initY) > 0) {
-      state.yHalf += 1;
-    } else if (Math.floor(mouseY - state.initY) < 0) {
-      state.yHalf -= 1;
-    }
-
-    state.initX = mouseX;
-    state.initY = mouseY;
+    state.xHalf = state.initX - Math.floor((mouseX - state.initPosX) / cellWidth);
+    state.yHalf = state.initY + Math.floor((mouseY - state.initPosY) / cellWidth);
   },
   resetInitPos(state) { // touchend
-    state.initX = 0;
-    state.initY = 0;
+    // 次の起点場所情報の保存
+    state.initX = state.xHalf;
+    state.initY = state.yHalf;
   },
 };
 
