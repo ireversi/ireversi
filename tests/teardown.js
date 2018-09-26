@@ -1,3 +1,1 @@
-const { teardown } = require('./setup.js');
-
-module.exports = () => teardown();
+module.exports = require('./setup.js').teardown;
