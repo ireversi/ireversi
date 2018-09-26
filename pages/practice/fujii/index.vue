@@ -1,6 +1,9 @@
 <template>
     <div class="main">
-      <div class="board">
+      <div class="board"
+      @touchstart="setInitPos($event)"
+      @touchmove="gridMove($event)"
+      @touchend="resetInitPos">
         <div>
           <div
             class="cell"
@@ -28,7 +31,8 @@
         @change="changeCurrentUser"
       />
 
-      <button class="reset btn" @click="resetGame"> reset </button>
+      <ResetButton />
+
       <button class="minus btn" @click="zoomout"> - </button>
       <button class="plus btn" @click="zoomin"> + </button>
       <button class="btn up" @click="moveUp"> ↑ </button>
@@ -36,20 +40,21 @@
       <button class="btn down" @click="moveDown"> ↓ </button>
       <button class="btn left" @click="moveLeft"> ← </button>
     </div>
-      <!-- <div>{{ JSON.stringify(board) }}</div> -->
 </template>
 
 <script>
 import UserSelector from '~/components/fujii/UserSelector.vue';
+import ResetButton from '~/components/fujii/ResetButton.vue';
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   components: {
     UserSelector,
+    ResetButton,
   },
 
   async fetch({ store }) {
-    await store.dispatch('fujii/index/getBoard');
+    await store.dispatch('practice/fujii/index/getBoard');
   },
 
   mounted() {
@@ -58,7 +63,7 @@ export default {
     }, 1000);
   },
   computed: {
-    ...mapState('fujii/index', [
+    ...mapState('practice/fujii/index', [
       'counter',
       'mypath',
       'board',
@@ -149,8 +154,8 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('fujii/index', ['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown']),
-    ...mapActions('fujii/index', ['putPiece', 'resetGame']),
+    ...mapMutations('practice/fujii/index', ['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown', 'setInitPos', 'gridMove', 'resetInitPos']),
+    ...mapActions('practice/fujii/index', ['putPiece', 'resetGame']),
     async send(i) {
       const half = Math.floor(this.grid / 2);
       const x = ((i - 1) % this.grid) - half + this.xHalf;
@@ -170,6 +175,7 @@ export default {
 .btn {
   position:fixed;
   cursor: pointer;
+  background: #fff;
 }
 .btn:hover {
   background: #f77;

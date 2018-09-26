@@ -1,5 +1,4 @@
 export const state = () => ({
-  counter: 0,
   mypath: process.env.ANDO_PATH,
   board: null,
   grid: 35,
@@ -8,11 +7,27 @@ export const state = () => ({
   colors: [],
   colorList: ['#f00', '#0f0', '#00f', '#fff'],
   currentColorIndex: 2,
+  centerPosition: { x: 0, y: 0 },
 });
 
 export const mutations = {
-  increment(state) {
-    state.counter += 1;
+  moveUp(state) {
+    state.centerPosition.y += 1;
+  },
+  moveRight(state) {
+    state.centerPosition.x += 1;
+  },
+  moveDown(state) {
+    state.centerPosition.y -= 1;
+  },
+  moveLeft(state) {
+    state.centerPosition.x -= 1;
+  },
+  zoomOut(state) {
+    state.grid += 2;
+  },
+  zoomIn(state) {
+    state.grid -= 2;
   },
   setBoard(state, board) {
     state.board = board;
