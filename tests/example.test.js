@@ -18,9 +18,14 @@ describe('Example: Vuex test', () => {
   afterEach(deleteMock);
 
   it('Get state', () => {
-    expect(store.state.ando.index.counter).toBe(0);
-    store.commit('ando/index/increment');
-    expect(store.state.ando.index.counter).toBe(1);
+    // Given
+    const { grid } = store.state.practice.ando.index;
+
+    // When
+    store.commit('practice/ando/index/zoomOut');
+
+    // Then
+    expect(store.state.practice.ando.index.grid).toBe(grid + 2);
   });
 
   it('Get board', async () => {
