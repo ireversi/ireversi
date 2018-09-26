@@ -10,12 +10,7 @@ export const mutations = {
 
 export const actions = {
   async getBoard({ commit }) {
-    const board = await this.$axios.$get('/board', {
-      query: {
-        user_id: 1,
-      },
-    });
-
+    const board = await this.$axios.$get('/board');
     commit('setBoard', board);
   },
 };

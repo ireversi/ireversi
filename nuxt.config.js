@@ -46,8 +46,7 @@ module.exports = {
   // See https://github.com/nuxt-community/axios-module#options
   },
   env: {
-    IS_MOCKING: process.env.IS_MOCKING,
-    MOCKING_PORT: process.env.MOCKING_PORT,
+    MOCK_DB_PORT: process.env.MOCK_DB_PORT,
     AXIOS_BASE: process.env.AXIOS_BASE,
     FUJII_PATH: process.env.FUJII_PATH,
     KIDO_PATH: process.env.KIDO_PATH,
