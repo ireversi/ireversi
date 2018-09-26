@@ -4,10 +4,9 @@
 
 <script>
 export default {
-  async fetch(context) {
-    const { req } = context;
+  fetch({ req, store }) {
     try {
-      await req.test(context);
+      req.test(store);
     } catch (error) {
       throw error;
     }

@@ -1,5 +1,10 @@
 const { resolve } = require('path');
-const { axios, env, modules } = require('../nuxt.config.js');
+const {
+  axios,
+  env,
+  modules,
+  router,
+} = require('../nuxt.config.js');
 
 const testComponent = {
   name: 'executer',
@@ -14,6 +19,7 @@ const config = {
   dev: false,
   rootDir: resolve(__dirname, '..'),
   router: {
+    ...router,
     extendRoutes(routes) {
       routes.push(testComponent);
     },

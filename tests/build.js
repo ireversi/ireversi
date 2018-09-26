@@ -1,5 +1,1 @@
-const { build } = require('./setup.js');
-
-module.exports = async () => {
-  await build();
-};
+module.exports = require('./setup.js').build;
