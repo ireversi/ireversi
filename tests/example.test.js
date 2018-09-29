@@ -1,21 +1,11 @@
 const { getStore } = require('./setup.js');
-const {
-  getDB,
-  prepareMock,
-  deleteMock,
-} = require('../mock/testUtil.js');
 
 describe('Example: Vuex test', () => {
   let store;
 
-  beforeEach(() => Promise.all([
-    prepareMock(),
-    (async () => {
-      store = await getStore();
-    })(),
-  ]));
-
-  afterEach(deleteMock);
+  beforeEach(async () => {
+    store = await getStore();
+  });
 
   it('Get state', () => {
     // Given
@@ -26,16 +16,5 @@ describe('Example: Vuex test', () => {
 
     // Then
     expect(store.state.practice.ando.index.grid).toBe(grid + 2);
-  });
-
-  it('Get board', async () => {
-    // Given
-    const { board } = await getDB();
-
-    // When
-    await store.dispatch('sample/getBoard');
-
-    // Then
-    expect(store.state.sample.board).toEqual(board);
   });
 });
