@@ -160,7 +160,3 @@ dist
 
 # npm lockfile
 package-lock.json
-
-# mock DB file
-mock/db.json
-mock/routes.json
