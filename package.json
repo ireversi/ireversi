@@ -9,15 +9,12 @@
   },
   "scripts": {
     "dev": "nuxt",
-    "dev:mock": "cross-env MOCK_DB_PORT=10001 concurrently \"npm run mock\" \"npm run dev\"",
-    "mock": "node mock/setup.js && json-server -p 10001 -w mock/db.json --routes mock/routes.json --middlewares mock/testFujii.js",
-    "mock:update": "node mock/setup.js",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint:fix": "npm run lint -- --fix",
-    "test": "cross-env MOCK_DB_PORT=10001 jest",
+    "test": "jest",
     "test:watch": "npm t -- --watch"
   },
   "dependencies": {
@@ -29,8 +26,6 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
-    "concurrently": "^4.0.1",
-    "cross-env": "^5.0.1",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-loader": "^2.0.0",
@@ -38,7 +33,6 @@
     "eslint-plugin-vue": "^4.0.0",
     "husky": "^1.0.0-rc.14",
     "jest": "^23.6.0",
-    "json-server": "^0.14.0",
     "lint-staged": "^7.2.2"
   },
   "husky": {
