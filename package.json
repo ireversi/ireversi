@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "nuxt",
     "dev:mock": "cross-env MOCK_DB_PORT=10001 concurrently \"npm run mock\" \"npm run dev\"",
-    "mock": "node mock/setup.js && json-server -p 10001 -w mock/db.json --routes mock/routes.json",
+    "mock": "node mock/setup.js && json-server -p 10001 -w mock/db.json --routes mock/routes.json --middlewares mock/testFujii.js",
+    "mock:update": "node mock/setup.js",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",

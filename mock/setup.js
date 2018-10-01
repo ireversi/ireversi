@@ -3,7 +3,7 @@ const path = require('path');
 const dbTemplate = require('./db.template.js');
 const routesTemplate = require('./routes.template.js');
 
-const dbFile = path.join(__dirname, 'db.json');
+const dbFile = path.join(__dirname, 'db.json'); // path.joinでディレクトリ名をつなげる。 __dirnameでそのファイルのディレクトリを参照
 const routesFile = path.join(__dirname, 'routes.json');
 
 if (!fs.existsSync(dbFile)) {
