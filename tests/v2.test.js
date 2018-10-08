@@ -9,7 +9,6 @@ describe('V2 test', () => {
 
   it('sets a board', async () => {
     // Given
-    console.log(store.$axios.defaults.baseURL);
     const { pieces, candidates, standbys } = await store.$axios.$get(`/board?userId=${store.state.currentUser}`);
 
     // When

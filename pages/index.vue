@@ -11,7 +11,7 @@
             :key="i"
             :style="
             `width: ${100/grid}%;
-            background:${putAbleCheck(i)};
+            background: ${putAbleCheck(i) ? '#0652DD': ''};
             cursor: ${putAbleCheck(i) ? 'pointer' : ''}`"
           >
             <div @click="send(i)">
@@ -43,8 +43,10 @@
 </template>
 
 <script>
-import UserSelector from '~/components/fujii/UserSelector.vue';
-import ResetButton from '~/components/fujii/ResetButton.vue';
+/* デバッグ用 (最終的に削除予定) */
+import UserSelector from '~/components/UserSelector.vue';
+import ResetButton from '~/components/ResetButton.vue';
+/* デバッグ用 */
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
@@ -59,7 +61,7 @@ export default {
 
   mounted() {
     setInterval(async () => {
-      // this.board = await this.$axios.$get(`${this.mypath}/board`);
+      // this.getBoard();
     }, 1000);
   },
   computed: {
@@ -83,79 +85,16 @@ export default {
     },
     putAbleCheck() {
       return (i) => {
-        if (this.pieces.length === 0) {
-          return '#ff0';
-        }
-        const adjacentPieces = [
-          [0, 1], [1, 0], [0, -1], [-1, 0],
-        ];
-        const adjacents = [
-          ...adjacentPieces, [1, 1], [1, -1], [-1, -1], [-1, 1],
-        ];
-
         const half = Math.floor(this.grid / 2);
         const x = ((i - 1) % this.grid) - half + this.xHalf;
         const y = half + this.yHalf - Math.floor((i - 1) / (this.grid));
-        const targetUser = this.currentUser;
-        const updatePieces = []; // めくるための空の配列
-
-        for (let j = 0; j < adjacents.length; j += 1) {
-          const adj = adjacents[j]; // 短い変数へ入れる
-          const candidates = []; // めくる可能性のある駒を入れるための空配列
-          let target = this.pieces.find(el => el.x === x + adj[0] && el.y === y + adj[1]);
-          let flag = false; // falseで立てておき、同じuserIdが見つかればtrueに切り替えて止める
-          let n = 1;
-
-          // 周りが存在する限り
-          while (target) {
-            if (target.userId === targetUser) {
-              flag = true;
-              break;
-            } else {
-              // めくる可能性のある駒をcandidatesに送る
-              candidates.push(target);
-              // targetの更新(nをかけることで一つ先の方向に進む)
-              n += 1;
-              /* eslint-disable-next-line no-loop-func */
-              target = this.pieces.find(e => e.x === x + adj[0] * n && e.y === y + adj[1] * n);
-            }
-          }
-
-          // whileループを回した後に同じidのものが見つかっていれば、
-          if (flag) {
-            updatePieces.push(...candidates);
-          }
-        }
-
-        // その場所にあるかどうかの判定
-        const exist = this.pieces.find(e => e.x === x && e.y === y);
-
-        // 自分の駒がない場合の処理
-        if (!this.pieces.find(el => el.userId === targetUser)) {
-          let existBy = false;
-          // 上下左右を確認
-          for (let k = 0; k < 4; k += 1) {
-            const adj = adjacentPieces[k];
-            // 上下左右に駒があれば
-            if (this.pieces.find(el => el.x === x + adj[0] && el.y === y + adj[1])) {
-              existBy = true;
-              break;
-            }
-          }
-          if (existBy && !exist) {
-            return '#ff0';
-          }
-        }
-        if (updatePieces.length > 0 && !exist) {
-          return '#ff0';
-        }
-        return '';
+        return (this.candidates.find(el => el.x === x && el.y === y));
       };
     },
   },
   methods: {
     ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown', 'setInitPos', 'gridMove', 'resetInitPos']),
-    ...mapActions(['putPiece', 'resetGame']),
+    ...mapActions(['getBoard', 'putPiece', 'resetGame']),
     async send(i) {
       const half = Math.floor(this.grid / 2);
       const x = ((i - 1) % this.grid) - half + this.xHalf;
@@ -229,7 +168,7 @@ export default {
   left:0;
   right:0;
   bottom:0;
-  background:rgb(27,145,57);
+  background: #009432;
 }
 .board {
   padding-top: 100%;
