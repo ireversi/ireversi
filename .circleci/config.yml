@@ -35,7 +35,7 @@ jobs:
 
       - run:
           command: |
-            echo 'export AXIOS_BASE=${AXIOS_BASE}' >> $BASH_ENV
+            echo 'export AXIOS_BASE="$AXIOS_BASE"' >> $BASH_ENV
             source /home/circleci/.bashrc
 
       # run tests!
