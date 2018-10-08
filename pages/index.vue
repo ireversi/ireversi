@@ -94,17 +94,12 @@ export default {
   },
   methods: {
     ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown', 'setInitPos', 'gridMove', 'resetInitPos']),
-    ...mapActions(['getBoard', 'putPiece', 'resetGame']),
-    async send(i) {
+    ...mapActions(['getBoard', 'putPiece']),
+    send(i) {
       const half = Math.floor(this.grid / 2);
       const x = ((i - 1) % this.grid) - half + this.xHalf;
       const y = half + this.yHalf - Math.floor((i - 1) / (this.grid));
-
-      const params = new URLSearchParams();
-      params.append('x', x);
-      params.append('y', y);
-      params.append('userId', this.currentUser);
-      this.putPiece(params);
+      this.putPiece({ x, y });
     },
   },
 };

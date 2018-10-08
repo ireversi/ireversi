@@ -61,24 +61,15 @@ export const mutations = {
 };
 
 export const actions = {
-  async getBoard({ commit, state }) {
-    const { pieces, candidates, standbys } = await this.$axios.$get(`/board?userId=${state.currentUser}`);
-    commit('setBoard', { pieces, candidates, standbys });
+  async getBoard({ commit }) {
+    commit('setBoard', await this.$axios.$get('/board'));
   },
-  async putPiece({ commit, state }, params) {
-    await this.$axios.$post(`/piece?userId=${state.currentUser}`, params, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
-    const { pieces, candidates, standbys } = await this.$axios.$get(`/board?userId=${state.currentUser}`);
-    commit('setBoard', { pieces, candidates, standbys });
+  async putPiece({ dispatch }, params) {
+    await this.$axios.$post('/piece', params);
+    await dispatch('getBoard');
   },
-  async resetGame({ commit, state }, keyword) {
-    const params = new URLSearchParams();
-    params.append('keyword', keyword);
-    await this.$axios.$delete('/piece', { data: params });
-    const { pieces, candidates, standbys } = await this.$axios.$get(`/board?userId=${state.currentUser}`);
-    commit('setBoard', { pieces, candidates, standbys });
+  async resetGame({ dispatch }, keyword) {
+    await this.$axios.$delete('/piece', { keyword });
+    await dispatch('getBoard');
   },
 };
