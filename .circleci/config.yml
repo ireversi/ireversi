@@ -16,6 +16,9 @@ jobs:
 
     working_directory: ~/repo
 
+    environment:
+      AXIOS_BASE: https://ireversi-server.now.sh/api
+
     steps:
       - checkout
 
