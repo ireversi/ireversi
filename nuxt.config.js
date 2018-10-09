@@ -49,6 +49,7 @@ module.exports = {
   // See https://github.com/nuxt-community/axios-module#options
   },
   env: {
+    NODE_ENV: process.env.NODE_ENV,
     AXIOS_BASE: process.env.AXIOS_BASE,
     FUJII_PATH: process.env.FUJII_PATH,
     KIDO_PATH: process.env.KIDO_PATH,
