@@ -61,8 +61,8 @@ export default {
 
   mounted() {
     setInterval(async () => {
-      // this.getBoard();
-    }, 1000);
+      this.getBoard();
+    }, process.env.NODE_ENV === 'production' ? 300 : 1000);
   },
   computed: {
     ...mapState([
