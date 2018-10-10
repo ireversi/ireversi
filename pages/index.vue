@@ -1,45 +1,47 @@
 <template>
     <div class="main">
       <div class="board"
-      @touchstart="setInitPos($event)"
-      @touchmove="gridMove($event)"
-      @touchend="resetInitPos">
-        <div>
-          <div
-            class="cell"
-            v-for="i in Math.pow(grid, 2)"
-            :key="i"
-            :style="
-            `width: ${100/grid}%;
-            background: ${putAbleCheck(i) ? '#0652DD': ''};
-            cursor: ${putAbleCheck(i) ? 'pointer' : ''}`"
-          >
-            <div @click="send(i)">
-              <div
+        @touchstart="setInitPos($event)"
+        @touchmove="gridMove($event)"
+        @touchend="resetInitPos"
+      >
+      <div>
+        <div
+          class="cell"
+          v-for="i in Math.pow(grid, 2)"
+          :key="i"
+          :style="
+          `width: ${100/grid}%;
+          background: ${putAbleCheck(i) ? '#0652DD': ''};
+          cursor: ${putAbleCheck(i) ? 'pointer' : ''}`"
+        >
+          <div @click="send(i)">
+            <div
               class="piece"
               v-if="getUserId(i)"
               :style="getUserId(i) === currentUser ? 'background:#444;color:white' :''"
-              > {{ getUserId(i) }}</div>
-            </div>
+            > {{ getUserId(i) }}</div>
           </div>
         </div>
       </div>
+    </div>
 
-      <UserSelector
-        :number="number"
-        :current="currentUser"
-        @change="changeCurrentUser"
-      />
+    <UserSelector
+      :number="number"
+      :current="currentUser"
+      @change="changeCurrentUser"
+    />
 
-      <ResetButton />
-
-      <button class="minus btn" @click="zoomout"> - </button>
-      <button class="plus btn" @click="zoomin"> + </button>
+    <ResetButton />
+    <button class="minus btn" @click="zoomout"> - </button>
+    <button class="plus btn" @click="zoomin"> + </button>
+    <div v-if="checkPC">
       <button class="btn up" @click="moveUp"> ↑ </button>
       <button class="btn right" @click="moveRight"> → </button>
       <button class="btn down" @click="moveDown"> ↓ </button>
       <button class="btn left" @click="moveLeft"> ← </button>
     </div>
+  </div>
 </template>
 
 <script>
@@ -54,11 +56,9 @@ export default {
     UserSelector,
     ResetButton,
   },
-
   async fetch({ store }) {
     await store.dispatch('getBoard');
   },
-
   mounted() {
     setInterval(async () => {
       this.getBoard();
@@ -75,6 +75,14 @@ export default {
       'xHalf',
       'yHalf',
     ]),
+    checkPC() {
+      const { userAgent } = navigator;
+      if (userAgent.indexOf('iPhone') > -1 || userAgent.indexOf('iPod') > -1
+          || userAgent.indexOf('Android') > -1) {
+        return false;
+      }
+      return true;
+    },
     getUserId() {
       return (i) => {
         const half = Math.floor(this.grid / 2);
