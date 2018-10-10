@@ -9,7 +9,7 @@ describe('V2 test', () => {
 
   it('sets a board', async () => {
     // Given
-    const { pieces, candidates, standbys } = await store.$axios.$get(`/board?userId=${store.state.currentUser}`);
+    const { pieces, candidates, standbys } = await store.$axios.$get('/board');
 
     // When
     await store.dispatch('getBoard');

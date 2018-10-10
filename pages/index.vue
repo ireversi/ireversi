@@ -61,8 +61,8 @@ export default {
 
   mounted() {
     setInterval(async () => {
-      // this.getBoard();
-    }, 1000);
+      this.getBoard();
+    }, process.env.NODE_ENV === 'production' ? 300 : 1000);
   },
   computed: {
     ...mapState([
@@ -96,10 +96,12 @@ export default {
     ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown', 'setInitPos', 'gridMove', 'resetInitPos']),
     ...mapActions(['getBoard', 'putPiece']),
     send(i) {
-      const half = Math.floor(this.grid / 2);
-      const x = ((i - 1) % this.grid) - half + this.xHalf;
-      const y = half + this.yHalf - Math.floor((i - 1) / (this.grid));
-      this.putPiece({ x, y });
+      if (this.putAbleCheck(i)) {
+        const half = Math.floor(this.grid / 2);
+        const x = ((i - 1) % this.grid) - half + this.xHalf;
+        const y = half + this.yHalf - Math.floor((i - 1) / (this.grid));
+        this.putPiece({ x, y });
+      }
     },
   },
 };
