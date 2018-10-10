@@ -20,7 +20,7 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#FFFFFF' },
+  loading: false,
 
   /*
   ** Global CSS
@@ -33,6 +33,7 @@ module.exports = {
   plugins: [
     '@/plugins/axios',
     '@/plugins/element-ui',
+    '@/plugins/vue-touch',
   ],
 
   /*
