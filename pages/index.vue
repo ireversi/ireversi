@@ -1,7 +1,5 @@
 <template>
     <div class="main">
-      <!-- デバッグ用 -->
-      画面サイズ: {{ $window.width }} x {{ $window.height }}
       <div class="board"
         @touchstart="setInitPos($event)"
         @touchmove="gridMove($event)"
@@ -10,10 +8,10 @@
       <div>
         <div
           class="cell"
-          v-for="i in Math.pow(grid, 2)"
+          v-for="i in gridX * Math.floor($window.height / ($window.width/gridX))"
           :key="i"
           :style="
-          `width: ${100/grid}%;
+          `width: ${$window.width/gridX}px;
           background: ${putAbleCheck(i) ? '#0652DD': ''};
           cursor: ${putAbleCheck(i) ? 'pointer' : ''}`"
         >
@@ -34,7 +32,7 @@
       @change="changeCurrentUser"
     />
 
-    <ResetButton />
+    <ResetButton v-if="!productionCheck" />
     <button class="minus btn" @click="zoomout"> - </button>
     <button class="plus btn" @click="zoomin"> + </button>
     <div v-if="checkPC">
@@ -64,7 +62,7 @@ export default {
   mounted() {
     setInterval(async () => {
       this.getBoard();
-    }, process.env.NODE_ENV === 'production' ? 300 : 1000);
+    }, this.productionCheck ? 300 : 1000);
   },
   computed: {
     ...mapState([
@@ -73,10 +71,14 @@ export default {
       'standbys',
       'number',
       'currentUser',
-      'grid',
+      'gridX',
+      'gridY',
       'xHalf',
       'yHalf',
     ]),
+    productionCheck() {
+      return process.env.NODE_ENV === 'production';
+    },
     checkPC() {
       const { userAgent } = navigator;
       if (userAgent.indexOf('iPhone') > -1 || userAgent.indexOf('iPod') > -1
@@ -87,17 +89,19 @@ export default {
     },
     getUserId() {
       return (i) => {
-        const half = Math.floor(this.grid / 2);
-        const x = ((i - 1) % this.grid) - half + this.xHalf;
-        const y = half + this.yHalf - Math.floor((i - 1) / (this.grid));
+        const halfGridX = Math.floor(this.gridX / 2);
+        const halfGridY = Math.floor(this.gridY / 2);
+        const x = ((i - 1) % this.gridX) - halfGridX + this.xHalf;
+        const y = halfGridY + this.yHalf - Math.floor((i - 1) / (this.gridY));
         return (this.pieces.find(el => el.x === x && el.y === y) || {}).userId;
       };
     },
     putAbleCheck() {
       return (i) => {
-        const half = Math.floor(this.grid / 2);
-        const x = ((i - 1) % this.grid) - half + this.xHalf;
-        const y = half + this.yHalf - Math.floor((i - 1) / (this.grid));
+        const halfGridX = Math.floor(this.gridX / 2);
+        const halfGridY = Math.floor(this.gridY / 2);
+        const x = ((i - 1) % this.gridX) - halfGridX + this.xHalf;
+        const y = halfGridY + this.yHalf - Math.floor((i - 1) / (this.gridY));
         return (this.candidates.find(el => el.x === x && el.y === y));
       };
     },
@@ -105,11 +109,16 @@ export default {
   methods: {
     ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown', 'setInitPos', 'gridMove', 'resetInitPos']),
     ...mapActions(['getBoard', 'putPiece']),
+    setGrid() {
+      this.gridX = Math.floor(this.$window.width / 30);
+      this.gridY = Math.floor(this.$window.height / 30);
+    },
     send(i) {
       if (this.putAbleCheck(i)) {
-        const half = Math.floor(this.grid / 2);
-        const x = ((i - 1) % this.grid) - half + this.xHalf;
-        const y = half + this.yHalf - Math.floor((i - 1) / (this.grid));
+        const halfGridX = Math.floor(this.gridX / 2);
+        const halfGridY = Math.floor(this.gridY / 2);
+        const x = ((i - 1) % this.gridX) - halfGridX + this.xHalf;
+        const y = halfGridY + this.yHalf - Math.floor((i - 1) / (this.gridY));
         this.putPiece({ x, y });
       }
     },

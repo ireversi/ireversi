@@ -4,7 +4,8 @@ export const state = () => ({
   standbys: null,
   number: 4,
   currentUser: 1,
-  grid: 21,
+  gridX: 10,
+  gridY: 10,
   xHalf: 0, // grid描写更新変数
   yHalf: 0,
   initX: 0, // mousemove時のxHalf起点情報
@@ -21,10 +22,12 @@ export const mutations = {
     state.standbys = standbys;
   },
   zoomout(state) {
-    state.grid += 2;
+    state.gridX += 2;
+    state.gridY += 2;
   },
   zoomin(state) {
-    state.grid -= 2;
+    state.gridX -= 2;
+    state.gridY -= 2;
   },
   changeCurrentUser(state, n) {
     state.currentUser = n;
@@ -48,7 +51,7 @@ export const mutations = {
   gridMove(state, e) { // touchsmove
     const mouseX = e.changedTouches[0].clientX;
     const mouseY = e.changedTouches[0].clientY;
-    const cellWidth = window.innerWidth / state.grid;
+    const cellWidth = this.$window.width / state.gridX;
 
     state.xHalf = state.initX - Math.floor((mouseX - state.initPosX) / cellWidth);
     state.yHalf = state.initY + Math.floor((mouseY - state.initPosY) / cellWidth);
