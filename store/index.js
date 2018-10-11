@@ -51,7 +51,7 @@ export const mutations = {
   gridMove(state, e) { // touchsmove
     const mouseX = e.changedTouches[0].clientX;
     const mouseY = e.changedTouches[0].clientY;
-    const cellWidth = this.$window.width / state.gridX;
+    const cellWidth = window.innerWidth / state.gridX;
 
     state.xHalf = state.initX - Math.floor((mouseX - state.initPosX) / cellWidth);
     state.yHalf = state.initY + Math.floor((mouseY - state.initPosY) / cellWidth);
