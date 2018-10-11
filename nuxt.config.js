@@ -33,6 +33,7 @@ module.exports = {
   plugins: [
     '@/plugins/axios',
     '@/plugins/element-ui',
+    '@/plugins/window-state',
     '@/plugins/vue-touch',
   ],
 

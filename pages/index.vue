@@ -1,5 +1,7 @@
 <template>
     <div class="main">
+      <!-- デバッグ用 -->
+      画面サイズ: {{ $window.width }} x {{ $window.height }}
       <div class="board"
         @touchstart="setInitPos($event)"
         @touchmove="gridMove($event)"
@@ -19,7 +21,7 @@
             <div
               class="piece"
               v-if="getUserId(i)"
-              :style="getUserId(i) === currentUser ? 'background:#444;color:white' :''"
+              :style="getUserId(i) === currentUser ? 'background:#444;color:white' : ''"
             > {{ getUserId(i) }}</div>
           </div>
         </div>
