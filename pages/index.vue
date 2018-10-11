@@ -8,7 +8,7 @@
       <div>
         <div
           class="cell"
-          v-for="i in gridX * Math.floor($window.height / ($window.width/gridX))"
+          v-for="i in gridX * Math.ceil($window.height / ($window.width/gridX))"
           :key="i"
           :style="
           `width: ${$window.width/gridX}px;
