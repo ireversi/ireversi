@@ -2,8 +2,11 @@
     <div class="main">
       <div class="board"
         @touchstart="setInitPos($event)"
+        @mousedown="setInitPos($event)"
         @touchmove="gridMove($event)"
+        @mousemove="gridMove($event)"
         @touchend="resetInitPos"
+        @mouseup="resetInitPos"
       >
       <div>
         <div
@@ -35,7 +38,7 @@
     <ResetButton v-if="!productionCheck" />
     <button class="minus btn" @click="zoomout"> - </button>
     <button class="plus btn" @click="zoomin"> + </button>
-    <div v-if="checkPC">
+    <div v-if="!productionCheck">
       <button class="btn up" @click="moveUp"> ↑ </button>
       <button class="btn right" @click="moveRight"> → </button>
       <button class="btn down" @click="moveDown"> ↓ </button>

@@ -12,6 +12,7 @@ export const state = () => ({
   initY: 0,
   initPosX: 0, // mouseXの起点情報
   initPosY: 0,
+  dragFlg: false,
 });
 
 
@@ -45,18 +46,22 @@ export const mutations = {
     state.yHalf -= 1;
   },
   setInitPos(state, e) { // touchstart
-    state.initPosX = e.changedTouches[0].clientX;
-    state.initPosY = e.changedTouches[0].clientY;
+    state.dragFlg = true;
+    state.initPosX = e.pageX || e.changedTouches[0].clientX;
+    state.initPosY = e.pageY || e.changedTouches[0].clientY;
   },
   gridMove(state, e) { // touchsmove
-    const mouseX = e.changedTouches[0].clientX;
-    const mouseY = e.changedTouches[0].clientY;
-    const cellWidth = window.innerWidth / state.gridX;
+    if (state.dragFlg) {
+      const mouseX = e.pageX || e.changedTouches[0].clientX;
+      const mouseY = e.pageY || e.changedTouches[0].clientY;
+      const cellWidth = window.innerWidth / state.gridX;
 
-    state.xHalf = state.initX - Math.floor((mouseX - state.initPosX) / cellWidth);
-    state.yHalf = state.initY + Math.floor((mouseY - state.initPosY) / cellWidth);
+      state.xHalf = state.initX - Math.floor((mouseX - state.initPosX) / cellWidth);
+      state.yHalf = state.initY + Math.floor((mouseY - state.initPosY) / cellWidth);
+    }
   },
   resetInitPos(state) { // touchend
+    state.dragFlg = false;
     // 次の起点場所情報の保存
     state.initX = state.xHalf;
     state.initY = state.yHalf;
