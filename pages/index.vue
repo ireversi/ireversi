@@ -129,6 +129,13 @@ export default {
 };
 </script>
 
+<style>
+body {
+  user-select: none;
+}
+</style>
+
+
 <style scoped>
 .btn {
   position:fixed;
