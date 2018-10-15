@@ -28,6 +28,10 @@
         </div>
       </div>
     </div>
+    <div class="score">
+      <div>Score</div>
+      <div>{{ score }}</div>
+    </div>
 
     <UserSelector
       :number="number"
@@ -72,6 +76,8 @@ export default {
       'pieces',
       'candidates',
       'standbys',
+      'size',
+      'score',
       'number',
       'currentUser',
       'gridX',
@@ -211,7 +217,8 @@ body {
 
 .cell {
   display: inline-block;
-  border: 1px solid #313;
+  border-top: 1px solid #313;
+  border-left: 1px solid #313;
   vertical-align: bottom;
 }
 
@@ -233,7 +240,27 @@ body {
   justify-content: center;
   align-items: center;
   color:#444;
-  font-size:120%;
-  font-weight: bold;
+  font-size:80%;
+}
+
+.score {
+  position:fixed;
+  bottom:0;
+  right:0;
+  background: #fff;
+  width: 100px;
+  border-radius: 5px;
+  border: 2px solid #555;
+}
+
+.score > div {
+  box-sizing: border-box;
+  width: 100px;
+  height: 48px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 150%;
+  border-bottom: 1px solid #555;
 }
 </style>
