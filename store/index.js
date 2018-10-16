@@ -57,30 +57,41 @@ export const mutations = {
     state.yHalf -= 1;
   },
   setInitPos(state, e) { // touchstart
-    // console.log(e.changedTouches);
-    if (e.changedTouches && e.changedTouches.length >= 2) {
-      state.initLen = e.changedTouches[1].clientX - e.changedTouches[0].clientX;
-    } else {
-      state.dragFlg = true;
-      state.initPosX = e.pageX || e.changedTouches[0].clientX;
-      state.initPosY = e.pageY || e.changedTouches[0].clientY;
-    }
+    console.log(e.changedTouches);
+    // if (e.changedTouches && e.changedTouches.length >= 2) {
+    //   state.initLen = e.changedTouches[1].clientX - e.changedTouches[0].clientX;
+    // } else {
+    state.dragFlg = true;
+    state.initPosX = e.pageX || e.changedTouches[0].clientX;
+    state.initPosY = e.pageY || e.changedTouches[0].clientY;
+    console.log(`${state.initPosX}, ${state.initPosY}`);
+    // }
   },
   gridMove(state, e) { // touchsmove
-    // console.log(e.changedTouches);
+    console.log(e.changedTouches);
     const cellWidth = window.innerWidth / state.gridX;
-    if (state.dragFlg) {
-      const mouseX = e.pageX || e.changedTouches[0].clientX;
-      const mouseY = e.pageY || e.changedTouches[0].clientY;
-      state.xHalf = state.initX - Math.floor((mouseX - state.initPosX) / cellWidth);
-      state.yHalf = state.initY + Math.floor((mouseY - state.initPosY) / cellWidth);
-    } else if (state.initLen) {
-      const nowLen = e.changedTouches[1].clientX - e.changedTouches[0].clientX;
-      state.gridX += Math.floor(nowLen / cellWidth);
-      state.gridY += Math.floor(nowLen / cellWidth);
+    // if (state.dragFlg) {
+    const mouseX = e.pageX || e.changedTouches[0].clientX;
+    const mouseY = e.pageY || e.changedTouches[0].clientY;
+    const requestXHalf = state.initX - Math.floor((mouseX - state.initPosX) / cellWidth);
+    const requestYHalf = state.initY + Math.floor((mouseY - state.initPosY) / cellWidth);
+    if (requestXHalf >= state.size.xMin + (state.gridX / 2) - 2
+      && requestXHalf <= state.size.xMax - (state.gridX / 2) + 3) {
+      state.xHalf = requestXHalf;
     }
+    if (requestYHalf >= state.size.yMin + state.gridY - 1
+      && requestYHalf <= state.size.yMax - (state.gridY / 2) + 2) {
+      state.yHalf = requestYHalf;
+    }
+    // } else if (state.initLen) {
+    //   const nowLen = e.changedTouches[1].clientX - e.changedTouches[0].clientX;
+    //   state.gridX += Math.floor(nowLen / cellWidth);
+    //   state.gridY += Math.floor(nowLen / cellWidth);
+    // }
+    console.log(`${state.xHalf}, ${state.yHalf}`);
   },
   resetInitPos(state) { // touchend
+    console.log('resetInit');
     state.initLen = 0;
     state.dragFlg = false;
     // 次の起点場所情報の保存

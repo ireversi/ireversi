@@ -1,13 +1,14 @@
 <template>
-    <div class="main">
-      <div class="board"
-        @touchstart="setInitPos($event)"
-        @mousedown="setInitPos($event)"
-        @touchmove="gridMove($event)"
-        @mousemove="gridMove($event)"
-        @touchend="resetInitPos"
-        @mouseup="resetInitPos"
-      >
+  <div class="main"
+    @touchstart="setInitPos($event)"
+    @mousedown="setInitPos($event)"
+    @touchmove="gridMove($event)"
+    @mousemove="gridMove($event)"
+    @touchend="resetInitPos"
+    @touchcancel="resetInitPos"
+    @mouseup="resetInitPos"
+  >
+    <div class="board">
       <div>
         <div
           class="cell"
@@ -23,7 +24,9 @@
               class="piece"
               v-if="getUserId(i)"
               :style="getUserId(i) === currentUser ? 'background:#444;color:white' : ''"
-            > {{ getUserId(i) }}</div>
+            >
+              {{ getUserId(i) }}
+            </div>
           </div>
         </div>
       </div>
@@ -202,10 +205,6 @@ body {
   bottom:0;
   background: #009432;
 }
-.board {
-  padding-top: 100%;
-  position: relative;
-}
 
 .board > div {
   position: absolute;
@@ -245,8 +244,8 @@ body {
 
 .score {
   position:fixed;
-  bottom:0;
-  right:0;
+  top:0;
+  left:0;
   background: #fff;
   width: 100px;
   border-radius: 5px;
