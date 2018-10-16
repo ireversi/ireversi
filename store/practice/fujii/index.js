@@ -68,9 +68,6 @@ export const actions = {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     });
-    // モックサーバーの場合boardにpostしたデータしか帰ってこない
-    // const newBoard = [...state.board];
-    // newBoard.push(board);
     commit('setBoard', board);
   },
   async resetGame({ commit, state }, keyword) {
