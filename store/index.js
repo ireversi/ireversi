@@ -12,7 +12,7 @@ export const state = () => ({
   yHalf: 0,
   initX: 0, // mousemove時のxHalf起点情報
   initY: 0,
-  initLen: 0, // ピンチ操作の基準情報
+  baseDistance: 0, // ピンチ操作の基準情報
   initPosX: 0, // mouseXの起点情報
   initPosY: 0,
   dragFlg: false,
@@ -57,46 +57,61 @@ export const mutations = {
   moveDown(state) {
     state.yHalf -= 1;
   },
-  // pinchStart(state, e) {
-  //   // e.preventDefault();
-  //   // if (e.touches.length === 2) {
-  //   //   state.touchDistance = Math.abs(e.touches[1].clientX - e.touches[0].clientX);
-  //   // }
-  //   // console.log('touchDis', state.touchDistance);
-  // },
-  // pinchMove(state, e) {
-  //   // if (e.touches.length === 2) {
-  //   //   // e.preventDefault();
-  //   // }
-  //   // // let touchPos = e.touches;
-  //   // console.log(touchPos[0].clientX, touchPos[1].clientX);
-  //   // if (touchPos.length === 2) {
-  //   // }
-  //   // console.log(touches);
-  // },
   setInitPos(state, e) { // touchstart
     state.dragFlg = true;
     state.initPosX = e.pageX || e.changedTouches[0].clientX;
     state.initPosY = e.pageY || e.changedTouches[0].clientY;
+
+    const { touches } = e;
+    if (touches && touches.length >= 2) {
+      const x1 = touches[0].pageX;
+      const y1 = touches[0].pageY;
+
+      const x2 = touches[1].pageX;
+      const y2 = touches[1].pageY;
+
+      const distance = Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
+      state.baseDistance = distance;
+      console.log(state.baseDistance, state.gridX, state.gridY);
+    }
   },
   gridMove(state, e) { // touchsmove
+    e.preventDefault();
+
     const cellWidth = window.innerWidth / state.gridX;
-    // if (state.dragFlg) {
-    const mouseX = e.pageX || e.changedTouches[0].clientX;
-    const mouseY = e.pageY || e.changedTouches[0].clientY;
-    const requestXHalf = state.initX - Math.floor((mouseX - state.initPosX) / cellWidth);
-    const requestYHalf = state.initY + Math.floor((mouseY - state.initPosY) / cellWidth);
-    if (requestXHalf >= state.size.xMin + (state.gridX / 2) - 2
-      && requestXHalf <= state.size.xMax - (state.gridX / 2) + 3) {
+    if (state.dragFlg) {
+      const mouseX = e.pageX || e.changedTouches[0].clientX;
+      const mouseY = e.pageY || e.changedTouches[0].clientY;
+      const requestXHalf = state.initX - Math.floor((mouseX - state.initPosX) / cellWidth);
+      const requestYHalf = state.initY + Math.floor((mouseY - state.initPosY) / cellWidth);
       state.xHalf = requestXHalf;
-    }
-    if (requestYHalf >= state.size.yMin + state.gridY - 1
-      && requestYHalf <= state.size.yMax - (state.gridY / 2) + 2) {
       state.yHalf = requestYHalf;
+    }
+
+    // touchmove
+    const { touches } = e;
+
+    if (touches && touches.length >= 2) {
+      const x1 = touches[0].pageX;
+      const y1 = touches[0].pageY;
+
+      const x2 = touches[1].pageX;
+      const y2 = touches[1].pageY;
+
+      const distance = Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
+
+      const cellWidth = window.innerWidth / state.gridX;
+      if ((distance - state.baseDistance) > cellWidth) {
+        state.gridX -= 1;
+        state.gridY -= 1;
+      } else if ((distance - state.baseDistance) < cellWidth) {
+        state.gridX += 1;
+        state.gridY += 1;
+      }
     }
   },
   resetInitPos(state) { // touchend
-    state.initLen = 0;
+    state.baseDistance = 0;
     state.dragFlg = false;
     // 次の起点場所情報の保存
     state.initX = state.xHalf;

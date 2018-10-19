@@ -1,15 +1,14 @@
 <template>
   <div class="main"
+  >
+    <div class="board"
     @touchstart="setInitPos($event)"
     @mousedown="setInitPos($event)"
     @touchmove="gridMove($event)"
     @mousemove="gridMove($event)"
     @touchend="resetInitPos"
     @touchcancel="resetInitPos"
-    @mouseup="resetInitPos"
-  >
-    <div class="board">
-      <div>
+    @mouseup="resetInitPos">
         <div
           class="cell"
           v-for="i in gridX * Math.ceil($window.height / ($window.width/gridX))"
@@ -29,7 +28,6 @@
             </div>
           </div>
         </div>
-      </div>
     </div>
     <div class="score">
       <div>Score</div>
@@ -87,13 +85,19 @@ export default {
       'gridY',
       'xHalf',
       'yHalf',
+      'initX', // mousemove時のxHalf起点情報
+      'initY',
+      'initLen', // ピンチ操作の基準情報
+      'initPosX', // mouseXの起点情報
+      'initPosY',
+      'dragFlg',
     ]),
     productionCheck() {
       return process.env.NODE_ENV === 'production';
     },
     checkPC() {
       const { userAgent } = navigator;
-      if (userAgent.indexOf('iPhone') > -1 || userAgent.indexOf('iPod') > -1
+      if (userAgent.indexOf('iPhone') > -1 || userAgent.indexOf('iPad') > -1
           || userAgent.indexOf('Android') > -1) {
         return false;
       }
@@ -121,10 +125,6 @@ export default {
   methods: {
     ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown', 'setInitPos', 'gridMove', 'resetInitPos']),
     ...mapActions(['getBoard', 'putPiece']),
-    setGrid() {
-      this.gridX = Math.floor(this.$window.width / 30);
-      this.gridY = Math.floor(this.$window.height / 30);
-    },
     send(i) {
       if (this.putAbleCheck(i)) {
         const halfGridX = Math.floor(this.gridX / 2);
@@ -206,7 +206,7 @@ body {
   background: #009432;
 }
 
-.board > div {
+.board {
   position: absolute;
   top:0;
   left:0;
