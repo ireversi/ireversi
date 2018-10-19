@@ -1,15 +1,14 @@
 <template>
   <div class="main"
+  >
+    <div class="board"
     @touchstart="setInitPos($event)"
     @mousedown="setInitPos($event)"
     @touchmove="gridMove($event)"
     @mousemove="gridMove($event)"
     @touchend="resetInitPos"
     @touchcancel="resetInitPos"
-    @mouseup="resetInitPos"
-  >
-    <div class="board">
-      <div>
+    @mouseup="resetInitPos">
         <div
           class="cell"
           v-for="i in gridX * Math.ceil($window.height / ($window.width/gridX))"
@@ -29,7 +28,6 @@
             </div>
           </div>
         </div>
-      </div>
     </div>
     <div class="score">
       <div>Score</div>
@@ -87,13 +85,19 @@ export default {
       'gridY',
       'xHalf',
       'yHalf',
+      'initX', // mousemove時のxHalf起点情報
+      'initY',
+      'initLen', // ピンチ操作の基準情報
+      'initPosX', // mouseXの起点情報
+      'initPosY',
+      'dragFlg',
     ]),
     productionCheck() {
       return process.env.NODE_ENV === 'production';
     },
     checkPC() {
       const { userAgent } = navigator;
-      if (userAgent.indexOf('iPhone') > -1 || userAgent.indexOf('iPod') > -1
+      if (userAgent.indexOf('iPhone') > -1 || userAgent.indexOf('iPad') > -1
           || userAgent.indexOf('Android') > -1) {
         return false;
       }
@@ -101,8 +105,8 @@ export default {
     },
     getUserId() {
       return (i) => {
-        const halfGridX = Math.floor(this.gridX / 2);
-        const halfGridY = Math.floor(this.gridY / 2);
+        const halfGridX = Math.ceil(this.gridX / 2) + (this.gridX % 2);
+        const halfGridY = Math.ceil(this.gridY / 2) + (this.gridY % 2);
         const x = ((i - 1) % this.gridX) - halfGridX + this.xHalf;
         const y = halfGridY + this.yHalf - Math.floor((i - 1) / (this.gridY));
         return (this.pieces.find(el => el.x === x && el.y === y) || {}).userId;
@@ -206,7 +210,7 @@ body {
   background: #009432;
 }
 
-.board > div {
+.board {
   position: absolute;
   top:0;
   left:0;
