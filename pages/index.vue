@@ -11,7 +11,7 @@
     @mouseup="resetInitPos">
         <div
           class="cell"
-          v-for="i in gridX * Math.ceil($window.height / ($window.width/gridX))"
+          v-for="i in gridX * Math.ceil(($window.height / $window.width) * gridX)"
           :key="i"
           :style="
           `width: ${$window.width/gridX}px;
@@ -114,8 +114,8 @@ export default {
     },
     putAbleCheck() {
       return (i) => {
-        const halfGridX = Math.floor(this.gridX / 2);
-        const halfGridY = Math.floor(this.gridY / 2);
+        const halfGridX = Math.ceil(this.gridX / 2) + (this.gridX % 2);
+        const halfGridY = Math.ceil(this.gridY / 2) + (this.gridY % 2);
         const x = ((i - 1) % this.gridX) - halfGridX + this.xHalf;
         const y = halfGridY + this.yHalf - Math.floor((i - 1) / (this.gridY));
         return (this.candidates.find(el => el.x === x && el.y === y));

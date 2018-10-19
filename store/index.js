@@ -72,7 +72,6 @@ export const mutations = {
 
       const distance = Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
       state.baseDistance = distance;
-      console.log(state.baseDistance, state.gridX, state.gridY);
     }
   },
   gridMove(state, e) { // touchsmove
