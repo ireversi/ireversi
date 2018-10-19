@@ -16,6 +16,7 @@ export const state = () => ({
   initPosX: 0, // mouseXの起点情報
   initPosY: 0,
   dragFlg: false,
+  touchDistance: 0,
 });
 
 
@@ -60,9 +61,23 @@ export const mutations = {
     state.dragFlg = true;
     state.initPosX = e.pageX || e.changedTouches[0].clientX;
     state.initPosY = e.pageY || e.changedTouches[0].clientY;
+
+    const { touches } = e;
+    if (touches && touches.length >= 2) {
+      const x1 = touches[0].pageX;
+      const y1 = touches[0].pageY;
+
+      const x2 = touches[1].pageX;
+      const y2 = touches[1].pageY;
+
+      const distance = Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
+      state.baseDistance = distance;
+      console.log(state.baseDistance, state.gridX, state.gridY);
+    }
   },
   gridMove(state, e) { // touchsmove
     e.preventDefault();
+
     const cellWidth = window.innerWidth / state.gridX;
     if (state.dragFlg) {
       const mouseX = e.pageX || e.changedTouches[0].clientX;
@@ -74,8 +89,6 @@ export const mutations = {
     }
 
     // touchmove
-
-
     const { touches } = e;
 
     if (touches && touches.length >= 2) {
@@ -86,20 +99,14 @@ export const mutations = {
       const y2 = touches[1].pageY;
 
       const distance = Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
-      console.log(`distance: ${distance}`);
 
-      console.log(`basedistance: ${state.baseDistance}`);
-      if (state.baseDistance) {
-        const scale = distance / state.baseDistance;
-
-        if (scale && scale !== Infinity && Math.floor(window.innerWidth / (cellWidth * scale)) >= 2
-            && (cellWidth * scale) >= 20) {
-          // console.log(Math.floor(cellWidth * scale));
-          state.gridX = Math.floor(window.innerWidth / (cellWidth * scale));
-          state.gridY = Math.floor(window.innerHeight / (cellWidth * scale));
-        }
-      } else {
-        state.baseDistance = distance;
+      const cellWidth = window.innerWidth / state.gridX;
+      if ((distance - state.baseDistance) > cellWidth) {
+        state.gridX -= 1;
+        state.gridY -= 1;
+      } else if ((distance - state.baseDistance) < cellWidth) {
+        state.gridX += 1;
+        state.gridY += 1;
       }
     }
   },

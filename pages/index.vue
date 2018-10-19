@@ -68,9 +68,9 @@ export default {
     await store.dispatch('getBoard');
   },
   mounted() {
-    setInterval(async () => {
-      this.getBoard();
-    }, this.productionCheck ? 300 : 1000);
+    // setInterval(async () => {
+    //   this.getBoard();
+    // }, this.productionCheck ? 300 : 1000);
   },
   computed: {
     ...mapState([
@@ -105,8 +105,8 @@ export default {
     },
     getUserId() {
       return (i) => {
-        const halfGridX = Math.ceil(this.gridX / 2) + (this.gridX % 2);
-        const halfGridY = Math.ceil(this.gridY / 2) + (this.gridY % 2);
+        const halfGridX = Math.floor(this.gridX / 2);
+        const halfGridY = Math.floor(this.gridY / 2);
         const x = ((i - 1) % this.gridX) - halfGridX + this.xHalf;
         const y = halfGridY + this.yHalf - Math.floor((i - 1) / (this.gridY));
         return (this.pieces.find(el => el.x === x && el.y === y) || {}).userId;
@@ -125,10 +125,6 @@ export default {
   methods: {
     ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown', 'setInitPos', 'gridMove', 'resetInitPos']),
     ...mapActions(['getBoard', 'putPiece']),
-    setGrid() {
-      this.gridX = Math.floor(this.$window.width / 30);
-      this.gridY = Math.floor(this.$window.height / 30);
-    },
     send(i) {
       if (this.putAbleCheck(i)) {
         const halfGridX = Math.floor(this.gridX / 2);
