@@ -70,9 +70,9 @@ export default {
     await store.dispatch('getBoard');
   },
   mounted() {
-    setInterval(async () => {
-      this.getBoard();
-    }, this.productionCheck ? 300 : 1000);
+    // setInterval(async () => {
+    //   this.getBoard();
+    // }, this.productionCheck ? 300 : 1000);
   },
   computed: {
     ...mapState([

@@ -16,6 +16,7 @@ export const state = () => ({
   initPosX: 0, // mouseXの起点情報
   initPosY: 0,
   dragFlg: false,
+  touchDistance: 0,
 });
 
 
@@ -56,19 +57,29 @@ export const mutations = {
   moveDown(state) {
     state.yHalf -= 1;
   },
+  // pinchStart(state, e) {
+  //   // e.preventDefault();
+  //   // if (e.touches.length === 2) {
+  //   //   state.touchDistance = Math.abs(e.touches[1].clientX - e.touches[0].clientX);
+  //   // }
+  //   // console.log('touchDis', state.touchDistance);
+  // },
+  // pinchMove(state, e) {
+  //   // if (e.touches.length === 2) {
+  //   //   // e.preventDefault();
+  //   // }
+  //   // // let touchPos = e.touches;
+  //   // console.log(touchPos[0].clientX, touchPos[1].clientX);
+  //   // if (touchPos.length === 2) {
+  //   // }
+  //   // console.log(touches);
+  // },
   setInitPos(state, e) { // touchstart
-    console.log(e.changedTouches);
-    // if (e.changedTouches && e.changedTouches.length >= 2) {
-    //   state.initLen = e.changedTouches[1].clientX - e.changedTouches[0].clientX;
-    // } else {
     state.dragFlg = true;
     state.initPosX = e.pageX || e.changedTouches[0].clientX;
     state.initPosY = e.pageY || e.changedTouches[0].clientY;
-    console.log(`${state.initPosX}, ${state.initPosY}`);
-    // }
   },
   gridMove(state, e) { // touchsmove
-    console.log(e.changedTouches);
     const cellWidth = window.innerWidth / state.gridX;
     // if (state.dragFlg) {
     const mouseX = e.pageX || e.changedTouches[0].clientX;
@@ -83,15 +94,8 @@ export const mutations = {
       && requestYHalf <= state.size.yMax - (state.gridY / 2) + 2) {
       state.yHalf = requestYHalf;
     }
-    // } else if (state.initLen) {
-    //   const nowLen = e.changedTouches[1].clientX - e.changedTouches[0].clientX;
-    //   state.gridX += Math.floor(nowLen / cellWidth);
-    //   state.gridY += Math.floor(nowLen / cellWidth);
-    // }
-    console.log(`${state.xHalf}, ${state.yHalf}`);
   },
   resetInitPos(state) { // touchend
-    console.log('resetInit');
     state.initLen = 0;
     state.dragFlg = false;
     // 次の起点場所情報の保存
