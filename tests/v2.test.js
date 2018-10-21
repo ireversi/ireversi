@@ -1,37 +1,5 @@
 const { getStore } = require('./setup.js');
 
-describe('V2 mutations test', () => {
-  let store;
-
-  beforeEach(async () => {
-    store = await getStore();
-  });
-
-  it('zoom out', () => {
-    // Given
-    const { gridX, gridY } = store.state;
-
-    // When
-    store.commit('zoomout');
-
-    // Then
-    expect(store.state.gridX).toEqual(gridX + 2);
-    expect(store.state.gridY).toEqual(gridY + 2);
-  });
-
-  it('zoom in', () => {
-    // Given
-    const { gridX, gridY } = store.state;
-
-    // When
-    store.commit('zoomin');
-
-    // Then
-    expect(store.state.gridX).toEqual(gridX - 2);
-    expect(store.state.gridY).toEqual(gridY - 2);
-  });
-});
-
 describe('V2 test', () => {
   let store;
 
