@@ -17,6 +17,7 @@ export const state = () => ({
   initPosY: 0,
   dragFlg: false,
   touchDistance: 0,
+  touchTime: 0, // ダブルタッチ無効利用変数
 });
 
 
@@ -45,39 +46,34 @@ export const mutations = {
   changeCurrentUser(state, n) {
     state.currentUser = n;
   },
-  moveRight(state) {
-    state.xHalf += 1;
-  },
-  moveLeft(state) {
-    state.xHalf -= 1;
-  },
-  moveUp(state) {
-    state.yHalf += 1;
-  },
-  moveDown(state) {
-    state.yHalf -= 1;
-  },
   setInitPos(state, e) { // touchstart
+    // ダブルタップ無効化
+    if (new Date().getTime() - state.touchTime < 350) {
+      e.preventDefault();
+    }
+
+    // 基準距離設定
     state.dragFlg = true;
     state.initPosX = e.pageX || e.changedTouches[0].clientX;
     state.initPosY = e.pageY || e.changedTouches[0].clientY;
 
     const { touches } = e;
     if (touches && touches.length >= 2) {
+      state.dragFlg = false;
       const x1 = touches[0].pageX;
       const y1 = touches[0].pageY;
-
       const x2 = touches[1].pageX;
       const y2 = touches[1].pageY;
 
       const distance = Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
       state.baseDistance = distance;
-      console.log(state.baseDistance, state.gridX, state.gridY);
     }
   },
-  gridMove(state, e) { // touchsmove
+  gridMove(state, e) { // touchmove
     e.preventDefault();
+    const { touches } = e;
 
+    // スワイプ処理
     const cellWidth = window.innerWidth / state.gridX;
     if (state.dragFlg) {
       const mouseX = e.pageX || e.changedTouches[0].clientX;
@@ -88,25 +84,34 @@ export const mutations = {
       state.yHalf = requestYHalf;
     }
 
-    // touchmove
-    const { touches } = e;
-
+    // ピンチ処理
     if (touches && touches.length >= 2) {
       const x1 = touches[0].pageX;
       const y1 = touches[0].pageY;
-
       const x2 = touches[1].pageX;
       const y2 = touches[1].pageY;
 
       const distance = Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
 
       const cellWidth = window.innerWidth / state.gridX;
-      if ((distance - state.baseDistance) > cellWidth) {
-        state.gridX -= 1;
-        state.gridY -= 1;
-      } else if ((distance - state.baseDistance) < cellWidth) {
-        state.gridX += 1;
-        state.gridY += 1;
+      if ((distance - state.baseDistance) > 0) {
+        if ((distance - state.baseDistance) > cellWidth) {
+          if (state.gridX <= 5) {
+            state.gridX = 5;
+            state.gridY = 5;
+          } else {
+            state.gridX -= 1;
+            state.gridY -= 1;
+          }
+        }
+      } else if ((distance - state.baseDistance) < 0) {
+        if (state.gridX >= 20) {
+          state.gridX = 20;
+          state.gridY = 20;
+        } else {
+          state.gridX += 1;
+          state.gridY += 1;
+        }
       }
     }
   },
@@ -116,6 +121,7 @@ export const mutations = {
     // 次の起点場所情報の保存
     state.initX = state.xHalf;
     state.initY = state.yHalf;
+    state.touchTime = new Date().getTime();
   },
 };
 
