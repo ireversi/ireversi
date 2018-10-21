@@ -56,7 +56,8 @@ export const mutations = {
     state.dragFlg = true;
     state.initPosX = e.pageX || e.changedTouches[0].clientX;
     state.initPosY = e.pageY || e.changedTouches[0].clientY;
-
+  },
+  pinchStart(state, e) { // touchstart
     const { touches } = e;
     if (touches && touches.length >= 2) {
       state.dragFlg = false;
@@ -69,11 +70,8 @@ export const mutations = {
       state.baseDistance = distance;
     }
   },
-  gridMove(state, e) { // touchmove
+  gridMove(state, e) {
     e.preventDefault();
-    const { touches } = e;
-
-    // スワイプ処理
     const cellWidth = window.innerWidth / state.gridX;
     if (state.dragFlg) {
       const mouseX = e.pageX || e.changedTouches[0].clientX;
@@ -83,8 +81,10 @@ export const mutations = {
       state.xHalf = requestXHalf;
       state.yHalf = requestYHalf;
     }
-
-    // ピンチ処理
+  },
+  pinchMove(state, e) {
+    e.preventDefault();
+    const { touches } = e;
     if (touches && touches.length >= 2) {
       const x1 = touches[0].pageX;
       const y1 = touches[0].pageY;

@@ -3,10 +3,10 @@
   >
     <Modal />
     <div class="board"
-    @touchstart="setInitPos($event)"
-    @mousedown="setInitPos($event)"
-    @touchmove="gridMove($event)"
-    @mousemove="gridMove($event)"
+    @touchstart="setInitPos($event);pinchStart($event)"
+    @mousedown="setInitPos"
+    @touchmove="gridMove($event);pinchMove($event)"
+    @mousemove="gridMove"
     @touchend="resetInitPos"
     @touchcancel="resetInitPos"
     @mouseup="resetInitPos">
@@ -68,9 +68,9 @@ export default {
     await store.dispatch('getBoard');
   },
   mounted() {
-    // setInterval(async () => {
-    //   this.getBoard();
-    // }, this.productionCheck ? 300 : 1000);
+    setInterval(async () => {
+      this.getBoard();
+    }, this.productionCheck ? 300 : 1000);
   },
   computed: {
     ...mapState([
@@ -123,7 +123,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'setInitPos', 'gridMove', 'resetInitPos']),
+    ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'setInitPos', 'gridMove', 'resetInitPos', 'pinchStart', 'pinchMove']),
     ...mapActions(['getBoard', 'putPiece']),
     send(i) {
       if (this.putAbleCheck(i)) {
