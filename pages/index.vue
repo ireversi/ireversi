@@ -1,7 +1,7 @@
 <template>
   <div class="main"
   >
-    <!-- <div v-if="overlay" class="modalLayer" @click="closeOverLayer"></div> -->
+    <Modal />
     <div class="board"
     @touchstart="setInitPos($event)"
     @mousedown="setInitPos($event)"
@@ -54,18 +54,15 @@
 /* デバッグ用 (最終的に削除予定) */
 import UserSelector from '~/components/UserSelector.vue';
 import ResetButton from '~/components/ResetButton.vue';
+import Modal from '~/components/Modal.vue';
 /* デバッグ用 */
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
-  data() {
-    return {
-      overlay: true,
-    };
-  },
   components: {
     UserSelector,
     ResetButton,
+    Modal,
   },
   async fetch({ store }) {
     await store.dispatch('getBoard');
@@ -136,10 +133,6 @@ export default {
         const y = halfGridY + this.yHalf - Math.floor((i - 1) / (this.gridY));
         this.putPiece({ x, y });
       }
-    },
-    closeOverLayer() {
-      console.log(this.overlay);
-      this.overlay = false;
     },
   },
 };
@@ -244,12 +237,5 @@ body {
   align-items: center;
   font-size: 150%;
   border-bottom: 1px solid #555;
-}
-
-.modalLayer {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 100;
 }
 </style>
