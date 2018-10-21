@@ -1,6 +1,7 @@
 <template>
   <div class="main"
   >
+    <!-- <div v-if="overlay" class="modalLayer" @click="closeOverLayer"></div> -->
     <div class="board"
     @touchstart="setInitPos($event)"
     @mousedown="setInitPos($event)"
@@ -40,15 +41,12 @@
       @change="changeCurrentUser"
     />
 
-    <ResetButton v-if="!productionCheck" />
-    <button class="minus btn" @click="zoomout"> - </button>
-    <button class="plus btn" @click="zoomin"> + </button>
-    <div v-if="!productionCheck">
-      <button class="btn up" @click="moveUp"> ↑ </button>
-      <button class="btn right" @click="moveRight"> → </button>
-      <button class="btn down" @click="moveDown"> ↓ </button>
-      <button class="btn left" @click="moveLeft"> ← </button>
+    <div v-if="checkPC" class="btns">
+      <div class="minus btn" @click="zoomout"> - </div>
+      <div class="plus btn" @click="zoomin"> + </div>
     </div>
+
+
   </div>
 </template>
 
@@ -60,6 +58,11 @@ import ResetButton from '~/components/ResetButton.vue';
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
+  data() {
+    return {
+      overlay: true,
+    };
+  },
   components: {
     UserSelector,
     ResetButton,
@@ -123,7 +126,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown', 'setInitPos', 'gridMove', 'resetInitPos']),
+    ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'setInitPos', 'gridMove', 'resetInitPos']),
     ...mapActions(['getBoard', 'putPiece']),
     send(i) {
       if (this.putAbleCheck(i)) {
@@ -133,6 +136,10 @@ export default {
         const y = halfGridY + this.yHalf - Math.floor((i - 1) / (this.gridY));
         this.putPiece({ x, y });
       }
+    },
+    closeOverLayer() {
+      console.log(this.overlay);
+      this.overlay = false;
     },
   },
 };
@@ -146,56 +153,31 @@ body {
 
 
 <style scoped>
+.btns {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+}
 .btn {
-  position:fixed;
   cursor: pointer;
   background: #fff;
+  font-size: 150%;
+  border: 1px solid #000;
+  text-align: center;
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
 }
 .btn:hover {
   background: #f77;
   color: #fff;
 }
-
-.up {
-  top: 20px;
-  left: 50%;
-  padding: 10px 30px;
-}
-
-.left {
-  top: 50%;
-  left: 20px;
-  padding: 30px 10px;
-}
-
-.down {
-  bottom: 20px;
-  left: 50%;
-  padding: 10px 30px;
-}
-
-.right {
-  top: 50%;
-  right: 20px;
-  padding: 30px 10px;
-}
-
-.minus {
-  bottom: 20px;
-  left: 70%;
-  padding: 10px 30px;
-}
 .plus {
-  bottom: 20px;
-  left: 80%;
-  padding: 10px 30px;
+  margin-left: 10px;
 }
 
-.reset {
-  bottom: 20px;
-  left: 30%;
-  padding: 10px 30px;
-}
 
 .main {
   position:fixed;
@@ -240,6 +222,7 @@ body {
   align-items: center;
   color:#444;
   font-size:80%;
+  box-shadow: 2px 3px 0px 0px #000;
 }
 
 .score {
@@ -261,5 +244,12 @@ body {
   align-items: center;
   font-size: 150%;
   border-bottom: 1px solid #555;
+}
+
+.modalLayer {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
 }
 </style>
