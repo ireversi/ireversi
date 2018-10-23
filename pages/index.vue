@@ -134,12 +134,12 @@ export default {
       }
     },
     onTouchStart(e) {
-      this.$store.commit('setInitPos', e);
-      this.$store.commit('pinchStart', e);
+      this.setInitPos(e);
+      this.pinchStart(e);
     },
     onTouchMove(e) {
-      this.$store.commit('gridMove', e);
-      this.$store.commit('pinchMove', e);
+      this.gridMove(e);
+      this.pinchMove(e);
     },
   },
 };
