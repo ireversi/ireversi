@@ -222,7 +222,7 @@ body {
   align-items: center;
   color:#444;
   font-size:80%;
-  box-shadow: 2px 3px 0px 0px #000;
+  box-shadow: 2px 3px 0px 0px rgba(0,0,0,0.5);
 }
 
 .score {
