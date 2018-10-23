@@ -3,9 +3,9 @@
   >
     <Modal />
     <div class="board"
-    @touchstart="setInitPos($event);pinchStart($event)"
+    @touchstart="onTouchStart"
     @mousedown="setInitPos"
-    @touchmove="gridMove($event);pinchMove($event)"
+    @touchmove="onTouchMove"
     @mousemove="gridMove"
     @touchend="resetInitPos"
     @touchcancel="resetInitPos"
@@ -132,6 +132,14 @@ export default {
         const y = halfGridY + this.yHalf - Math.floor((i - 1) / (this.gridY));
         this.putPiece({ x, y });
       }
+    },
+    onTouchStart(e) {
+      this.$store.commit('setInitPos', e);
+      this.$store.commit('pinchStart', e);
+    },
+    onTouchMove(e) {
+      this.$store.commit('gridMove', e);
+      this.$store.commit('pinchMove', e);
     },
   },
 };
