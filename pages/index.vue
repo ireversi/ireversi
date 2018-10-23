@@ -46,7 +46,6 @@
       <div class="plus btn" @click="zoomin"> + </div>
     </div>
 
-
   </div>
 </template>
 
