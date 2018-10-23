@@ -35,7 +35,6 @@ export default {
   right: 0;
   background: #fff;
   width: 100px;
-  z-index:20;
 }
 .palette > div {
   box-sizing: border-box;

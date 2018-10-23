@@ -1,12 +1,12 @@
 <template>
   <div class="main"
   >
-    <!-- <div v-if="overlay" class="modalLayer" @click="closeOverLayer"></div> -->
+    <Modal />
     <div class="board"
-    @touchstart="setInitPos($event)"
-    @mousedown="setInitPos($event)"
-    @touchmove="gridMove($event)"
-    @mousemove="gridMove($event)"
+    @touchstart="onTouchStart"
+    @mousedown="setInitPos"
+    @touchmove="onTouchMove"
+    @mousemove="gridMove"
     @touchend="resetInitPos"
     @touchcancel="resetInitPos"
     @mouseup="resetInitPos">
@@ -46,7 +46,6 @@
       <div class="plus btn" @click="zoomin"> + </div>
     </div>
 
-
   </div>
 </template>
 
@@ -54,26 +53,23 @@
 /* デバッグ用 (最終的に削除予定) */
 import UserSelector from '~/components/UserSelector.vue';
 import ResetButton from '~/components/ResetButton.vue';
+import Modal from '~/components/Modal.vue';
 /* デバッグ用 */
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
-  data() {
-    return {
-      overlay: true,
-    };
-  },
   components: {
     UserSelector,
     ResetButton,
+    Modal,
   },
   async fetch({ store }) {
     await store.dispatch('getBoard');
   },
   mounted() {
-    // setInterval(async () => {
-    //   this.getBoard();
-    // }, this.productionCheck ? 300 : 1000);
+    setInterval(async () => {
+      this.getBoard();
+    }, this.productionCheck ? 300 : 1000);
   },
   computed: {
     ...mapState([
@@ -126,7 +122,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'setInitPos', 'gridMove', 'resetInitPos']),
+    ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'setInitPos', 'gridMove', 'resetInitPos', 'pinchStart', 'pinchMove']),
     ...mapActions(['getBoard', 'putPiece']),
     send(i) {
       if (this.putAbleCheck(i)) {
@@ -137,9 +133,13 @@ export default {
         this.putPiece({ x, y });
       }
     },
-    closeOverLayer() {
-      console.log(this.overlay);
-      this.overlay = false;
+    onTouchStart(e) {
+      this.setInitPos(e);
+      this.pinchStart(e);
+    },
+    onTouchMove(e) {
+      this.gridMove(e);
+      this.pinchMove(e);
     },
   },
 };
@@ -244,12 +244,5 @@ body {
   align-items: center;
   font-size: 150%;
   border-bottom: 1px solid #555;
-}
-
-.modalLayer {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 100;
 }
 </style>
