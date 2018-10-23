@@ -1,14 +1,15 @@
 <template>
-    <div class="main">
-      <div class="board"
-        @touchstart="setInitPos($event)"
-        @mousedown="setInitPos($event)"
-        @touchmove="gridMove($event)"
-        @mousemove="gridMove($event)"
-        @touchend="resetInitPos"
-        @mouseup="resetInitPos"
-      >
-      <div>
+  <div class="main"
+  >
+    <Modal />
+    <div class="board"
+    @touchstart="onTouchStart"
+    @mousedown="setInitPos"
+    @touchmove="onTouchMove"
+    @mousemove="gridMove"
+    @touchend="resetInitPos"
+    @touchcancel="resetInitPos"
+    @mouseup="resetInitPos">
         <div
           class="cell"
           v-for="i in gridX * Math.ceil($window.height / ($window.width/gridX))"
@@ -23,10 +24,15 @@
               class="piece"
               v-if="getUserId(i)"
               :style="getUserId(i) === currentUser ? 'background:#444;color:white' : ''"
-            > {{ getUserId(i) }}</div>
+            >
+              {{ getUserId(i) }}
+            </div>
           </div>
         </div>
-      </div>
+    </div>
+    <div class="score">
+      <div>Score</div>
+      <div>{{ score }}</div>
     </div>
 
     <UserSelector
@@ -35,15 +41,11 @@
       @change="changeCurrentUser"
     />
 
-    <ResetButton v-if="!productionCheck" />
-    <button class="minus btn" @click="zoomout"> - </button>
-    <button class="plus btn" @click="zoomin"> + </button>
-    <div v-if="!productionCheck">
-      <button class="btn up" @click="moveUp"> ↑ </button>
-      <button class="btn right" @click="moveRight"> → </button>
-      <button class="btn down" @click="moveDown"> ↓ </button>
-      <button class="btn left" @click="moveLeft"> ← </button>
+    <div v-if="checkPC" class="btns">
+      <div class="minus btn" @click="zoomout"> - </div>
+      <div class="plus btn" @click="zoomin"> + </div>
     </div>
+
   </div>
 </template>
 
@@ -51,6 +53,7 @@
 /* デバッグ用 (最終的に削除予定) */
 import UserSelector from '~/components/UserSelector.vue';
 import ResetButton from '~/components/ResetButton.vue';
+import Modal from '~/components/Modal.vue';
 /* デバッグ用 */
 import { mapState, mapMutations, mapActions } from 'vuex';
 
@@ -58,6 +61,7 @@ export default {
   components: {
     UserSelector,
     ResetButton,
+    Modal,
   },
   async fetch({ store }) {
     await store.dispatch('getBoard');
@@ -72,19 +76,27 @@ export default {
       'pieces',
       'candidates',
       'standbys',
+      'size',
+      'score',
       'number',
       'currentUser',
       'gridX',
       'gridY',
       'xHalf',
       'yHalf',
+      'initX', // mousemove時のxHalf起点情報
+      'initY',
+      'initLen', // ピンチ操作の基準情報
+      'initPosX', // mouseXの起点情報
+      'initPosY',
+      'dragFlg',
     ]),
     productionCheck() {
       return process.env.NODE_ENV === 'production';
     },
     checkPC() {
       const { userAgent } = navigator;
-      if (userAgent.indexOf('iPhone') > -1 || userAgent.indexOf('iPod') > -1
+      if (userAgent.indexOf('iPhone') > -1 || userAgent.indexOf('iPad') > -1
           || userAgent.indexOf('Android') > -1) {
         return false;
       }
@@ -110,12 +122,8 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'moveRight', 'moveLeft', 'moveUp', 'moveDown', 'setInitPos', 'gridMove', 'resetInitPos']),
+    ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'setInitPos', 'gridMove', 'resetInitPos', 'pinchStart', 'pinchMove']),
     ...mapActions(['getBoard', 'putPiece']),
-    setGrid() {
-      this.gridX = Math.floor(this.$window.width / 30);
-      this.gridY = Math.floor(this.$window.height / 30);
-    },
     send(i) {
       if (this.putAbleCheck(i)) {
         const halfGridX = Math.floor(this.gridX / 2);
@@ -124,6 +132,14 @@ export default {
         const y = halfGridY + this.yHalf - Math.floor((i - 1) / (this.gridY));
         this.putPiece({ x, y });
       }
+    },
+    onTouchStart(e) {
+      this.setInitPos(e);
+      this.pinchStart(e);
+    },
+    onTouchMove(e) {
+      this.gridMove(e);
+      this.pinchMove(e);
     },
   },
 };
@@ -137,56 +153,31 @@ body {
 
 
 <style scoped>
+.btns {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+}
 .btn {
-  position:fixed;
   cursor: pointer;
   background: #fff;
+  font-size: 150%;
+  border: 1px solid #000;
+  text-align: center;
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
 }
 .btn:hover {
   background: #f77;
   color: #fff;
 }
-
-.up {
-  top: 20px;
-  left: 50%;
-  padding: 10px 30px;
-}
-
-.left {
-  top: 50%;
-  left: 20px;
-  padding: 30px 10px;
-}
-
-.down {
-  bottom: 20px;
-  left: 50%;
-  padding: 10px 30px;
-}
-
-.right {
-  top: 50%;
-  right: 20px;
-  padding: 30px 10px;
-}
-
-.minus {
-  bottom: 20px;
-  left: 70%;
-  padding: 10px 30px;
-}
 .plus {
-  bottom: 20px;
-  left: 80%;
-  padding: 10px 30px;
+  margin-left: 10px;
 }
 
-.reset {
-  bottom: 20px;
-  left: 30%;
-  padding: 10px 30px;
-}
 
 .main {
   position:fixed;
@@ -196,12 +187,8 @@ body {
   bottom:0;
   background: #009432;
 }
-.board {
-  padding-top: 100%;
-  position: relative;
-}
 
-.board > div {
+.board {
   position: absolute;
   top:0;
   left:0;
@@ -211,7 +198,8 @@ body {
 
 .cell {
   display: inline-block;
-  border: 1px solid #313;
+  border-top: 1px solid #313;
+  border-left: 1px solid #313;
   vertical-align: bottom;
 }
 
@@ -233,7 +221,28 @@ body {
   justify-content: center;
   align-items: center;
   color:#444;
-  font-size:120%;
-  font-weight: bold;
+  font-size:80%;
+  box-shadow: 2px 3px 0px 0px #000;
+}
+
+.score {
+  position:fixed;
+  top:0;
+  left:0;
+  background: #fff;
+  width: 100px;
+  border-radius: 5px;
+  border: 2px solid #555;
+}
+
+.score > div {
+  box-sizing: border-box;
+  width: 100px;
+  height: 48px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 150%;
+  border-bottom: 1px solid #555;
 }
 </style>
