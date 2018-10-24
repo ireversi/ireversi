@@ -6,7 +6,7 @@ export const state = () => ({
   score: 0,
   number: 4,
   currentUser: 1,
-  gridX: 10,
+  gridX: 10, // 縦と横比が違うため
   gridY: 10,
   xHalf: 0, // grid描写更新変数
   yHalf: 0,
@@ -36,12 +36,28 @@ export const mutations = {
     state.score = score;
   },
   zoomout(state) {
-    state.gridX += 2;
-    state.gridY += 2;
+    if (state.gridX >= 30) {
+      state.gridX = 30;
+    } else {
+      state.gridX += 2;
+    }
+    if (state.gridY >= 30) {
+      state.gridY = 30;
+    } else {
+      state.gridY += 2;
+    }
   },
   zoomin(state) {
-    state.gridX -= 2;
-    state.gridY -= 2;
+    if (state.gridX <= 10) {
+      state.gridX = 10;
+    } else {
+      state.gridX -= 2;
+    }
+    if (state.gridY <= 10) {
+      state.gridY = 10;
+    } else {
+      state.gridY -= 2;
+    }
   },
   changeCurrentUser(state, n) {
     state.currentUser = n;
