@@ -3,13 +3,13 @@
   >
     <Modal />
     <div class="board"
-    @touchstart="onTouchStart"
-    @mousedown="setInitPos"
-    @touchmove="onTouchMove"
-    @mousemove="gridMove"
-    @touchend="resetInitPos"
-    @touchcancel="resetInitPos"
-    @mouseup="resetInitPos">
+      @touchstart="onTouchStart"
+      @mousedown="setInitPos"
+      @touchmove="onTouchMove"
+      @mousemove="gridMove"
+      @touchend="resetInitPos"
+      @touchcancel="resetInitPos"
+      @mouseup="resetInitPos">
         <div
           class="cell"
           v-for="i in gridX * Math.ceil($window.height / ($window.width/gridX))"
@@ -70,6 +70,7 @@ export default {
     setInterval(async () => {
       this.getBoard();
     }, this.productionCheck ? 300 : 1000);
+    window.addEventListener('wheel', this.handleScroll);
   },
   computed: {
     ...mapState([
@@ -90,6 +91,7 @@ export default {
       'initPosX', // mouseXの起点情報
       'initPosY',
       'dragFlg',
+      'touchTime',
     ]),
     productionCheck() {
       return process.env.NODE_ENV === 'production';
@@ -120,6 +122,17 @@ export default {
         return (this.candidates.find(el => el.x === x && el.y === y));
       };
     },
+    touchDistance() {
+      return (touches) => {
+        const x1 = touches[0].pageX;
+        const y1 = touches[0].pageY;
+        const x2 = touches[1].pageX;
+        const y2 = touches[1].pageY;
+
+        // pinch距離算出
+        return Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
+      };
+    },
   },
   methods: {
     ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'setInitPos', 'gridMove', 'resetInitPos', 'pinchStart', 'pinchMove']),
@@ -134,12 +147,53 @@ export default {
       }
     },
     onTouchStart(e) {
-      this.setInitPos(e);
-      this.pinchStart(e);
+      // ダブルタップ無効化
+      if (new Date().getTime() - this.touchTime < 350) {
+        e.preventDefault();
+      }
+
+      // drag基準地点
+      const position = {
+        x: e.pageX || e.changedTouches[0].clientX,
+        y: e.pageY || e.changedTouches[0].clientY,
+      };
+
+      this.setInitPos(position);
+
+      // pinch基準距離
+      const { touches } = e;
+      if (touches && touches.length >= 2) {
+        const distance = this.touchDistance(touches);
+
+        this.pinchStart(distance);
+      }
     },
     onTouchMove(e) {
-      this.gridMove(e);
-      this.pinchMove(e);
+      e.preventDefault();
+
+      // drag現在地点
+      const movePos = {
+        x: e.pageX || e.changedTouches[0].clientX,
+        y: e.pageY || e.changedTouches[0].clientY,
+      };
+      this.gridMove(movePos);
+
+      // pinch現在距離
+      const { touches } = e;
+      if (touches && touches.length >= 2) {
+        const distance = this.touchDistance(touches);
+
+        this.pinchMove(distance);
+      }
+    },
+    handleScroll(e) {
+      e.preventDefault();
+      // ホイール移動量取得
+      if (e.deltaY < 0) {
+        this.zoomout();
+      } else if (e.deltaY > 0) {
+        this.zoomin();
+      }
     },
   },
 };

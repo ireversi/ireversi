@@ -12,9 +12,10 @@ export const state = () => ({
   yHalf: 0,
   initX: 0, // mousemove時のxHalf起点情報
   initY: 0,
-  baseDistance: 0, // ピンチ操作の基準情報
+  initDistance: 0, // ピンチ操作の基準情報
   initPosX: 0, // mouseXの起点情報
   initPosY: 0,
+  initPos: { x: 0, y: 0 },
   dragFlg: false,
   touchDistance: 0,
   touchTime: 0, // ダブルタッチ無効利用変数
@@ -40,83 +41,55 @@ export const mutations = {
     state.gridY += 2;
   },
   zoomin(state) {
-    state.gridX -= 2;
-    state.gridY -= 2;
+    if (state.gridX >= 7) state.gridX -= 2;
+    if (state.gridY >= 7) state.gridY -= 2;
   },
   changeCurrentUser(state, n) {
     state.currentUser = n;
   },
-  setInitPos(state, e) { // touchstart
-    // ダブルタップ無効化
-    if (new Date().getTime() - state.touchTime < 350) {
-      e.preventDefault();
-    }
-
-    // 基準距離設定
+  setInitPos(state, position) {
+    // 基準地点設定
     state.dragFlg = true;
-    state.initPosX = e.pageX || e.changedTouches[0].clientX;
-    state.initPosY = e.pageY || e.changedTouches[0].clientY;
+    state.initPos = position;
   },
-  pinchStart(state, e) { // touchstart
-    const { touches } = e;
-    if (touches && touches.length >= 2) {
-      state.dragFlg = false;
-      const x1 = touches[0].pageX;
-      const y1 = touches[0].pageY;
-      const x2 = touches[1].pageX;
-      const y2 = touches[1].pageY;
-
-      const distance = Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
-      state.baseDistance = distance;
-    }
+  pinchStart(state, distance) {
+    // 基準距離設定
+    state.dragFlg = false;
+    state.initDistance = distance;
   },
-  gridMove(state, e) {
-    e.preventDefault();
+  gridMove(state, position) {
     const cellWidth = window.innerWidth / state.gridX;
     if (state.dragFlg) {
-      const mouseX = e.pageX || e.changedTouches[0].clientX;
-      const mouseY = e.pageY || e.changedTouches[0].clientY;
-      const requestXHalf = state.initX - Math.floor((mouseX - state.initPosX) / cellWidth);
-      const requestYHalf = state.initY + Math.floor((mouseY - state.initPosY) / cellWidth);
+      const requestXHalf = state.initX - Math.floor((position.x - state.initPos.x) / cellWidth);
+      const requestYHalf = state.initY + Math.floor((position.y - state.initPos.y) / cellWidth);
       state.xHalf = requestXHalf;
       state.yHalf = requestYHalf;
     }
   },
-  pinchMove(state, e) {
-    e.preventDefault();
-    const { touches } = e;
-    if (touches && touches.length >= 2) {
-      const x1 = touches[0].pageX;
-      const y1 = touches[0].pageY;
-      const x2 = touches[1].pageX;
-      const y2 = touches[1].pageY;
-
-      const distance = Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
-
-      const cellWidth = window.innerWidth / state.gridX;
-      if ((distance - state.baseDistance) > 0) {
-        if ((distance - state.baseDistance) > cellWidth) {
-          if (state.gridX <= 5) {
-            state.gridX = 5;
-            state.gridY = 5;
-          } else {
-            state.gridX -= 1;
-            state.gridY -= 1;
-          }
-        }
-      } else if ((distance - state.baseDistance) < 0) {
-        if (state.gridX >= 20) {
-          state.gridX = 20;
-          state.gridY = 20;
+  pinchMove(state, distance) {
+    const cellWidth = window.innerWidth / state.gridX;
+    if ((distance - state.initDistance) > 0) {
+      if ((distance - state.initDistance) > cellWidth) {
+        if (state.gridX <= 5) {
+          state.gridX = 5;
+          state.gridY = 5;
         } else {
-          state.gridX += 1;
-          state.gridY += 1;
+          state.gridX -= 1;
+          state.gridY -= 1;
         }
+      }
+    } else if ((distance - state.initDistance) < 0) {
+      if (state.gridX >= 20) {
+        state.gridX = 20;
+        state.gridY = 20;
+      } else {
+        state.gridX += 1;
+        state.gridY += 1;
       }
     }
   },
   resetInitPos(state) { // touchend
-    state.baseDistance = 0;
+    state.initDistance = 0;
     state.dragFlg = false;
     // 次の起点場所情報の保存
     state.initX = state.xHalf;
