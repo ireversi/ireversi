@@ -35,6 +35,8 @@
       <div>{{ score }}</div>
     </div>
 
+    <Ranking />
+
     <UserSelector
       :number="number"
       :current="currentUser"
@@ -50,10 +52,12 @@
 </template>
 
 <script>
+import Modal from '~/components/Modal.vue';
+import Ranking from '~/components/Ranking.vue';
 /* デバッグ用 (最終的に削除予定) */
 import UserSelector from '~/components/UserSelector.vue';
 import ResetButton from '~/components/ResetButton.vue';
-import Modal from '~/components/Modal.vue';
+
 /* デバッグ用 */
 import { mapState, mapMutations, mapActions } from 'vuex';
 
@@ -62,6 +66,7 @@ export default {
     UserSelector,
     ResetButton,
     Modal,
+    Ranking,
   },
   async fetch({ store }) {
     await store.dispatch('getBoard');
@@ -276,7 +281,7 @@ body {
   align-items: center;
   color:#444;
   font-size:80%;
-  box-shadow: 2px 3px 0px 0px #000;
+  box-shadow: 2px 3px 0px 0px rgba(0,0,0,0.5);
 }
 
 .score {
