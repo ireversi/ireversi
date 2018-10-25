@@ -1,3 +1,7 @@
+const USER_KEY_NAME = 'iReversiUserId';
+const GRID_MIN = 5;
+const GRID_MAX = 30;
+
 export const state = () => ({
   pieces: null,
   candidates: null,
@@ -6,7 +10,7 @@ export const state = () => ({
   score: 0,
   number: 4,
   currentUser: 1,
-  gridX: 10,
+  gridX: 10, // 縦と横比が違うため
   gridY: 10,
   xHalf: 0, // grid描写更新変数
   yHalf: 0,
@@ -19,6 +23,7 @@ export const state = () => ({
   dragFlg: false,
   touchDistance: 0,
   touchTime: 0, // ダブルタッチ無効利用変数
+  userId: null,
 });
 
 
@@ -37,12 +42,12 @@ export const mutations = {
     state.score = score;
   },
   zoomout(state) {
-    state.gridX += 2;
-    state.gridY += 2;
+    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 2));
+    state.gridY = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridY + 2));
   },
   zoomin(state) {
-    if (state.gridX >= 7) state.gridX -= 2;
-    if (state.gridY >= 7) state.gridY -= 2;
+    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 2));
+    state.gridY = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridY - 2));
   },
   changeCurrentUser(state, n) {
     state.currentUser = n;
@@ -96,9 +101,28 @@ export const mutations = {
     state.initY = state.yHalf;
     state.touchTime = new Date().getTime();
   },
+  setUserId(state, userId) {
+    state.userId = userId;
+  },
 };
 
 export const actions = {
+  async getUserId({ commit }) {
+    let userId = localStorage.getItem(USER_KEY_NAME);
+    if (!userId) {
+      const seedLetters = 'abcdefghijklmnopqrstuvwxyz';
+      const seedNumbers = '0123456789';
+      const len = 6;
+      let pwd = '';
+      const seed = seedLetters + seedLetters.toUpperCase() + seedNumbers;
+      for (let i = 0; i < len; i += 1) {
+        pwd += seed[Math.floor(Math.random() * seed.length)];
+      }
+      userId = pwd;
+      localStorage.setItem(USER_KEY_NAME, userId);
+    }
+    commit('setUserId', userId);
+  },
   async getBoard({ commit }) {
     commit('setBoard', await this.$axios.$get('/board'));
   },

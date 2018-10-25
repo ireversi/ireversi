@@ -80,4 +80,21 @@ export default {
   width: 25%;
   border-left: 1px solid #555;
 }
+
+@media screen and (max-width: 800px){
+  .ranking{
+    width: 150px;
+  }
+  .ranking > div {
+    line-height: 30px;
+    height: 30px;
+  }
+  .rank > span {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    line-height: 14px;
+    transform: rotate(45deg);
+  }
+}
 </style>
