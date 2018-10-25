@@ -69,8 +69,8 @@ export default {
     Ranking,
   },
   async fetch({ store }) {
-    await store.dispatch('getBoard');
     await store.dispatch('getUserId');
+    await store.dispatch('getBoard');
   },
   mounted() {
     setInterval(async () => {

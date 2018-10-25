@@ -1,3 +1,7 @@
+const USER_KEY_NAME = 'iReversiUserId';
+const GRID_MIN = 5;
+const GRID_MAX = 30;
+
 export const state = () => ({
   pieces: null,
   candidates: null,
@@ -38,20 +42,12 @@ export const mutations = {
     state.score = score;
   },
   zoomout(state) {
-    if (state.gridX >= 30) {
-      state.gridX = 30;
-    } else {
-      state.gridX += 2;
-    }
-    if (state.gridY >= 30) {
-      state.gridY = 30;
-    } else {
-      state.gridY += 2;
-    }
+    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 2));
+    state.gridY = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridY + 2));
   },
   zoomin(state) {
-    if (state.gridX >= 7) state.gridX -= 2;
-    if (state.gridY >= 7) state.gridY -= 2;
+    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 2));
+    state.gridY = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridY - 2));
   },
   changeCurrentUser(state, n) {
     state.currentUser = n;
@@ -112,7 +108,7 @@ export const mutations = {
 
 export const actions = {
   async getUserId({ commit }) {
-    let userId = localStorage.getItem('iReversiUserId');
+    let userId = localStorage.getItem(USER_KEY_NAME);
     if (!userId) {
       const seedLetters = 'abcdefghijklmnopqrstuvwxyz';
       const seedNumbers = '0123456789';
@@ -123,7 +119,7 @@ export const actions = {
         pwd += seed[Math.floor(Math.random() * seed.length)];
       }
       userId = pwd;
-      localStorage.setItem('iReversiUserId', userId);
+      localStorage.setItem(USER_KEY_NAME, userId);
     }
     commit('setUserId', userId);
   },
