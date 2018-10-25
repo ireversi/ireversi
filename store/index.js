@@ -153,11 +153,7 @@ export const actions = {
       const len = 6;
       let pwd = '';
       const seed = seedLetters + seedLetters.toUpperCase() + seedNumbers;
-      // while (len -= 1) {
-      //     pwd += seed[Math.floor(Math.random()*seed.length)];
-      // };
       for (let i = 0; i < len; i += 1) {
-        // seedという文字列からlength一つずつランダムに取得し、pwdに入れて行く
         pwd += seed[Math.floor(Math.random() * seed.length)];
       }
       userId = pwd;
