@@ -70,6 +70,7 @@ export default {
   },
   async fetch({ store }) {
     await store.dispatch('getBoard');
+    await store.dispatch('getUserId');
   },
   mounted() {
     setInterval(async () => {

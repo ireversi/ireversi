@@ -18,6 +18,7 @@ export const state = () => ({
   dragFlg: false,
   touchDistance: 0,
   touchTime: 0, // ダブルタッチ無効利用変数
+  userId: null,
 });
 
 
@@ -67,7 +68,6 @@ export const mutations = {
     if (new Date().getTime() - state.touchTime < 350) {
       e.preventDefault();
     }
-
     // 基準距離設定
     state.dragFlg = true;
     state.initPosX = e.pageX || e.changedTouches[0].clientX;
@@ -139,9 +139,32 @@ export const mutations = {
     state.initY = state.yHalf;
     state.touchTime = new Date().getTime();
   },
+  setUserId(state, userId) {
+    state.userId = userId;
+  },
 };
 
 export const actions = {
+  async getUserId({ commit }) {
+    let userId = localStorage.getItem('iReversiUserId');
+    if (!userId) {
+      const seedLetters = 'abcdefghijklmnopqrstuvwxyz';
+      const seedNumbers = '0123456789';
+      const len = 6;
+      let pwd = '';
+      const seed = seedLetters + seedLetters.toUpperCase() + seedNumbers;
+      // while (len -= 1) {
+      //     pwd += seed[Math.floor(Math.random()*seed.length)];
+      // };
+      for (let i = 0; i < len; i += 1) {
+        // seedという文字列からlength一つずつランダムに取得し、pwdに入れて行く
+        pwd += seed[Math.floor(Math.random() * seed.length)];
+      }
+      userId = pwd;
+      localStorage.setItem('iReversiUserId', userId);
+    }
+    commit('setUserId', userId);
+  },
   async getBoard({ commit }) {
     commit('setBoard', await this.$axios.$get('/board'));
   },
