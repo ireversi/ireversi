@@ -1,5 +1,5 @@
 const USER_KEY_NAME = 'iReversiUserId';
-const GRID_MIN = 5;
+const GRID_MIN = 6;
 const GRID_MAX = 30;
 
 export const state = () => ({
@@ -69,27 +69,39 @@ export const mutations = {
       const requestYHalf = state.initY + Math.floor((position.y - state.initPos.y) / cellWidth);
       state.xHalf = requestXHalf;
       state.yHalf = requestYHalf;
+
+      const arryX = [];
+      state.pieces.map(el => arryX.push(el.x));
+      const swipeMaxNumX = Math.max(...arryX) + 2;
+      if (state.xHalf >= swipeMaxNumX) {
+        state.xHalf = swipeMaxNumX;
+      }
+
+      const swipeMinNumX = Math.min(...arryX) - 1;
+      if (state.xHalf <= swipeMinNumX) {
+        state.xHalf = swipeMinNumX;
+      }
     }
   },
   pinchMove(state, distance) {
     const cellWidth = window.innerWidth / state.gridX;
     if ((distance - state.initDistance) > 0) {
       if ((distance - state.initDistance) > cellWidth) {
-        if (state.gridX <= 5) {
-          state.gridX = 5;
-          state.gridY = 5;
+        if (state.gridX <= 6) {
+          state.gridX = 6;
+          state.gridY = 6;
         } else {
-          state.gridX -= 1;
-          state.gridY -= 1;
+          state.gridX -= 2;
+          state.gridY -= 2;
         }
       }
     } else if ((distance - state.initDistance) < 0) {
-      if (state.gridX >= 20) {
-        state.gridX = 20;
-        state.gridY = 20;
+      if (state.gridX >= 30) {
+        state.gridX = 30;
+        state.gridY = 30;
       } else {
-        state.gridX += 1;
-        state.gridY += 1;
+        state.gridX += 2;
+        state.gridY += 2;
       }
     }
   },
@@ -103,6 +115,7 @@ export const mutations = {
   },
   setUserId(state, userId) {
     state.userId = userId;
+    state.currentUser = userId;
   },
 };
 

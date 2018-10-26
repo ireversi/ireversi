@@ -23,7 +23,8 @@
             <div
               class="piece"
               v-if="getUserId(i)"
-              :style="getUserId(i) === currentUser ? 'background:#444;color:white' : ''"
+              :style="
+              getUserId(i) === currentUser ? 'background:#444;color:white' : ''"
             >
               {{ getUserId(i) }}
             </div>
@@ -98,6 +99,7 @@ export default {
       'initPosY',
       'dragFlg',
       'touchTime',
+      'userId',
     ]),
     productionCheck() {
       return process.env.NODE_ENV === 'production';
@@ -201,6 +203,26 @@ export default {
         this.zoomin();
       }
     },
+
+    // hslテストコード
+    // userPieceColor() {
+    //   const userIdArry = this.userId.split('');
+    //   const hueArry = [];
+    //   // const satArry = [];
+    //   // const ligArry = [];
+    //   for (let i = 0; i < userIdArry.length; i += 1) {
+    //     if (userIdArry[i].match(/\d|0/)) {
+    //       hueArry.push(+userIdArry[i]);
+    //     } else {
+    //       hueArry.push(userIdArry[i].charCodeAt()); // ASCIIコードの利用
+    //     }
+    //   }
+    //   const hue = Math.floor( // 色相
+    //     (hueArry.reduce((sum, num) => sum + num, 0)) / userIdArry.length,
+    //   );
+    //   const color = `hsl(${hue}, 100%, 50% )`;
+    //   console.log(color);
+    // },
   },
 };
 </script>
