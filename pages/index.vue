@@ -2,7 +2,7 @@
   <div class="main"
   >
     <Modal />
-    <div class="board"
+    <!-- <div class="board"
       @touchstart="onTouchStart"
       @mousedown="setInitPos"
       @touchmove="onTouchMove"
@@ -29,13 +29,83 @@
             </div>
           </div>
         </div>
+    </div> -->
+    <div class="board"
+      @touchstart="onTouchStart"
+      @mousedown="setInitPos"
+      @touchmove="onTouchMove"
+      @mousemove="gridMove"
+      @touchend="resetInitPos"
+      @touchcancel="resetInitPos"
+      @mouseup="resetInitPos"
+    >
+      <svg viewbox="0 0 100% 100%" width="100%" height="100%">
+        <line
+          class="border-x"
+          v-for="i in Math.ceil($window.height / ($window.width/gridX)) - 1"
+          :key="'border-x' + i"
+          x1=0
+          x2=100%
+          :y1="Math.ceil($window.width / gridX) * i"
+          :y2="Math.ceil($window.width / gridX) * i"
+        />
+
+        <line
+          class="border-y"
+          v-for="i in gridX - 1"
+          :key="'border-y' + i"
+          :x1="Math.ceil($window.width / gridX) * i"
+          :x2="Math.ceil($window.width / gridX) * i"
+          y1=0
+          y2=100%
+        />
+
+        <circle
+          class="piece"
+          v-for="i in gridX * Math.ceil($window.height / ($window.width/gridX))"
+          v-if="getUserId(i)"
+          :key="'piece' + i"
+          :r="Math.ceil($window.width / gridX) * 0.3"
+          :cx="(i - 1) % gridX * Math.ceil($window.width / gridX)
+                + Math.ceil($window.width / gridX) / 2"
+          :cy="Math.ceil(i / gridX) * Math.ceil($window.width / gridX)
+                - Math.ceil($window.width / gridX) / 2"
+          :style="getUserId(i) === currentUser ? 'fill: #444;' : ''"
+          filter="url(#dropShadow)"
+        />
+
+        <text
+          class="user-id"
+          v-for="i in gridX * Math.ceil($window.height / ($window.width/gridX))"
+          v-if="getUserId(i)"
+          :key="'user-id' + i"
+          :x="(i - 1) % gridX * Math.ceil($window.width / gridX)
+              + Math.ceil($window.width / gridX) / 2"
+          :y="Math.ceil(i / gridX) * Math.ceil($window.width / gridX)
+              - Math.ceil($window.width / gridX) / 2"
+          dy=0.5em
+          :style="getUserId(i) === currentUser ? 'stroke: #fff;' : ''"
+        >
+          {{ getUserId(i) }}
+        </text>
+
+        <filter id="dropShadow"
+          filterUnits="objectBoundingBox">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+          <feOffset in="SourceGraphic" dx="-1" dy="-1" result="offset"/>
+          <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="offset" />
+          </feMerge>
+        </filter>
+      </svg>
     </div>
-    <div class="score">
+    <!-- <div class="score">
       <div>Score</div>
       <div>{{ score }}</div>
-    </div>
+    </div> -->
 
-    <Ranking />
+    <!-- <Ranking /> -->
 
     <UserSelector
       :number="number"
@@ -111,6 +181,8 @@ export default {
     },
     getUserId() {
       return (i) => {
+        // const gridX = Math.ceil(this.$window.width / 50);
+        // const gridY = Math.ceil(this.$window.height / 50);
         const halfGridX = Math.floor(this.gridX / 2);
         const halfGridY = Math.floor(this.gridY / 2);
         const x = ((i - 1) % this.gridX) - halfGridX + this.xHalf;
@@ -124,7 +196,7 @@ export default {
         const halfGridY = Math.floor(this.gridY / 2);
         const x = ((i - 1) % this.gridX) - halfGridX + this.xHalf;
         const y = halfGridY + this.yHalf - Math.floor((i - 1) / (this.gridY));
-        return (this.candidates.find(el => el.x === x && el.y === y));
+        return this.candidates.find(el => el.x === x && el.y === y);
       };
     },
     touchDistance() {
@@ -255,33 +327,41 @@ body {
   bottom:0;
 }
 
-.cell {
-  display: inline-block;
+.border-x, .border-y {
+  /* display: inline-block;
   border-top: 1px solid #313;
   border-left: 1px solid #313;
-  vertical-align: bottom;
+  vertical-align: bottom; */
+  stroke: #313;
+  stroke-width: 0.5px;
 }
 
-.cell > div {
+/* .cell > div {
   padding-top:100%;
   position: relative;
-}
+} */
 
 .piece {
-  position: absolute;
+  /* position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  border-radius: 50%;
-  width: 60%;
-  height: 60%;
-  background: #fff;
-  display:flex;
+  border-radius: 50%; */
+  /* width: 60%;
+  height: 60%; */
+  fill: #fff;
+  /* display:flex;
   justify-content: center;
-  align-items: center;
-  color:#444;
-  font-size:80%;
-  box-shadow: 2px 3px 0px 0px rgba(0,0,0,0.5);
+  align-items: center; */
+
+  /* font-size:80%; */
+}
+
+.user-id {
+  text-anchor: middle;
+  stroke: #444;
+  font-size: 80%;
+  font-weight: lighter;
 }
 
 .score {
