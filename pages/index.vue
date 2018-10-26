@@ -19,7 +19,11 @@
           background: ${putAbleCheck(i) ? '#0652DD': ''};
           cursor: ${putAbleCheck(i) ? 'pointer' : ''}`"
         >
-          <div @click="send(i)">
+          <div
+            @mousedown="setCountTime"
+            @touchstart="setCountTime"
+            @mouseup="checkElapsedTime(i)"
+            @touchend="checkElapsedTime(i)">
             <div
               class="piece"
               v-if="getUserId(i)"
@@ -63,6 +67,11 @@ import ResetButton from '~/components/ResetButton.vue';
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
+  data() {
+    return {
+      timer: 0,
+    };
+  },
   components: {
     UserSelector,
     ResetButton,
@@ -202,6 +211,18 @@ export default {
       } else if (e.deltaY > 0) {
         this.zoomin();
       }
+    },
+    setCountTime() {
+      this.timer = Date.now();
+    },
+    checkElapsedTime(i) {
+      const elapsedTime = Date.now() - this.timer;
+      if (this.score !== 0) {
+        this.send(i);
+      } else if (this.score === 0 && elapsedTime >= 3000) {
+        this.send(i);
+      }
+      this.timer = 0;
     },
 
     // hslテストコード
