@@ -1,5 +1,5 @@
 const USER_KEY_NAME = 'iReversiUserId';
-const GRID_MIN = 5;
+const GRID_MIN = 6;
 const GRID_MAX = 30;
 
 export const state = () => ({
@@ -69,6 +69,18 @@ export const mutations = {
       const requestYHalf = state.initY + Math.floor((position.y - state.initPos.y) / cellWidth);
       state.xHalf = requestXHalf;
       state.yHalf = requestYHalf;
+
+      const arryX = [];
+      state.pieces.map(el => arryX.push(el.x));
+      const swipeMaxNumX = Math.max.apply(null, arryX) + 2;
+      if (state.xHalf >= swipeMaxNumX) {
+        state.xHalf = swipeMaxNumX;
+      }
+
+      const swipeMinNumX = Math.min.apply(null, arryX) - 1;
+      if (state.xHalf <= swipeMinNumX) {
+        state.xHalf = swipeMinNumX;
+      }
     }
   },
   pinchMove(state, distance) {
@@ -103,6 +115,7 @@ export const mutations = {
   },
   setUserId(state, userId) {
     state.userId = userId;
+    state.currentUser = userId;
   },
 };
 
