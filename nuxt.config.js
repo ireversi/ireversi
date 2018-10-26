@@ -1,4 +1,5 @@
-const pkg = require('./package')
+const pkg = require('./package');
+require('dotenv').config();
 
 module.exports = {
   mode: 'spa',
@@ -11,30 +12,29 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description }
+      { hid: 'description', name: 'description', content: pkg.description },
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#FFFFFF' },
+  loading: false,
 
   /*
   ** Global CSS
   */
-  css: [
-    'element-ui/lib/theme-chalk/index.css'
-  ],
+  css: ['element-ui/lib/theme-chalk/index.css'],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/element-ui'
+    '@/plugins/axios',
+    '@/plugins/element-ui',
+    '@/plugins/window-state',
+    '@/plugins/vue-touch',
   ],
 
   /*
@@ -42,15 +42,27 @@ module.exports = {
   */
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
   ],
   /*
   ** Axios module configuration
   */
   axios: {
-    // See https://github.com/nuxt-community/axios-module#options
+  // See https://github.com/nuxt-community/axios-module#options
   },
-
+  env: {
+    NODE_ENV: process.env.NODE_ENV,
+    AXIOS_BASE: process.env.AXIOS_BASE,
+    FUJII_PATH: process.env.FUJII_PATH,
+    KIDO_PATH: process.env.KIDO_PATH,
+    MATSUDA_PATH: process.env.MATSUDA_PATH,
+    KIMURA_PATH: process.env.KIMURA_PATH,
+    KAI_PATH: process.env.KAI_PATH,
+    ANDO_PATH: process.env.ANDO_PATH,
+  },
+  router: {
+    middleware: 'baseURL',
+  },
   /*
   ** Build configuration
   */
@@ -65,9 +77,9 @@ module.exports = {
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        })
+          exclude: /(node_modules)/,
+        });
       }
-    }
-  }
-}
+    },
+  },
+};
