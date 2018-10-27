@@ -4,10 +4,10 @@
 #
 version: 2
 jobs:
-  build:
+  test:
     docker:
       # specify the version you desire here
-      - image: circleci/node:8.11.4
+      - image: circleci/node:10.12
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -15,9 +15,6 @@ jobs:
       # - image: circleci/mongo:3.4.4
 
     working_directory: ~/repo
-
-    environment:
-      AXIOS_BASE: https://ireversi-server.now.sh/api
 
     steps:
       - checkout
@@ -39,3 +36,41 @@ jobs:
       # run tests!
       - run: yarn lint
       - run: yarn test
+
+  deploy:
+    docker:
+      - image: circleci/node:10.12
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run: yarn generate
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y awscli
+      - run: aws s3 sync dist s3://$AWS_BUCKET --delete
+
+workflows:
+  version: 2
+  test_and_staging:
+    jobs:
+      - test
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master

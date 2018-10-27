@@ -85,23 +85,13 @@ export const mutations = {
   },
   pinchMove(state, distance) {
     const cellWidth = window.innerWidth / state.gridX;
-    if ((distance - state.initDistance) > 0) {
-      if ((distance - state.initDistance) > cellWidth) {
-        if (state.gridX <= 6) {
-          state.gridX = 6;
-          state.gridY = 6;
-        } else {
-          state.gridX -= 2;
-          state.gridY -= 2;
-        }
-      }
-    } else if ((distance - state.initDistance) < 0) {
-      if (state.gridX >= 30) {
-        state.gridX = 30;
-        state.gridY = 30;
-      } else {
-        state.gridX += 2;
-        state.gridY += 2;
+    if (Math.abs(distance - state.initDistance) > cellWidth) {
+      if ((distance - state.initDistance) > 0) {
+        state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 2));
+        state.gridY = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridY - 2));
+      } else if ((distance - state.initDistance) < 0) {
+        state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 2));
+        state.gridY = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridY + 2));
       }
     }
   },
