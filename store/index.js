@@ -7,7 +7,6 @@ export const state = () => ({
   number: 4,
   currentUser: 1,
   gridX: 10,
-  gridY: 10,
   xHalf: 0, // grid描写更新変数
   yHalf: 0,
   initX: 0, // mousemove時のxHalf起点情報
@@ -38,11 +37,9 @@ export const mutations = {
   },
   zoomout(state) {
     state.gridX += 2;
-    state.gridY += 2;
   },
   zoomin(state) {
     if (state.gridX >= 7) state.gridX -= 2;
-    if (state.gridY >= 7) state.gridY -= 2;
   },
   changeCurrentUser(state, n) {
     state.currentUser = n;
@@ -58,10 +55,9 @@ export const mutations = {
     state.initDistance = distance;
   },
   gridMove(state, position) {
-    const cellWidth = window.innerWidth / state.gridX;
     if (state.dragFlg) {
-      const requestXHalf = state.initX - Math.floor((position.x - state.initPos.x) / cellWidth);
-      const requestYHalf = state.initY + Math.floor((position.y - state.initPos.y) / cellWidth);
+      const requestXHalf = state.initX - (position.x - state.initPos.x);
+      const requestYHalf = state.initY + (position.y - state.initPos.y);
       state.xHalf = requestXHalf;
       state.yHalf = requestYHalf;
     }
@@ -72,19 +68,15 @@ export const mutations = {
       if ((distance - state.initDistance) > cellWidth) {
         if (state.gridX <= 5) {
           state.gridX = 5;
-          state.gridY = 5;
         } else {
           state.gridX -= 1;
-          state.gridY -= 1;
         }
       }
     } else if ((distance - state.initDistance) < 0) {
       if (state.gridX >= 20) {
         state.gridX = 20;
-        state.gridY = 20;
       } else {
         state.gridX += 1;
-        state.gridY += 1;
       }
     }
   },

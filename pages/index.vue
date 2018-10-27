@@ -2,34 +2,7 @@
   <div class="main"
   >
     <Modal />
-    <!-- <div class="board"
-      @touchstart="onTouchStart"
-      @mousedown="setInitPos"
-      @touchmove="onTouchMove"
-      @mousemove="gridMove"
-      @touchend="resetInitPos"
-      @touchcancel="resetInitPos"
-      @mouseup="resetInitPos">
-        <div
-          class="cell"
-          v-for="i in gridX * Math.ceil($window.height / ($window.width/gridX))"
-          :key="i"
-          :style="
-          `width: ${$window.width/gridX}px;
-          background: ${putAbleCheck(i) ? '#0652DD': ''};
-          cursor: ${putAbleCheck(i) ? 'pointer' : ''}`"
-        >
-          <div @click="send(i)">
-            <div
-              class="piece"
-              v-if="getUserId(i)"
-              :style="getUserId(i) === currentUser ? 'background:#444;color:white' : ''"
-            >
-              {{ getUserId(i) }}
-            </div>
-          </div>
-        </div>
-    </div> -->
+
     <div class="board"
       @touchstart="onTouchStart"
       @mousedown="setInitPos"
@@ -42,53 +15,55 @@
       <svg viewbox="0 0 100% 100%" width="100%" height="100%">
         <line
           class="border-x"
-          v-for="i in Math.ceil($window.height / ($window.width/gridX)) - 1"
-          :key="'border-x' + i"
+          v-for="i in calcGridY() + 2"
+          :key="'borderX' + i"
           x1=0
-          x2=100%
-          :y1="Math.ceil($window.width / gridX) * i"
-          :y2="Math.ceil($window.width / gridX) * i"
+          :x2="$window.width"
+          :y1="calcBorderPos(i).y"
+          :y2="calcBorderPos(i).y"
         />
 
         <line
           class="border-y"
-          v-for="i in gridX - 1"
-          :key="'border-y' + i"
-          :x1="Math.ceil($window.width / gridX) * i"
-          :x2="Math.ceil($window.width / gridX) * i"
+          v-for="i in gridX + 2"
+          :key="'borderY' + i"
+          :x1="calcBorderPos(i).x"
+          :x2="calcBorderPos(i).x"
           y1=0
-          y2=100%
+          :y2="$window.height"
         />
 
         <circle
           class="piece"
-          v-for="i in gridX * Math.ceil($window.height / ($window.width/gridX))"
-          v-if="getUserId(i)"
+          v-for="(piece, i) in pieces"
           :key="'piece' + i"
-          :r="Math.ceil($window.width / gridX) * 0.3"
-          :cx="(i - 1) % gridX * Math.ceil($window.width / gridX)
-                + Math.ceil($window.width / gridX) / 2"
-          :cy="Math.ceil(i / gridX) * Math.ceil($window.width / gridX)
-                - Math.ceil($window.width / gridX) / 2"
-          :style="getUserId(i) === currentUser ? 'fill: #444;' : ''"
-          filter="url(#dropShadow)"
+          :r="calcGridWidth() * 0.3"
+          :cx="calcObjPos(piece).x"
+          :cy="calcObjPos(piece).y"
+          :style="piece.userId === currentUser ? 'fill: #444;' : ''"
         />
 
-        <text
-          class="user-id"
-          v-for="i in gridX * Math.ceil($window.height / ($window.width/gridX))"
-          v-if="getUserId(i)"
-          :key="'user-id' + i"
-          :x="(i - 1) % gridX * Math.ceil($window.width / gridX)
-              + Math.ceil($window.width / gridX) / 2"
-          :y="Math.ceil(i / gridX) * Math.ceil($window.width / gridX)
-              - Math.ceil($window.width / gridX) / 2"
-          dy=0.5em
-          :style="getUserId(i) === currentUser ? 'stroke: #fff;' : ''"
-        >
-          {{ getUserId(i) }}
-        </text>
+        <circle
+          class="candidate"
+          v-for="(candidate, i) in candidates"
+          :key="'candidate' + i"
+          :r="calcGridWidth() * 0.1"
+          :cx="calcObjPos(candidate).x"
+          :cy="calcObjPos(candidate).y"
+        />
 
+        <!-- コマを置くボタンをcandidateの上に重ねて表示 -->
+        <circle
+          class="put-btn"
+          v-for="(candidate, i) in candidates"
+          :key="'putBtn' + i"
+          :r="calcGridWidth() * 0.5"
+          :cx="calcObjPos(candidate).x"
+          :cy="calcObjPos(candidate).y"
+          @click="putPiece(candidate)"
+        />
+
+        <!-- 影設定 -->
         <filter id="dropShadow"
           filterUnits="objectBoundingBox">
           <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
@@ -100,23 +75,19 @@
         </filter>
       </svg>
     </div>
-    <!-- <div class="score">
+
+    <div class="score">
       <div>Score</div>
       <div>{{ score }}</div>
-    </div> -->
+    </div>
 
-    <!-- <Ranking /> -->
+    <Ranking />
 
     <UserSelector
       :number="number"
       :current="currentUser"
       @change="changeCurrentUser"
     />
-
-    <div v-if="checkPC" class="btns">
-      <div class="minus btn" @click="zoomout"> - </div>
-      <div class="plus btn" @click="zoomin"> + </div>
-    </div>
 
   </div>
 </template>
@@ -157,7 +128,6 @@ export default {
       'number',
       'currentUser',
       'gridX',
-      'gridY',
       'xHalf',
       'yHalf',
       'initX', // mousemove時のxHalf起点情報
@@ -174,29 +144,54 @@ export default {
     checkPC() {
       const { userAgent } = navigator;
       if (userAgent.indexOf('iPhone') > -1 || userAgent.indexOf('iPad') > -1
-          || userAgent.indexOf('Android') > -1) {
+          || userAgent.indexOf('iPod') > -1 || userAgent.indexOf('Android') > -1) {
         return false;
       }
       return true;
     },
-    getUserId() {
+    calcGridWidth() {
+      return () => this.$window.width / this.gridX;
+    },
+    calcGridY() {
+      return () => Math.ceil(this.$window.height / this.calcGridWidth());
+    },
+    calcCenterPos() {
+      return () => ({
+        x: this.$window.width / 2,
+        y: this.$window.height / 2,
+      });
+    },
+    calcBorderPos() {
       return (i) => {
-        // const gridX = Math.ceil(this.$window.width / 50);
-        // const gridY = Math.ceil(this.$window.height / 50);
-        const halfGridX = Math.floor(this.gridX / 2);
-        const halfGridY = Math.floor(this.gridY / 2);
-        const x = ((i - 1) % this.gridX) - halfGridX + this.xHalf;
-        const y = halfGridY + this.yHalf - Math.floor((i - 1) / (this.gridY));
-        return (this.pieces.find(el => el.x === x && el.y === y) || {}).userId;
+        const gridWidth = this.calcGridWidth();
+        return {
+          x: this.calcCenterPos().x // 中心座標
+              // Gridの中心が座標となるよう修正
+              - gridWidth / 2
+              // 画面サイズとグリッド幅から始点計算
+              - (Math.ceil((this.$window.width / 2) / gridWidth)) * gridWidth
+              // 移動量調整
+              - (this.xHalf % gridWidth)
+              + (gridWidth * (i - 1)),
+          y: this.calcCenterPos().y // 中心座標
+              // Gridの中心が座標となるよう修正
+              - gridWidth / 2
+              // 画面サイズとグリッド幅から始点
+              - (Math.ceil((this.$window.height / 2) / gridWidth)) * gridWidth
+              // 移動量調整
+              + (this.yHalf % gridWidth)
+              + (gridWidth * (i - 1)),
+        };
       };
     },
-    putAbleCheck() {
-      return (i) => {
-        const halfGridX = Math.floor(this.gridX / 2);
-        const halfGridY = Math.floor(this.gridY / 2);
-        const x = ((i - 1) % this.gridX) - halfGridX + this.xHalf;
-        const y = halfGridY + this.yHalf - Math.floor((i - 1) / (this.gridY));
-        return this.candidates.find(el => el.x === x && el.y === y);
+    calcObjPos() {
+      return (object) => {
+        const gridWidth = this.calcGridWidth();
+        const centerPos = this.calcCenterPos();
+        return {
+          x: centerPos.x + (gridWidth * object.x - this.xHalf),
+          y: centerPos.y - (gridWidth * object.y - this.yHalf),
+        };
       };
     },
     touchDistance() {
@@ -214,15 +209,6 @@ export default {
   methods: {
     ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'setInitPos', 'gridMove', 'resetInitPos', 'pinchStart', 'pinchMove']),
     ...mapActions(['getBoard', 'putPiece']),
-    send(i) {
-      if (this.putAbleCheck(i)) {
-        const halfGridX = Math.floor(this.gridX / 2);
-        const halfGridY = Math.floor(this.gridY / 2);
-        const x = ((i - 1) % this.gridX) - halfGridX + this.xHalf;
-        const y = halfGridY + this.yHalf - Math.floor((i - 1) / (this.gridY));
-        this.putPiece({ x, y });
-      }
-    },
     onTouchStart(e) {
       // ダブルタップ無効化
       if (new Date().getTime() - this.touchTime < 350) {
@@ -328,40 +314,21 @@ body {
 }
 
 .border-x, .border-y {
-  /* display: inline-block;
-  border-top: 1px solid #313;
-  border-left: 1px solid #313;
-  vertical-align: bottom; */
   stroke: #313;
   stroke-width: 0.5px;
 }
 
-/* .cell > div {
-  padding-top:100%;
-  position: relative;
-} */
-
-.piece {
-  /* position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  border-radius: 50%; */
-  /* width: 60%;
-  height: 60%; */
+.piece, .candidate {
   fill: #fff;
-  /* display:flex;
-  justify-content: center;
-  align-items: center; */
-
-  /* font-size:80%; */
 }
 
-.user-id {
-  text-anchor: middle;
-  stroke: #444;
-  font-size: 80%;
-  font-weight: lighter;
+.piece {
+  filter: url(#dropShadow);
+}
+
+.put-btn {
+  fill-opacity: 0;
+  cursor: pointer;
 }
 
 .score {
