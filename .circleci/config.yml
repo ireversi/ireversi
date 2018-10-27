@@ -61,7 +61,7 @@ jobs:
       - run: yarn generate
       - run: sudo apt-get update
       - run: sudo apt-get install -y awscli
-      - run: aws s3 sync dist s3://${AWS_BUCKET} --delete
+      - run: aws s3 sync dist s3://$AWS_BUCKET --delete
 
 workflows:
   version: 2
