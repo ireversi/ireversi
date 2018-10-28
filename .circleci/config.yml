@@ -16,10 +16,10 @@ jobs:
 
     working_directory: ~/repo
 
-    steps:
-      - run: echo 'export AXIOS_BASE="$AXIOS_BASE"' >> $BASH_ENV
-      - run: source $BASH_ENV
+    environment:
+      AXIOS_BASE: https://ireversi-server.now.sh/api
 
+    steps:
       - checkout
 
       # Download and cache dependencies
