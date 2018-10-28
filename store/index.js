@@ -104,8 +104,12 @@ export const mutations = {
 };
 
 export const actions = {
-  async getUserId({ commit }) {
+  async getUserId({ commit, state }) {
     let userId = localStorage.getItem(USER_KEY_NAME);
+    // デバッグ用(本番環境では無効)
+    if (process.env.NODE_ENV === 'production') {
+      userId = state.currentUser;
+    }
     if (!userId) {
       const seedLetters = 'abcdefghijklmnopqrstuvwxyz';
       const seedNumbers = '0123456789';

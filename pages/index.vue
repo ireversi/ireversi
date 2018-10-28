@@ -43,6 +43,19 @@
           :style="piece.userId === currentUser ? 'fill: #444;' : ''"
         />
 
+        <!-- デバッグ用(色を設定するまでは本番環境でも表示) -->
+        <text
+          class="userid"
+          v-for="(piece, i) in pieces"
+          :key="'userId' + i"
+          :font-size="calcGridWidth() * 0.2"
+          :x="calcObjPos(piece).x"
+          :y="calcObjPos(piece).y + calcGridWidth() * 0.05"
+          :style="piece.userId === currentUser ? 'fill: #fff' : ''"
+        >
+          {{ piece.userId ? piece.userId : 'null' }}
+        </text>
+
         <circle
           class="candidate"
           v-for="(candidate, i) in candidates"
@@ -82,6 +95,10 @@
     <div class="score">
       <div>Score</div>
       <div>{{ score }}</div>
+      <!-- 仮 -->
+      <div v-if="score === 0">
+        {{ '3秒長押しして下さい' }}
+      </div>
     </div>
 
     <Ranking />
@@ -262,9 +279,9 @@ export default {
     handleScroll(e) {
       e.preventDefault();
       // ホイール移動量取得
-      if (e.deltaY < 0) {
+      if (e.deltaY > 0) {
         this.zoomout();
-      } else if (e.deltaY > 0) {
+      } else if (e.deltaY < 0) {
         this.zoomin();
       }
     },
@@ -386,11 +403,17 @@ body {
 .score > div {
   box-sizing: border-box;
   width: 100px;
-  height: 48px;
+  height: 35px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  font-size: 150%;
+  font-size: 100%;
   border-bottom: 1px solid #555;
 }
+
+.userid {
+  text-anchor: middle;
+  fill: #444;
+}
+
 </style>
