@@ -95,7 +95,7 @@
     <div class="score">
       <div>Score</div>
       <div>{{ score }}</div>
-      <!-- デバッグ用 -->
+      <!-- 仮 -->
       <div v-if="score === 0">
         {{ '3秒長押しして下さい' }}
       </div>
@@ -279,9 +279,9 @@ export default {
     handleScroll(e) {
       e.preventDefault();
       // ホイール移動量取得
-      if (e.deltaY < 0) {
+      if (e.deltaY > 0) {
         this.zoomout();
-      } else if (e.deltaY > 0) {
+      } else if (e.deltaY < 0) {
         this.zoomin();
       }
     },
