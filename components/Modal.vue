@@ -69,7 +69,7 @@ export default {
 }
 
 .modal-leave-active {
-  transition: opacity 2s;
+  transition: opacity 1s;
 }
 
 @media screen and (max-width: 800px){
