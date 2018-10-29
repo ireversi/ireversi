@@ -30,7 +30,10 @@ export const state = () => ({
 export const plugins = [
   (store) => {
     if (process.env.NODE_ENV === 'test') return;
-    store.commit('setAccessToken', JSON.parse(localStorage.getItem(USER_KEY_NAME)));
+    const localData = localStorage.getItem(USER_KEY_NAME);
+    if (localData) {
+      store.commit('setAccessToken', JSON.parse(localData));
+    }
 
     store.subscribe((mutation) => {
       if (mutation.type !== 'setAccessToken') return; // setAccessTokenの発火時のみ起動
