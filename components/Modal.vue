@@ -1,5 +1,5 @@
 <template>
-    <transition>
+    <transition name="modal">
       <div v-if="overlay" class="modalLayer">
         <div class="initMsg">
           <div class="title">iReversi</div>
@@ -64,11 +64,11 @@ export default {
   cursor: pointer;
 }
 
-.v-leave-to {
+.modal-leave-to {
   opacity: 0;
 }
 
-.v-leave-active {
+.modal-leave-active {
   transition: opacity 2s;
 }
 

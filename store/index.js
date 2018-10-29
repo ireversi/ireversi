@@ -9,7 +9,7 @@ export const state = () => ({
   size: null,
   score: 0,
   number: 4,
-  currentUser: 1,
+  currentUser: 1, // テスト用
   gridX: 10, // 縦と横比が違うため
   xHalf: 0, // grid描写更新変数
   yHalf: 0,
@@ -23,8 +23,21 @@ export const state = () => ({
   touchDistance: 0,
   touchTime: 0, // ダブルタッチ無効利用変数
   userId: null,
+  token: null,
 });
 
+
+export const plugins = [
+  (store) => {
+    if (process.env.NODE_ENV === 'test') return;
+    store.commit('setAccessToken', JSON.parse(localStorage.getItem(USER_KEY_NAME)));
+
+    store.subscribe((mutation) => {
+      if (mutation.type !== 'setAccessToken') return; // setAccessTokenの発火時のみ起動
+      localStorage.setItem(USER_KEY_NAME, JSON.stringify(mutation.payload));
+    });
+  },
+];
 
 export const mutations = {
   setBoard(state, {
@@ -66,17 +79,17 @@ export const mutations = {
       state.xHalf = requestXHalf;
       state.yHalf = requestYHalf;
 
-      const arryX = [];
-      state.pieces.map(el => arryX.push(el.x));
-      const swipeMaxNumX = Math.max(...arryX) + 2;
-      if (state.xHalf >= swipeMaxNumX) {
-        state.xHalf = swipeMaxNumX;
-      }
+      // const arryX = [];
+      // state.pieces.map(el => arryX.push(el.x));
+      // const swipeMaxNumX = Math.max(...arryX) + 2;
+      // if (state.xHalf >= swipeMaxNumX) {
+      //   state.xHalf = swipeMaxNumX;
+      // }
 
-      const swipeMinNumX = Math.min(...arryX) - 1;
-      if (state.xHalf <= swipeMinNumX) {
-        state.xHalf = swipeMinNumX;
-      }
+      // const swipeMinNumX = Math.min(...arryX) - 1;
+      // if (state.xHalf <= swipeMinNumX) {
+      //   state.xHalf = swipeMinNumX;
+      // }
     }
   },
   pinchMove(state, distance) {
@@ -97,32 +110,18 @@ export const mutations = {
     state.initY = state.yHalf;
     state.touchTime = new Date().getTime();
   },
-  setUserId(state, userId) {
+  setAccessToken(state, { accessToken, userId }) {
+    state.token = accessToken;
     state.userId = userId;
-    state.currentUser = userId;
   },
 };
 
 export const actions = {
-  async getUserId({ commit, state }) {
-    let userId = localStorage.getItem(USER_KEY_NAME);
-    // デバッグ用(本番環境では無効)
-    if (process.env.NODE_ENV === 'production') {
-      userId = state.currentUser;
+  async getAccessToken({ commit, state }) {
+    if (!state.token) {
+      const userData = await this.$axios.$post('/user_id_generate');
+      commit('setAccessToken', userData);
     }
-    if (!userId) {
-      const seedLetters = 'abcdefghijklmnopqrstuvwxyz';
-      const seedNumbers = '0123456789';
-      const len = 6;
-      let pwd = '';
-      const seed = seedLetters + seedLetters.toUpperCase() + seedNumbers;
-      for (let i = 0; i < len; i += 1) {
-        pwd += seed[Math.floor(Math.random() * seed.length)];
-      }
-      userId = pwd;
-      localStorage.setItem(USER_KEY_NAME, userId);
-    }
-    commit('setUserId', userId);
   },
   async getBoard({ commit }) {
     commit('setBoard', await this.$axios.$get('/board'));

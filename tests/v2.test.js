@@ -9,6 +9,9 @@ describe('V2 test', () => {
 
   it('sets a board', async () => {
     // Given
+    await store.dispatch('getAccessToken');
+
+    store.$axios.setHeader('Authorization', store.state.token);
     const { pieces, candidates, standbys } = await store.$axios.$get('/board');
 
     // When

@@ -103,18 +103,25 @@
 
     <Ranking />
 
-    <UserSelector
+    <!-- <UserSelector
       :number="number"
       :current="currentUser"
       @change="changeCurrentUser"
-    />
+    /> -->
 
+    <div v-if="checkPC" class="btns">
+      <div class="minus btn" @click="zoomout"> - </div>
+      <div class="plus btn" @click="zoomin"> + </div>
+    </div>
+
+    <LoadingIcon :loading="loading" />
   </div>
 </template>
 
 <script>
 import Modal from '~/components/Modal.vue';
 import Ranking from '~/components/Ranking.vue';
+import LoadingIcon from '~/components/LoadingIcon.vue';
 /* デバッグ用 (最終的に削除予定) */
 import UserSelector from '~/components/UserSelector.vue';
 import ResetButton from '~/components/ResetButton.vue';
@@ -126,6 +133,7 @@ export default {
   data() {
     return {
       timer: 0,
+      loading: false,
     };
   },
   components: {
@@ -133,9 +141,10 @@ export default {
     ResetButton,
     Modal,
     Ranking,
+    LoadingIcon,
   },
   async fetch({ store }) {
-    await store.dispatch('getUserId');
+    await store.dispatch('getAccessToken');
     await store.dispatch('getBoard');
   },
   mounted() {
@@ -287,15 +296,19 @@ export default {
     },
     setCountTime() {
       this.timer = Date.now();
+      if (this.score === 0) {
+        this.loading = true;
+      }
     },
     checkElapsedTime(candidate) {
       const elapsedTime = Date.now() - this.timer;
       if (this.score !== 0) {
         this.putPiece(candidate);
-      } else if (this.score === 0 && elapsedTime >= 3000) {
+      } else if (this.score === 0 && elapsedTime <= 3000) {
         this.putPiece(candidate);
       }
       this.timer = 0;
+      this.loading = false;
     },
 
     // hslテストコード
