@@ -59,7 +59,7 @@ export default {
     background: #999;
     transform-origin: right 50px;
     z-index: 2;
-    animation: rotate-circle-left 3s linear forwards;
+    animation: rotate-circle-left 2s linear forwards;
 }
 
 .circle::after {
@@ -73,7 +73,7 @@ export default {
     background: #999;
     transform-origin: left 50px;
     z-index: 3;
-    animation: rotate-circle-right 3s linear forwards;
+    animation: rotate-circle-right 2s linear forwards;
 }
 
 .circle .circle-inner {

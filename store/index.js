@@ -106,10 +106,15 @@ export const mutations = {
 
 export const actions = {
   async getAccessToken({ commit }) {
-    let userData = JSON.parse(localStorage.getItem(USER_KEY_NAME));
+    let userData;
+    if (process.env.NODE_ENV !== 'test') {
+      userData = JSON.parse(localStorage.getItem(USER_KEY_NAME));
+    }
     if (!userData) {
       userData = await this.$axios.$post('/user_id_generate');
-      localStorage.setItem(USER_KEY_NAME, JSON.stringify(userData));
+      if (process.env.NODE_ENV !== 'test') {
+        localStorage.setItem(USER_KEY_NAME, JSON.stringify(userData));
+      }
     }
     commit('setAccessToken', userData);
   },

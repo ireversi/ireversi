@@ -294,9 +294,9 @@ export default {
         this.zoomin();
       }
     },
-    setCountTime(i) {
+    setCountTime() {
       this.timer = Date.now();
-      if (this.score === 0 && this.putAbleCheck(i)) {
+      if (this.score === 0) {
         this.loading = true;
       }
     },
@@ -304,7 +304,7 @@ export default {
       const elapsedTime = Date.now() - this.timer;
       if (this.score !== 0) {
         this.putPiece(candidate);
-      } else if (this.score === 0 && elapsedTime >= 2000) {
+      } else if (this.score === 0 && elapsedTime <= 3000) {
         this.putPiece(candidate);
       }
       this.timer = 0;
