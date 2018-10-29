@@ -3,7 +3,6 @@ export default ({ $axios, store }) => {
     const url = new URL(`${config.baseURL}${config.url}`);
     /* eslint-disable no-param-reassign */
     config.url = url.href;
-
     if (typeof config.data === 'object') {
       const params = new URLSearchParams();
       Object.keys(config.data).forEach(key => params.append(key, config.data[key]));

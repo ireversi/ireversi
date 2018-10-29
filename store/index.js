@@ -1,6 +1,7 @@
 const USER_KEY_NAME = 'iReversiUserId';
 const GRID_MIN = 6;
 const GRID_MAX = 30;
+const localData = JSON.parse(localStorage.getItem(USER_KEY_NAME));
 
 export const state = () => ({
   pieces: null,
@@ -22,10 +23,22 @@ export const state = () => ({
   dragFlg: false,
   touchDistance: 0,
   touchTime: 0, // ダブルタッチ無効利用変数
-  userId: null,
-  token: null,
+  userId: localData ? localData.userId : '',
+  token: localData ? localData.accessToken : '',
 });
 
+export const plugins = [
+  (store) => {
+    // $store.commit が呼ばれるのを監視してlocalStorageに保存する
+    store.subscribe((mutation, state) => {
+      const userData = {
+        accessToken: state.token,
+        userId: state.userId,
+      };
+      localStorage.setItem(USER_KEY_NAME, JSON.stringify(userData));
+    });
+  },
+];
 
 export const mutations = {
   setBoard(state, {
@@ -105,18 +118,11 @@ export const mutations = {
 };
 
 export const actions = {
-  async getAccessToken({ commit }) {
-    let userData;
-    if (process.env.NODE_ENV !== 'test') {
-      userData = JSON.parse(localStorage.getItem(USER_KEY_NAME));
+  async getAccessToken({ commit, state }) {
+    if (!state.token) {
+      const userData = await this.$axios.$post('/user_id_generate');
+      commit('setAccessToken', userData);
     }
-    if (!userData) {
-      userData = await this.$axios.$post('/user_id_generate');
-      if (process.env.NODE_ENV !== 'test') {
-        localStorage.setItem(USER_KEY_NAME, JSON.stringify(userData));
-      }
-    }
-    commit('setAccessToken', userData);
   },
   async getBoard({ commit }) {
     commit('setBoard', await this.$axios.$get('/board'));
