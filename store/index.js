@@ -114,15 +114,6 @@ export const actions = {
   async getAccessToken({ commit }) {
     let userData = JSON.parse(localStorage.getItem(USER_KEY_NAME));
     if (!userData) {
-      // const seedLetters = 'abcdefghijklmnopqrstuvwxyz';
-      // const seedNumbers = '0123456789';
-      // const len = 6;
-      // let pwd = '';
-      // const seed = seedLetters + seedLetters.toUpperCase() + seedNumbers;
-      // for (let i = 0; i < len; i += 1) {
-      //   pwd += seed[Math.floor(Math.random() * seed.length)];
-      // }
-      // userId = pwd;
       userData = await this.$axios.$post('/user_id_generate');
       localStorage.setItem(USER_KEY_NAME, JSON.stringify(userData));
     }
