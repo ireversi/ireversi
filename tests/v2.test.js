@@ -10,13 +10,9 @@ describe('V2 test', () => {
   it('sets a board', async () => {
     // Given
     await store.dispatch('getAccessToken');
-    // console.log(store.state.token);
-    // console.log(store.state.token);
-    // console.log(store.state.token);
-    // console.log(store.state.token);
-    // console.log(store.state.token);
+
+    store.$axios.setHeader('Authorization', store.state.token);
     const { pieces, candidates, standbys } = await store.$axios.$get('/board');
-    // const { accessToken } = await this.$axios.$post('/user_id_generate');
 
     // When
     await store.dispatch('getBoard');

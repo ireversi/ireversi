@@ -1,7 +1,6 @@
 const USER_KEY_NAME = 'iReversiUserId';
 const GRID_MIN = 6;
 const GRID_MAX = 30;
-const localData = JSON.parse(localStorage.getItem(USER_KEY_NAME));
 
 export const state = () => ({
   pieces: null,
@@ -23,19 +22,19 @@ export const state = () => ({
   dragFlg: false,
   touchDistance: 0,
   touchTime: 0, // ダブルタッチ無効利用変数
-  userId: localData ? localData.userId : '',
-  token: localData ? localData.accessToken : '',
+  userId: null,
+  token: null,
 });
+
 
 export const plugins = [
   (store) => {
-    // $store.commit が呼ばれるのを監視してlocalStorageに保存する
-    store.subscribe((mutation, state) => {
-      const userData = {
-        accessToken: state.token,
-        userId: state.userId,
-      };
-      localStorage.setItem(USER_KEY_NAME, JSON.stringify(userData));
+    if (process.env.NODE_ENV === 'test') return;
+    store.commit('setAccessToken', JSON.parse(localStorage.getItem(USER_KEY_NAME)));
+
+    store.subscribe((mutation) => {
+      if (mutation.type !== 'setAccessToken') return; // setAccessTokenの発火時のみ起動
+      localStorage.setItem(USER_KEY_NAME, JSON.stringify(mutation.payload));
     });
   },
 ];
