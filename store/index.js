@@ -11,7 +11,6 @@ export const state = () => ({
   number: 4,
   currentUser: 1, // テスト用
   gridX: 10, // 縦と横比が違うため
-  gridY: 10,
   xHalf: 0, // grid描写更新変数
   yHalf: 0,
   initX: 0, // mousemove時のxHalf起点情報
@@ -44,11 +43,9 @@ export const mutations = {
   },
   zoomout(state) {
     state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 2));
-    state.gridY = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridY + 2));
   },
   zoomin(state) {
     state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 2));
-    state.gridY = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridY - 2));
   },
   changeCurrentUser(state, n) {
     state.currentUser = n;
@@ -64,35 +61,32 @@ export const mutations = {
     state.initDistance = distance;
   },
   gridMove(state, position) {
-    const cellWidth = window.innerWidth / state.gridX;
     if (state.dragFlg) {
-      const requestXHalf = state.initX - Math.floor((position.x - state.initPos.x) / cellWidth);
-      const requestYHalf = state.initY + Math.floor((position.y - state.initPos.y) / cellWidth);
+      const requestXHalf = state.initX - (position.x - state.initPos.x);
+      const requestYHalf = state.initY + (position.y - state.initPos.y);
       state.xHalf = requestXHalf;
       state.yHalf = requestYHalf;
 
-      const arryX = [];
-      state.pieces.map(el => arryX.push(el.x));
-      const swipeMaxNumX = Math.max(...arryX) + 2;
-      if (state.xHalf >= swipeMaxNumX) {
-        state.xHalf = swipeMaxNumX;
-      }
+      // const arryX = [];
+      // state.pieces.map(el => arryX.push(el.x));
+      // const swipeMaxNumX = Math.max(...arryX) + 2;
+      // if (state.xHalf >= swipeMaxNumX) {
+      //   state.xHalf = swipeMaxNumX;
+      // }
 
-      const swipeMinNumX = Math.min(...arryX) - 1;
-      if (state.xHalf <= swipeMinNumX) {
-        state.xHalf = swipeMinNumX;
-      }
+      // const swipeMinNumX = Math.min(...arryX) - 1;
+      // if (state.xHalf <= swipeMinNumX) {
+      //   state.xHalf = swipeMinNumX;
+      // }
     }
   },
   pinchMove(state, distance) {
     const cellWidth = window.innerWidth / state.gridX;
     if (Math.abs(distance - state.initDistance) > cellWidth) {
       if ((distance - state.initDistance) > 0) {
-        state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 2));
-        state.gridY = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridY - 2));
+        state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 1));
       } else if ((distance - state.initDistance) < 0) {
-        state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 2));
-        state.gridY = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridY + 2));
+        state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 1));
       }
     }
   },
