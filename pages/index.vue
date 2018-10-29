@@ -20,8 +20,8 @@
           cursor: ${putAbleCheck(i) ? 'pointer' : ''}`"
         >
           <div
-            @mousedown="setCountTime"
-            @touchstart="setCountTime"
+            @mousedown="setCountTime(i)"
+            @touchstart="setCountTime(i)"
             @mouseup="checkElapsedTime(i)"
             @touchend="checkElapsedTime(i)">
             <div
@@ -53,12 +53,19 @@
       <div class="plus btn" @click="zoomin"> + </div>
     </div>
 
+    <LoadingIcon :loading="loading" />
+    <!-- <transition name="loading">
+      <div v-if="loading" class="loading">
+        <div class="circle"><div class="circle-inner">loading</div></div>
+      </div>
+    </transition> -->
   </div>
 </template>
 
 <script>
 import Modal from '~/components/Modal.vue';
 import Ranking from '~/components/Ranking.vue';
+import LoadingIcon from '~/components/LoadingIcon.vue';
 /* デバッグ用 (最終的に削除予定) */
 import UserSelector from '~/components/UserSelector.vue';
 import ResetButton from '~/components/ResetButton.vue';
@@ -70,6 +77,7 @@ export default {
   data() {
     return {
       timer: 0,
+      loading: false,
     };
   },
   components: {
@@ -77,9 +85,10 @@ export default {
     ResetButton,
     Modal,
     Ranking,
+    LoadingIcon,
   },
   async fetch({ store }) {
-    await store.dispatch('getUserId');
+    await store.dispatch('getAccessToken');
     await store.dispatch('getBoard');
   },
   mounted() {
@@ -212,8 +221,11 @@ export default {
         this.zoomin();
       }
     },
-    setCountTime() {
+    setCountTime(i) {
       this.timer = Date.now();
+      if (this.score === 0 && this.putAbleCheck(i)) {
+        this.loading = true;
+      }
     },
     checkElapsedTime(i) {
       const elapsedTime = Date.now() - this.timer;
@@ -223,6 +235,7 @@ export default {
         this.send(i);
       }
       this.timer = 0;
+      // this.loading = false;
     },
 
     // hslテストコード
@@ -326,6 +339,7 @@ body {
   color:#444;
   font-size:80%;
   box-shadow: 2px 3px 0px 0px rgba(0,0,0,0.5);
+  user-select: none;
 }
 
 .score {

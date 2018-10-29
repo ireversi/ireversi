@@ -9,7 +9,7 @@ export const state = () => ({
   size: null,
   score: 0,
   number: 4,
-  currentUser: 1,
+  currentUser: 1, // テスト用
   gridX: 10, // 縦と横比が違うため
   gridY: 10,
   xHalf: 0, // grid描写更新変数
@@ -24,6 +24,7 @@ export const state = () => ({
   touchDistance: 0,
   touchTime: 0, // ダブルタッチ無効利用変数
   userId: null,
+  token: null,
 });
 
 
@@ -103,28 +104,29 @@ export const mutations = {
     state.initY = state.yHalf;
     state.touchTime = new Date().getTime();
   },
-  setUserId(state, userId) {
+  setAccessToken(state, { accessToken, userId }) {
+    state.token = accessToken;
     state.userId = userId;
-    state.currentUser = userId;
   },
 };
 
 export const actions = {
-  async getUserId({ commit }) {
-    let userId = localStorage.getItem(USER_KEY_NAME);
-    if (!userId) {
-      const seedLetters = 'abcdefghijklmnopqrstuvwxyz';
-      const seedNumbers = '0123456789';
-      const len = 6;
-      let pwd = '';
-      const seed = seedLetters + seedLetters.toUpperCase() + seedNumbers;
-      for (let i = 0; i < len; i += 1) {
-        pwd += seed[Math.floor(Math.random() * seed.length)];
-      }
-      userId = pwd;
-      localStorage.setItem(USER_KEY_NAME, userId);
+  async getAccessToken({ commit }) {
+    let userData = JSON.parse(localStorage.getItem(USER_KEY_NAME));
+    if (!userData) {
+      // const seedLetters = 'abcdefghijklmnopqrstuvwxyz';
+      // const seedNumbers = '0123456789';
+      // const len = 6;
+      // let pwd = '';
+      // const seed = seedLetters + seedLetters.toUpperCase() + seedNumbers;
+      // for (let i = 0; i < len; i += 1) {
+      //   pwd += seed[Math.floor(Math.random() * seed.length)];
+      // }
+      // userId = pwd;
+      userData = await this.$axios.$post('/user_id_generate');
+      localStorage.setItem(USER_KEY_NAME, JSON.stringify(userData));
     }
-    commit('setUserId', userId);
+    commit('setAccessToken', userData);
   },
   async getBoard({ commit }) {
     commit('setBoard', await this.$axios.$get('/board'));

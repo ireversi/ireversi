@@ -1,7 +1,6 @@
 export default ({ $axios, store }) => {
   $axios.onRequest((config) => {
     const url = new URL(`${config.baseURL}${config.url}`);
-    url.searchParams.set('userId', store.state.currentUser);
     /* eslint-disable no-param-reassign */
     config.url = url.href;
 
@@ -11,5 +10,6 @@ export default ({ $axios, store }) => {
       config.data = params;
       config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
     }
+    config.headers.Authorization = store.state.token;
   });
 };
