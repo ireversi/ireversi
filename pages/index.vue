@@ -35,12 +35,16 @@
 
         <!-- 影設定 -->
         <circle
+          class="piece-shadow"
           v-for="(piece, i) in pieces"
           :key="'pieceShadow' + i"
           :r="calcGridWidth() * 0.3"
           :cx="calcObjPos(piece).x + calcGridWidth() * 0.02"
           :cy="calcObjPos(piece).y + calcGridWidth() * 0.02"
-          style="fill: #444"
+          :style="`
+            stroke:${yourPiece(piece)};
+            stroke-width:${flick > 0 ? calcGridWidth() * 0.03 : 0};
+          `"
         />
 
         <circle
@@ -50,9 +54,7 @@
           :r="calcGridWidth() * 0.3"
           :cx="calcObjPos(piece).x"
           :cy="calcObjPos(piece).y"
-          :style="`fill:${userPieceColor(piece)};
-          stroke:${yourPiece(piece)};
-          stroke-width:2`"
+          :style="`fill:${userPieceColor(piece)};`"
         />
 
         <circle
@@ -81,22 +83,7 @@
       </svg>
     </div>
 
-    <div class="score">
-      <div>Score</div>
-      <div>{{ score }}</div>
-      <!-- 仮 -->
-      <div v-if="score === 0">
-        {{ '3秒長押しして下さい' }}
-      </div>
-    </div>
-
     <Ranking />
-
-    <!-- <UserSelector
-      :number="number"
-      :current="currentUser"
-      @change="changeCurrentUser"
-    /> -->
 
     <LoadingIcon :loading="loading" />
   </div>
@@ -106,11 +93,7 @@
 import Modal from '~/components/Modal.vue';
 import Ranking from '~/components/Ranking.vue';
 import LoadingIcon from '~/components/LoadingIcon.vue';
-/* デバッグ用 (最終的に削除予定) */
-import UserSelector from '~/components/UserSelector.vue';
-import ResetButton from '~/components/ResetButton.vue';
 
-/* デバッグ用 */
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
@@ -118,11 +101,10 @@ export default {
     return {
       timer: 0,
       loading: false,
+      flick: -1,
     };
   },
   components: {
-    UserSelector,
-    ResetButton,
     Modal,
     Ranking,
     LoadingIcon,
@@ -134,6 +116,7 @@ export default {
   mounted() {
     setInterval(async () => {
       this.getBoard();
+      this.flick *= -1;
     }, this.productionCheck ? 300 : 1000);
     window.addEventListener('wheel', this.handleScroll);
   },
@@ -337,32 +320,6 @@ body {
 
 
 <style scoped>
-.btns {
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-.btn {
-  cursor: pointer;
-  background: #fff;
-  font-size: 150%;
-  border: 1px solid #000;
-  text-align: center;
-  height: 50px;
-  width: 50px;
-  line-height: 50px;
-}
-.btn:hover {
-  background: #f77;
-  color: #fff;
-}
-.plus {
-  margin-left: 10px;
-}
-
-
 .main {
   position:fixed;
   top:0;
@@ -388,31 +345,13 @@ body {
 .piece, .candidate {
   fill: #fff;
 }
+.piece-shadow {
+  fill: #444;
+}
 
 .put-btn {
   fill-opacity: 0;
   cursor: pointer;
-}
-
-.score {
-  position:fixed;
-  top:0;
-  left:0;
-  background: #fff;
-  width: 100px;
-  border-radius: 5px;
-  border: 2px solid #555;
-}
-
-.score > div {
-  box-sizing: border-box;
-  width: 100px;
-  height: 35px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 100%;
-  border-bottom: 1px solid #555;
 }
 
 .userid {
