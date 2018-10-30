@@ -268,9 +268,7 @@ export default {
           const secondLetterNum = obj[p.userId.split('')[1]];
           const hue = COLOR_RANGE / (LETTERARRAY_LENGTH ** 2)
                       * (firstLetterNum * LETTERARRAY_LENGTH + secondLetterNum);
-          const sat = obj[p.userId.split('')[2]];
-          const lin = obj[p.userId.split('')[3]];
-          const color = `hsl(${hue}, ${sat}%, ${lin}% )`;
+          const color = `hsl(${hue}, 100%, 50% )`;
           return color;
         }
         return '#000'; // ユーザーID = 1の時の場合用
