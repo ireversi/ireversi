@@ -275,7 +275,7 @@ export default {
           const color = `hsl(${hue}, 80%, 60% )`;
           return color;
         }
-        return '#000';
+        return '#000'; // ユーザーID = 1の時の場合用
       };
     },
     yourPiece() {
