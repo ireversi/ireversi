@@ -40,7 +40,9 @@
           :r="calcGridWidth() * 0.3"
           :cx="calcObjPos(piece).x"
           :cy="calcObjPos(piece).y"
-          :style="`fill:${userPieceColor(piece)}`"
+          :style="`fill:${userPieceColor(piece)};
+          stroke:${yourPiece(piece)};
+          stroke-width:2`"
         />
 
         <!-- デバッグ用(色を設定するまでは本番環境でも表示) -->
@@ -240,26 +242,48 @@ export default {
         return Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
       };
     },
-    // hslテストコード
     userPieceColor() {
       return (p) => {
-        if (p.userId !== 1) {
-          const userIdArry = p.userId.split('');
-          const hueArry = [];
-          // const satArry = [];
-          // const ligArry = [];
-          for (let i = 0; i < 2; i += 1) {
-            hueArry.push(userIdArry[i].match(/\d|0/) ? +userIdArry[i] : userIdArry[i].charCodeAt());
+        if (p.userId !== 1) { // 初期の盤面のuserId === 1の駒があるため
+          // アルファベット配列の作成
+          const alphabets = [];
+          const first = 'a';
+          const last = 'z';
+          for (let n = first.charCodeAt(0); n <= last.charCodeAt(0); n += 1) {
+            alphabets.push(String.fromCodePoint(n));
           }
-          // const hue = Math.random() * Math.floor( // 色相
-          //   (hueArry.reduce((sum, num) => sum + num, 0)) / 2,
-          // );
-          const hue = Math.random() * 360;
+          // アルファベット数字対応表{'a':1, 'b':2, ...}
+          const obj = {};
+          for (let num = 0; num < alphabets.length; num += 1) {
+            obj[alphabets[num]] = num;
+          }
+          const COLOR_RANGE = 360;
+          const USERID_LENGTH = 6;
+          const colorVal = COLOR_RANGE / alphabets.length;
+          let userIdCode;
+          // ユーザーIDの最初のアルファベット対象に色に変換
+          let i = 0;
+          while (i <= USERID_LENGTH) {
+            if (!p.userId[i].match(/\d|0/)) {
+              userIdCode = p.userId.split('')[i].toLowerCase();
+              break;
+            }
+            i += 1;
+          }
+
+          const hue = Math.floor(obj[userIdCode] * colorVal);
           const color = `hsl(${hue}, 80%, 60% )`;
-          // console.log(color);
           return color;
         }
         return '#000';
+      };
+    },
+    yourPiece() {
+      return (p) => {
+        if (p.userId === this.userId) {
+          return '#fff';
+        }
+        return '';
       };
     },
   },
