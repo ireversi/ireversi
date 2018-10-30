@@ -33,6 +33,16 @@
           :y2="$window.height"
         />
 
+        <!-- 影設定 -->
+        <circle
+          v-for="(piece, i) in pieces"
+          :key="'pieceShadow' + i"
+          :r="calcGridWidth() * 0.3"
+          :cx="calcObjPos(piece).x + calcGridWidth() * 0.02"
+          :cy="calcObjPos(piece).y + calcGridWidth() * 0.02"
+          style="fill: #444"
+        />
+
         <circle
           class="piece"
           v-for="(piece, i) in pieces"
@@ -45,7 +55,6 @@
           stroke-width:2`"
         />
 
-        <!-- デバッグ用(色を設定するまでは本番環境でも表示) -->
         <circle
           class="candidate"
           v-for="(candidate, i) in candidates"
@@ -69,16 +78,6 @@
           @touchend="checkElapsedTime(candidate)"
         />
 
-        <!-- 影設定 -->
-        <filter id="dropShadow"
-          filterUnits="objectBoundingBox">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
-          <feOffset in="SourceGraphic" dx="-1" dy="-1" result="offset"/>
-          <feMerge>
-              <feMergeNode in="blur"/>
-              <feMergeNode in="offset" />
-          </feMerge>
-        </filter>
       </svg>
     </div>
 
@@ -396,10 +395,6 @@ body {
 
 .piece, .candidate {
   fill: #fff;
-}
-
-.piece {
-  filter: url(#dropShadow);
 }
 
 .put-btn {
