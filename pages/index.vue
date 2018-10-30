@@ -50,7 +50,9 @@
           :r="calcGridWidth() * 0.3"
           :cx="calcObjPos(piece).x"
           :cy="calcObjPos(piece).y"
-          :style="`fill:${userPieceColor(piece)}`"
+          :style="`fill:${userPieceColor(piece)};
+          stroke:${yourPiece(piece)};
+          stroke-width:2`"
         />
 
         <!-- デバッグ用(色を設定するまでは本番環境でも表示) -->
@@ -240,26 +242,44 @@ export default {
         return Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
       };
     },
-    // hslテストコード
     userPieceColor() {
       return (p) => {
-        if (p.userId !== 1) {
-          const userIdArry = p.userId.split('');
-          const hueArry = [];
-          // const satArry = [];
-          // const ligArry = [];
-          for (let i = 0; i < 2; i += 1) {
-            hueArry.push(userIdArry[i].match(/\d|0/) ? +userIdArry[i] : userIdArry[i].charCodeAt());
+        if (p.userId !== 1) { // 初期の盤面のuserId === 1の駒があるため
+          // Hue = １文字目 * 62 + ２文字目
+          // [0-9]数字配列
+          const numArray = [...Array(10)].map((i, n) => n);
+          // アルファベット小文字配列
+          const alphabets = [];
+          for (let n = 'a'.charCodeAt(0); n <= 'z'.charCodeAt(0); n += 1) {
+            alphabets.push(String.fromCodePoint(n));
           }
-          // const hue = Math.random() * Math.floor( // 色相
-          //   (hueArry.reduce((sum, num) => sum + num, 0)) / 2,
-          // );
-          const hue = Math.random() * 360;
-          const color = `hsl(${hue}, 80%, 60% )`;
-          // console.log(color);
+          // アルファベット大文字配列
+          const ALPHABETS = alphabets.map(el => el.toUpperCase());
+          // 62通りの文字配列
+          const letterArray = [...numArray, ...alphabets, ...ALPHABETS];
+          const LETTERARRAY_LENGTH = letterArray.length;
+          // アルファベット数字対応表{'a':10, 'b':11, ...}
+          const obj = {};
+          for (let num = 0; num < LETTERARRAY_LENGTH; num += 1) {
+            obj[letterArray[num]] = num;
+          }
+          const COLOR_RANGE = 360;
+          const firstLetterNum = obj[p.userId.split('')[0]];
+          const secondLetterNum = obj[p.userId.split('')[1]];
+          const hue = COLOR_RANGE / (LETTERARRAY_LENGTH ** 2)
+                      * (firstLetterNum * LETTERARRAY_LENGTH + secondLetterNum);
+          const color = `hsl(${hue}, 100%, 50% )`;
           return color;
         }
-        return '#000';
+        return '#000'; // ユーザーID = 1の時の場合用
+      };
+    },
+    yourPiece() {
+      return (p) => {
+        if (p.userId === this.userId) {
+          return '#fff';
+        }
+        return '';
       };
     },
   },
