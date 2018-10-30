@@ -256,7 +256,7 @@ export default {
           // );
           const hue = Math.random() * 360;
           const color = `hsl(${hue}, 80%, 60% )`;
-          console.log(color);
+          // console.log(color);
           return color;
         }
         return '#000';
