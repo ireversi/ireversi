@@ -85,12 +85,6 @@
 
     <Ranking />
 
-    <!-- <UserSelector
-      :number="number"
-      :current="currentUser"
-      @change="changeCurrentUser"
-    /> -->
-
     <LoadingIcon :loading="loading" />
   </div>
 </template>
@@ -99,11 +93,7 @@
 import Modal from '~/components/Modal.vue';
 import Ranking from '~/components/Ranking.vue';
 import LoadingIcon from '~/components/LoadingIcon.vue';
-/* デバッグ用 (最終的に削除予定) */
-import UserSelector from '~/components/UserSelector.vue';
-import ResetButton from '~/components/ResetButton.vue';
 
-/* デバッグ用 */
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
@@ -115,8 +105,6 @@ export default {
     };
   },
   components: {
-    UserSelector,
-    ResetButton,
     Modal,
     Ranking,
     LoadingIcon,
@@ -332,29 +320,6 @@ body {
 
 
 <style scoped>
-.btns {
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-.btn {
-  cursor: pointer;
-  background: #fff;
-  font-size: 150%;
-  border: 1px solid #000;
-  text-align: center;
-  height: 50px;
-  width: 50px;
-  line-height: 50px;
-}
-.btn:hover {
-  background: #f77;
-  color: #fff;
-}
-
-
 .main {
   position:fixed;
   top:0;
