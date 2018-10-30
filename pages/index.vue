@@ -245,34 +245,32 @@ export default {
     userPieceColor() {
       return (p) => {
         if (p.userId !== 1) { // 初期の盤面のuserId === 1の駒があるため
-          // アルファベット配列の作成
+          // Hue = １文字目 * 62 + ２文字目
+          // [0-9]数字配列
+          const numArray = [...Array(10)].map((i, n) => n);
+          // アルファベット小文字配列
           const alphabets = [];
-          const first = 'a';
-          const last = 'z';
-          for (let n = first.charCodeAt(0); n <= last.charCodeAt(0); n += 1) {
+          for (let n = 'a'.charCodeAt(0); n <= 'z'.charCodeAt(0); n += 1) {
             alphabets.push(String.fromCodePoint(n));
           }
-          // アルファベット数字対応表{'a':1, 'b':2, ...}
+          // アルファベット大文字配列
+          const ALPHABETS = alphabets.map(el => el.toUpperCase());
+          // 62通りの文字配列
+          const letterArray = [...numArray, ...alphabets, ...ALPHABETS];
+          const LETTERARRAY_LENGTH = letterArray.length;
+          // アルファベット数字対応表{'a':10, 'b':11, ...}
           const obj = {};
-          for (let num = 0; num < alphabets.length; num += 1) {
-            obj[alphabets[num]] = num;
+          for (let num = 0; num < LETTERARRAY_LENGTH; num += 1) {
+            obj[letterArray[num]] = num;
           }
           const COLOR_RANGE = 360;
-          const USERID_LENGTH = 6;
-          const colorVal = COLOR_RANGE / alphabets.length;
-          let userIdCode;
-          // ユーザーIDの最初のアルファベット対象に色に変換
-          let i = 0;
-          while (i <= USERID_LENGTH) {
-            if (!p.userId[i].match(/\d|0/)) {
-              userIdCode = p.userId.split('')[i].toLowerCase();
-              break;
-            }
-            i += 1;
-          }
-
-          const hue = Math.floor(obj[userIdCode] * colorVal);
-          const color = `hsl(${hue}, 80%, 60% )`;
+          const firstLetterNum = obj[p.userId.split('')[0]];
+          const secondLetterNum = obj[p.userId.split('')[1]];
+          const hue = COLOR_RANGE / (LETTERARRAY_LENGTH ** 2)
+                      * firstLetterNum * LETTERARRAY_LENGTH + secondLetterNum;
+          const sat = obj[p.userId.split('')[2]];
+          const lin = obj[p.userId.split('')[3]];
+          const color = `hsl(${hue}, ${sat}%, ${lin}% )`;
           return color;
         }
         return '#000'; // ユーザーID = 1の時の場合用
