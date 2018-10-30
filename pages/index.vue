@@ -55,18 +55,6 @@
           stroke-width:2`"
         />
 
-        <!-- デバッグ用(色を設定するまでは本番環境でも表示) -->
-        <text
-          class="userid"
-          v-for="(piece, i) in pieces"
-          :key="'userId' + i"
-          :font-size="calcGridWidth() * 0.1"
-          :x="calcObjPos(piece).x"
-          :y="calcObjPos(piece).y + calcGridWidth() * 0.05"
-        >
-          {{ piece.userId ? piece.userId : 'null' }}
-        </text>
-
         <circle
           class="candidate"
           v-for="(candidate, i) in candidates"
@@ -109,11 +97,6 @@
       :current="currentUser"
       @change="changeCurrentUser"
     /> -->
-
-    <div v-if="checkPC" class="btns">
-      <div class="minus btn" @click="zoomout"> - </div>
-      <div class="plus btn" @click="zoomin"> + </div>
-    </div>
 
     <LoadingIcon :loading="loading" />
   </div>
@@ -178,14 +161,6 @@ export default {
     productionCheck() {
       return process.env.NODE_ENV === 'production';
     },
-    checkPC() {
-      const { userAgent } = navigator;
-      if (userAgent.indexOf('iPhone') > -1 || userAgent.indexOf('iPad') > -1
-          || userAgent.indexOf('iPod') > -1 || userAgent.indexOf('Android') > -1) {
-        return false;
-      }
-      return true;
-    },
     calcGridWidth() {
       return () => this.$window.width / this.gridX;
     },
@@ -245,7 +220,6 @@ export default {
     userPieceColor() {
       return (p) => {
         if (p.userId !== 1) { // 初期の盤面のuserId === 1の駒があるため
-          // Hue = １文字目 * 62 + ２文字目
           // [0-9]数字配列
           const numArray = [...Array(10)].map((i, n) => n);
           // アルファベット小文字配列
