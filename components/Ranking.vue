@@ -36,7 +36,7 @@ export default {
         if (i === 3) {
           return '#a0541a';
         }
-        return '#fff';
+        return 'transparent';
       };
     },
   },
@@ -45,14 +45,12 @@ export default {
 
 <style scoped>
 .ranking{
-  background: #fff;
+  background: rgba(0, 40, 20, 0.8);
   width: 300px;
-  height: auto;
   position: fixed;
   top: 0;
   right: 0;
-  border-radius: 5px;
-  border: 2px solid #555;
+  color: #fff;
 }
 
 .ranking > div {
@@ -61,7 +59,7 @@ export default {
   text-align: center;
   line-height: 40px;
   height: 40px;
-  border-bottom: 1px solid #555;
+  border-bottom: 1px solid #888;
 }
 
 .rank {
@@ -91,8 +89,9 @@ export default {
   border-left: 1px solid #555;
 }
 
-.your-score {
-  border-top: 1px double #555;
+.ranking > .your-score {
+  border-bottom: none;
+  border-top: 1px solid #fff;
 }
 
 @media screen and (max-width: 800px){

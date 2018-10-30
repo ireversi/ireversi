@@ -3,7 +3,7 @@
       <div v-if="overlay" class="modalLayer">
         <div class="initMsg">
           <div class="title">iReversi</div>
-          <div class="startBtn" @click="closeOverLayer">Start</div>
+          <div class="startBtn" @click="closeOverLayer">START</div>
         </div>
       </div>
     </transition>
@@ -29,7 +29,7 @@ export default {
   width: 100%;
   height: 100%;
   position: absolute;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 30, 10, 0.7);
   z-index: 100;
 }
 
@@ -48,20 +48,28 @@ export default {
   color: #fff;
   font-size: 80px;
   font-weight: bold;
+  font-family: serif;
 }
 
 .startBtn {
-  margin: 5% auto;
-  color: #000;
-  background: #fff;
-  border: 1px solid #000;
-  border-radius: 5%;
-  width: 20%;
-  height: 20%;
+  margin: 30px auto 0;
+  color: #fff;
+  background: rgba(0, 30, 10, 0.8);
+  border: 3px solid #fff;
+  border-radius: 5px;
+  font-size: 30px;
+  width: 200px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: 0.4s;
+}
+
+.startBtn:hover {
+  color: #020;
+  background: #fff;
 }
 
 .modal-leave-to {

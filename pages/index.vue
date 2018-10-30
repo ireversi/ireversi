@@ -326,7 +326,7 @@ body {
   left:0;
   right:0;
   bottom:0;
-  background: #009432;
+  background: #00552e;
 }
 
 .board {
@@ -338,7 +338,7 @@ body {
 }
 
 .border-x, .border-y {
-  stroke: #313;
+  stroke: #121;
   stroke-width: 0.5px;
 }
 
