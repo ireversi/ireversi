@@ -267,7 +267,7 @@ export default {
           const firstLetterNum = obj[p.userId.split('')[0]];
           const secondLetterNum = obj[p.userId.split('')[1]];
           const hue = COLOR_RANGE / (LETTERARRAY_LENGTH ** 2)
-                      * firstLetterNum * LETTERARRAY_LENGTH + secondLetterNum;
+                      * (firstLetterNum * LETTERARRAY_LENGTH + secondLetterNum);
           const sat = obj[p.userId.split('')[2]];
           const lin = obj[p.userId.split('')[3]];
           const color = `hsl(${hue}, ${sat}%, ${lin}% )`;
