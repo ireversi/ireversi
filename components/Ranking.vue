@@ -9,12 +9,22 @@
       <div class="userName">Name</div>
       <div class="score">10</div>
     </div>
+    <div class="your-score">
+      <div class="rank">-</div>
+      <div class="userName">You</div>
+      <div class="score">{{ score }}</div>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   computed: {
+    ...mapState([
+      'score',
+    ]),
     rankingColor() {
       return (i) => {
         if (i === 1) {
@@ -79,6 +89,10 @@ export default {
 .score {
   width: 25%;
   border-left: 1px solid #555;
+}
+
+.your-score {
+  border-top: 1px double #555;
 }
 
 @media screen and (max-width: 800px){

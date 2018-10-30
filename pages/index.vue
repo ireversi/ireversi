@@ -83,15 +83,6 @@
       </svg>
     </div>
 
-    <div class="score">
-      <div>Score</div>
-      <div>{{ score }}</div>
-      <!-- 仮 -->
-      <div v-if="score === 0">
-        {{ '3秒長押しして下さい' }}
-      </div>
-    </div>
-
     <Ranking />
 
     <!-- <UserSelector
@@ -396,27 +387,6 @@ body {
 .put-btn {
   fill-opacity: 0;
   cursor: pointer;
-}
-
-.score {
-  position:fixed;
-  top:0;
-  left:0;
-  background: #fff;
-  width: 100px;
-  border-radius: 5px;
-  border: 2px solid #555;
-}
-
-.score > div {
-  box-sizing: border-box;
-  width: 100px;
-  height: 35px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 100%;
-  border-bottom: 1px solid #555;
 }
 
 .userid {
