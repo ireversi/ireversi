@@ -35,12 +35,16 @@
 
         <!-- 影設定 -->
         <circle
+          class="piece-shadow"
           v-for="(piece, i) in pieces"
           :key="'pieceShadow' + i"
           :r="calcGridWidth() * 0.3"
           :cx="calcObjPos(piece).x + calcGridWidth() * 0.02"
           :cy="calcObjPos(piece).y + calcGridWidth() * 0.02"
-          style="fill: #444"
+          :style="`
+            stroke:${yourPiece(piece)};
+            stroke-width:${flick > 0 ? calcGridWidth() * 0.03 : 0};
+          `"
         />
 
         <circle
@@ -50,9 +54,7 @@
           :r="calcGridWidth() * 0.3"
           :cx="calcObjPos(piece).x"
           :cy="calcObjPos(piece).y"
-          :style="`fill:${userPieceColor(piece)};
-          stroke:${yourPiece(piece)};
-          stroke-width:2`"
+          :style="`fill:${userPieceColor(piece)};`"
         />
 
         <circle
@@ -118,6 +120,7 @@ export default {
     return {
       timer: 0,
       loading: false,
+      flick: -1,
     };
   },
   components: {
@@ -134,6 +137,7 @@ export default {
   mounted() {
     setInterval(async () => {
       this.getBoard();
+      this.flick *= -1;
     }, this.productionCheck ? 300 : 1000);
     window.addEventListener('wheel', this.handleScroll);
   },
@@ -358,9 +362,6 @@ body {
   background: #f77;
   color: #fff;
 }
-.plus {
-  margin-left: 10px;
-}
 
 
 .main {
@@ -387,6 +388,9 @@ body {
 
 .piece, .candidate {
   fill: #fff;
+}
+.piece-shadow {
+  fill: #444;
 }
 
 .put-btn {
