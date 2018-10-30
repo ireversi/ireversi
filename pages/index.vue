@@ -161,14 +161,6 @@ export default {
     productionCheck() {
       return process.env.NODE_ENV === 'production';
     },
-    checkPC() {
-      const { userAgent } = navigator;
-      if (userAgent.indexOf('iPhone') > -1 || userAgent.indexOf('iPad') > -1
-          || userAgent.indexOf('iPod') > -1 || userAgent.indexOf('Android') > -1) {
-        return false;
-      }
-      return true;
-    },
     calcGridWidth() {
       return () => this.$window.width / this.gridX;
     },
