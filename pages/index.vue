@@ -33,6 +33,16 @@
           :y2="$window.height"
         />
 
+        <!-- 影設定 -->
+        <circle
+          v-for="(piece, i) in pieces"
+          :key="'pieceShadow' + i"
+          :r="calcGridWidth() * 0.3"
+          :cx="calcObjPos(piece).x + calcGridWidth() * 0.02"
+          :cy="calcObjPos(piece).y + calcGridWidth() * 0.02"
+          style="fill: #444"
+        />
+
         <circle
           class="piece"
           v-for="(piece, i) in pieces"
@@ -50,7 +60,7 @@
           class="userid"
           v-for="(piece, i) in pieces"
           :key="'userId' + i"
-          :font-size="calcGridWidth() * 0.2"
+          :font-size="calcGridWidth() * 0.1"
           :x="calcObjPos(piece).x"
           :y="calcObjPos(piece).y + calcGridWidth() * 0.05"
         >
@@ -80,16 +90,6 @@
           @touchend="checkElapsedTime(candidate)"
         />
 
-        <!-- 影設定 -->
-        <filter id="dropShadow"
-          filterUnits="objectBoundingBox">
-          <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
-          <feOffset in="SourceGraphic" dx="-1" dy="-1" result="offset"/>
-          <feMerge>
-              <feMergeNode in="blur"/>
-              <feMergeNode in="offset" />
-          </feMerge>
-        </filter>
       </svg>
     </div>
 
@@ -413,10 +413,6 @@ body {
 
 .piece, .candidate {
   fill: #fff;
-}
-
-.piece {
-  filter: url(#dropShadow);
 }
 
 .put-btn {
