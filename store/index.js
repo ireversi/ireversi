@@ -1,31 +1,24 @@
 const USER_KEY_NAME = 'iReversiUserId';
 const GRID_MIN = 6;
 const GRID_MAX = 40;
+const DEFAULT_GRID_X = 10;
 
 export const state = () => ({
+  userId: null,
+  token: null,
   pieces: null,
   candidates: null,
   standbys: null,
   size: null,
   score: 0,
-  number: 4,
-  currentUser: 1, // テスト用
-  gridX: 10, // 縦と横比が違うため
-  xHalf: 0, // grid描写更新変数
-  yHalf: 0,
-  initX: 0, // mousemove時のxHalf起点情報
-  initY: 0,
-  initDistance: 0, // ピンチ操作の基準情報
-  initPosX: 0, // mouseXの起点情報
-  initPosY: 0,
-  initPos: { x: 0, y: 0 },
+  gridX: DEFAULT_GRID_X, // Expect: Integer
+  moveDist: { x: 0, y: 0 }, // 原点の移動量
+  swipeInit: { x: 0, y: 0 }, // swipe基準点
+  dragInit: { x: 0, y: 0 }, // drag基準点
+  pinchInit: 0, // pinch基準距離
+  touchTime: 0, // ダブルタッチ無効判定に使用
   dragFlg: false,
-  touchDistance: 0,
-  touchTime: 0, // ダブルタッチ無効利用変数
-  userId: null,
-  token: null,
 });
-
 
 export const plugins = [
   (store) => {
@@ -62,55 +55,52 @@ export const mutations = {
   zoomin(state) {
     state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 2));
   },
-  changeCurrentUser(state, n) {
-    state.currentUser = n;
-  },
   setInitPos(state, position) {
     // 基準地点設定
     state.dragFlg = true;
-    state.initPos = position;
+    state.dragInit = position;
   },
   pinchStart(state, distance) {
     // 基準距離設定
     state.dragFlg = false;
-    state.initDistance = distance;
+    state.pinchInit = distance;
   },
   gridMove(state, position) {
     if (state.dragFlg) {
-      const requestXHalf = state.initX - (position.x - state.initPos.x);
-      const requestYHalf = state.initY + (position.y - state.initPos.y);
-      state.xHalf = requestXHalf;
-      state.yHalf = requestYHalf;
+      const requestXHalf = state.swipeInit.x - (position.x - state.dragInit.x);
+      const requestYHalf = state.swipeInit.y + (position.y - state.dragInit.y);
+      state.moveDist.x = requestXHalf;
+      state.moveDist.y = requestYHalf;
 
       // const arryX = [];
       // state.pieces.map(el => arryX.push(el.x));
       // const swipeMaxNumX = Math.max(...arryX) + 2;
-      // if (state.xHalf >= swipeMaxNumX) {
-      //   state.xHalf = swipeMaxNumX;
+      // if (state.moveDist.x >= swipeMaxNumX) {
+      //   state.moveDist.x = swipeMaxNumX;
       // }
 
       // const swipeMinNumX = Math.min(...arryX) - 1;
-      // if (state.xHalf <= swipeMinNumX) {
-      //   state.xHalf = swipeMinNumX;
+      // if (state.moveDist.x <= swipeMinNumX) {
+      //   state.moveDist.x = swipeMinNumX;
       // }
     }
   },
   pinchMove(state, distance) {
     const cellWidth = window.innerWidth / state.gridX;
-    if (Math.abs(distance - state.initDistance) > cellWidth) {
-      if ((distance - state.initDistance) > 0) {
+    if (Math.abs(distance - state.pinchInit) > cellWidth) {
+      if ((distance - state.pinchInit) > 0) {
         state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 1));
-      } else if ((distance - state.initDistance) < 0) {
+      } else if ((distance - state.pinchInit) < 0) {
         state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 1));
       }
     }
   },
   resetInitPos(state) { // touchend
-    state.initDistance = 0;
+    state.pinchInit = 0;
     state.dragFlg = false;
     // 次の起点場所情報の保存
-    state.initX = state.xHalf;
-    state.initY = state.yHalf;
+    state.swipeInit.x = state.moveDist.x;
+    state.swipeInit.y = state.moveDist.y;
     state.touchTime = new Date().getTime();
   },
   setAccessToken(state, { accessToken, userId }) {
