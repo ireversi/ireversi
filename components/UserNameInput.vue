@@ -4,10 +4,20 @@
         <transition name="instruction">
           <div class="initMsg">
             <div class="title">名前を入力してください</div>
+            <div class="condition">アルファベット小文字、数字、アンダースコアのみが使えます</div>
             <form class="form" @submit.prevent="sendName">
-              <input type="text" class="input">
+              <input type="text"
+                class="input"
+                placeholder="'test'(仮)と入力"
+                v-model="name"
+                minlength="4"
+                maxlength="15"
+                required
+              >
               <div class="sendBtn" @click="sendName">send</div>
             </form>
+            <div v-if="errorMsg1" class="errorMsg">大文字を使わないでください</div>
+            <div v-if="errorMsg2" class="errorMsg">特殊記号文字を使わないでください</div>
           </div>
         </transition>
       </div>
@@ -21,10 +31,23 @@ export default {
   props: [
     'nameInput',
   ],
+  data() {
+    return {
+      name: '',
+      errorMsg1: false,
+      errorMsg2: false,
+    };
+  },
   methods: {
     ...mapActions(['getAccessToken']),
     sendName() {
-      this.getAccessToken();
+      this.errorMsg1 = false;
+      this.errorMsg2 = false;
+      const reg1 = new RegExp(/[A-Z]/g);
+      const reg2 = new RegExp(/['!#$%&()*+,.:;=?"@[\]|^{}-]/g);
+      if (this.name.match(reg1)) this.errorMsg1 = true;
+      if (this.name.match(reg2)) this.errorMsg2 = true;
+      // this.getAccessToken();
     },
   },
 };
@@ -57,12 +80,23 @@ export default {
   font-family: serif;
 }
 
-.form {
+.condition {
   margin: 30px auto 0;
+  font-size: 12px;
+  color: white;
+}
+
+.form {
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   width: auto;
   text-align: center;
+}
+
+.errorMsg{
+  font-size: 18px;
+  color:red;
 }
 
 .input {
@@ -100,7 +134,6 @@ export default {
 }
 
 /* モーダル部分 */
-
 .modal-enter {
   opacity: 0;
 }
@@ -112,9 +145,6 @@ export default {
 .modal-enter-active{
   transition: opacity 2s;
 }
-
-/* 案内部分 */
-
 
 @media screen and (max-width: 800px){
   .startBtn {

@@ -72,7 +72,7 @@
 
       </svg>
       <Ranking />
-      <LoadingIcon :loading="loading" />
+      <!-- <LoadingIcon :loading="loading" /> -->
     </div>
   </div>
 </template>
