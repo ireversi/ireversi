@@ -116,6 +116,7 @@ export const mutations = {
   setAccessToken(state, { accessToken, userId }) {
     state.token = accessToken;
     state.userId = userId;
+    // state.userName = userName:
   },
 };
 
