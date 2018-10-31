@@ -1,9 +1,13 @@
 <template>
-  <div class="main"
-  >
-    <Modal />
+  <div class="main">
+    <Modal @judgename='judgeUserName'/>
+
+    <div v-if="!token" class="userInputScreen">
+      <UserNameInput :nameInput="nameInput"/>
+    </div>
 
     <div class="board"
+      v-else
       @touchstart="onTouchStart"
       @mousedown="setInitPos"
       @touchmove="onTouchMove"
@@ -67,16 +71,15 @@
         />
 
       </svg>
+      <Ranking />
+      <LoadingIcon :loading="loading" />
     </div>
-
-    <Ranking />
-
-    <LoadingIcon :loading="loading" />
   </div>
 </template>
 
 <script>
 import Modal from '~/components/Modal.vue';
+import UserNameInput from '~/components/UserNameInput.vue';
 import Ranking from '~/components/Ranking.vue';
 import LoadingIcon from '~/components/LoadingIcon.vue';
 
@@ -87,6 +90,7 @@ export default {
     return {
       timer: 0,
       loading: false,
+      nameInput: false,
       flicker: false,
     };
   },
@@ -94,10 +98,13 @@ export default {
     Modal,
     Ranking,
     LoadingIcon,
+    UserNameInput,
   },
   async fetch({ store }) {
-    await store.dispatch('getAccessToken');
-    await store.dispatch('getBoard');
+    // await store.dispatch('getAccessToken');
+    if (this.token) {
+      await store.dispatch('getBoard');
+    }
   },
   mounted() {
     const sleep = time => new Promise(resolve => setTimeout(resolve, time));
@@ -105,7 +112,9 @@ export default {
     (async () => {
       while (true) {
         await sleep(this.productionCheck ? 300 : 1000);
-        await this.getBoard();
+        if (this.token) {
+          await this.getBoard();
+        }
       }
     })();
 
@@ -140,6 +149,7 @@ export default {
       'dragFlg',
       'touchTime',
       'userId',
+      'token',
     ]),
     productionCheck() {
       return process.env.NODE_ENV === 'production';
@@ -308,6 +318,9 @@ export default {
       this.timer = 0;
       this.loading = false;
     },
+    judgeUserName() {
+      if (!this.token) this.nameInput = true;
+    },
   },
 };
 </script>
@@ -320,6 +333,14 @@ body {
 
 
 <style scoped>
+.userInputScreen {
+  position: fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background: center/cover url('../assets/image/board.png');
+}
 .main {
   position:fixed;
   top:0;

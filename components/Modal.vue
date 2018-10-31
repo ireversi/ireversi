@@ -19,6 +19,7 @@ export default {
   methods: {
     closeOverLayer() {
       this.overlay = false;
+      this.$emit('judgename');
     },
   },
 };
@@ -72,13 +73,13 @@ export default {
   background: #fff;
 }
 
-.modal-leave-to {
+/* .modal-leave-to {
   opacity: 0;
 }
 
 .modal-leave-active {
   transition: opacity 1s;
-}
+} */
 
 @media screen and (max-width: 800px){
   .startBtn {
