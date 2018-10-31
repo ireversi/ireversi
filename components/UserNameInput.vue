@@ -16,8 +16,8 @@
               >
               <div class="sendBtn" @click="sendName">send</div>
             </form>
-            <div v-if="errorMsg1" class="errorMsg">大文字を使わないでください</div>
-            <div v-if="errorMsg2" class="errorMsg">特殊記号文字を使わないでください</div>
+            <div v-if="error1" class="errorMsg">大文字を使わないでください</div>
+            <div v-if="error2" class="errorMsg">特殊記号文字を使わないでください</div>
           </div>
         </transition>
       </div>
@@ -34,20 +34,20 @@ export default {
   data() {
     return {
       name: '',
-      errorMsg1: false,
-      errorMsg2: false,
+      error1: false,
+      error2: false,
     };
   },
   methods: {
     ...mapActions(['getAccessToken']),
     sendName() {
-      this.errorMsg1 = false;
-      this.errorMsg2 = false;
+      this.error1 = false;
+      this.error2 = false;
       const reg1 = new RegExp(/[A-Z]/g);
       const reg2 = new RegExp(/['!#$%&()*+,.:;=?"@[\]|^{}-]/g);
-      if (this.name.match(reg1)) this.errorMsg1 = true;
-      if (this.name.match(reg2)) this.errorMsg2 = true;
-      // this.getAccessToken();
+      if (this.name.match(reg1)) this.error1 = true;
+      if (this.name.match(reg2)) this.error2 = true;
+      if (!this.error1 && !this.error2) this.getAccessToken();
     },
   },
 };
