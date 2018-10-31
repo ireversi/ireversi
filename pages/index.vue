@@ -37,20 +37,6 @@
           :y2="$window.height"
         />
 
-        <!-- 影設定 -->
-        <circle
-          class="piece-shadow"
-          v-for="(piece, i) in pieces"
-          :key="'pieceShadow' + i"
-          :r="calcGridWidth() * 0.3"
-          :cx="calcObjPos(piece).x + calcGridWidth() * 0.02"
-          :cy="calcObjPos(piece).y + calcGridWidth() * 0.02"
-          :style="`
-            stroke:${yourPiece(piece)};
-            stroke-width:${flick > 0 ? calcGridWidth() * 0.03 : 0};
-          `"
-        />
-
         <circle
           class="piece"
           v-for="(piece, i) in pieces"
@@ -58,7 +44,7 @@
           :r="calcGridWidth() * 0.3"
           :cx="calcObjPos(piece).x"
           :cy="calcObjPos(piece).y"
-          :style="`fill:${userPieceColor(piece)};`"
+          :style="`fill:${piece.userId === userId && flicker ? '' : userPieceColor(piece)};`"
         />
 
         <circle
@@ -104,7 +90,7 @@ export default {
     return {
       timer: 0,
       loading: false,
-      flick: -1,
+      flick: false,
       nameInput: false,
     };
   },
@@ -121,10 +107,24 @@ export default {
     }
   },
   mounted() {
-    setInterval(async () => {
-      this.getBoard();
-      this.flick *= -1;
-    }, this.productionCheck ? 300 : 1000);
+    const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+
+    (async () => {
+      while (true) {
+        await sleep(this.productionCheck ? 300 : 1000);
+        await this.getBoard();
+      }
+    })();
+
+    (async () => {
+      while (true) {
+        await sleep(1400);
+        this.flicker = true;
+        await sleep(100);
+        this.flicker = false;
+      }
+    })();
+
     window.addEventListener('wheel', this.handleScroll);
   },
   computed: {
@@ -363,9 +363,6 @@ body {
 
 .piece, .candidate {
   fill: #fff;
-}
-.piece-shadow {
-  fill: #444;
 }
 
 .put-btn {
