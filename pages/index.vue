@@ -110,6 +110,7 @@ export default {
     const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
     (async () => {
+      // eslint-disable-next-line
       while (true) {
         await sleep(this.productionCheck ? 300 : 1000);
         if (this.token) {
@@ -119,6 +120,7 @@ export default {
     })();
 
     (async () => {
+      // eslint-disable-next-line
       while (true) {
         await sleep(1400);
         this.flicker = true;
@@ -131,25 +133,16 @@ export default {
   },
   computed: {
     ...mapState([
+      'userId',
+      'token',
       'pieces',
       'candidates',
       'standbys',
       'size',
       'score',
-      'number',
-      'currentUser',
       'gridX',
-      'xHalf',
-      'yHalf',
-      'initX', // mousemove時のxHalf起点情報
-      'initY',
-      'initLen', // ピンチ操作の基準情報
-      'initPosX', // mouseXの起点情報
-      'initPosY',
-      'dragFlg',
+      'moveDist',
       'touchTime',
-      'userId',
-      'token',
     ]),
     productionCheck() {
       return process.env.NODE_ENV === 'production';
@@ -176,7 +169,7 @@ export default {
               // 画面サイズとグリッド幅から始点計算
               - (Math.ceil((this.$window.width / 2) / gridWidth)) * gridWidth
               // 移動量調整
-              - (this.xHalf % gridWidth)
+              - (this.moveDist.x % gridWidth)
               + (gridWidth * (i - 1)),
           y: this.calcCenterPos().y // 中心座標
               // Gridの中心が座標となるよう修正
@@ -184,7 +177,7 @@ export default {
               // 画面サイズとグリッド幅から始点
               - (Math.ceil((this.$window.height / 2) / gridWidth)) * gridWidth
               // 移動量調整
-              + (this.yHalf % gridWidth)
+              + (this.moveDist.y % gridWidth)
               + (gridWidth * (i - 1)),
         };
       };
@@ -194,8 +187,8 @@ export default {
         const gridWidth = this.calcGridWidth();
         const centerPos = this.calcCenterPos();
         return {
-          x: centerPos.x + (gridWidth * object.x - this.xHalf),
-          y: centerPos.y - (gridWidth * object.y - this.yHalf),
+          x: centerPos.x + (gridWidth * object.x - this.moveDist.x),
+          y: centerPos.y - (gridWidth * object.y - this.moveDist.y),
         };
       };
     },
