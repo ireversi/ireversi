@@ -112,7 +112,9 @@ export default {
     (async () => {
       while (true) {
         await sleep(this.productionCheck ? 300 : 1000);
-        this.getBoard();
+        if (this.token) {
+          await this.getBoard();
+        }
       }
     })();
 

@@ -1,6 +1,6 @@
 const USER_KEY_NAME = 'iReversiUserId';
 const GRID_MIN = 6;
-const GRID_MAX = 30;
+const GRID_MAX = 40;
 
 export const state = () => ({
   pieces: null,
