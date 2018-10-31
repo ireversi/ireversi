@@ -337,7 +337,7 @@ body {
   left:0;
   right:0;
   bottom:0;
-  background-image: center/cover url('../assets/image/board.png');
+  background: center/cover url('../assets/image/board.png');
 }
 .main {
   position:fixed;
