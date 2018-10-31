@@ -16,7 +16,9 @@ module.exports = {
   // required to lint *.vue files
   plugins: ['vue'],
   // add your custom rules here
-  rules: {},
+  rules: {
+    'no-await-in-loop': 0,
+  },
   overrides: [
     {
       files: ['*.{js,vue}'],

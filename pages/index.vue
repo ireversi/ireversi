@@ -100,15 +100,24 @@ export default {
     await store.dispatch('getBoard');
   },
   mounted() {
-    setInterval(async () => {
-      this.getBoard();
-    }, this.productionCheck ? 300 : 1000);
-    setInterval(() => {
-      this.flicker = false;
-      setTimeout(() => {
+    const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+
+    (async () => {
+      while (true) {
+        await sleep(this.productionCheck ? 300 : 1000);
+        await this.getBoard();
+      }
+    })();
+
+    (async () => {
+      while (true) {
+        await sleep(1400);
         this.flicker = true;
-      }, 1400);
-    }, 1500);
+        await sleep(100);
+        this.flicker = false;
+      }
+    })();
+
     window.addEventListener('wheel', this.handleScroll);
   },
   computed: {
