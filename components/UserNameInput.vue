@@ -8,7 +8,6 @@
             <form class="form" @submit.prevent="sendName">
               <input type="text"
                 class="input"
-                placeholder="'test'(仮)と入力"
                 v-model="name"
                 minlength="4"
                 maxlength="15"
