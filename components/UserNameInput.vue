@@ -12,12 +12,11 @@
                 v-model="name"
                 minlength="4"
                 maxlength="15"
+                pattern="^[a-z0-9]([_a-z0-9]){2,13}[a-z0-9]$"
                 required
               >
               <div class="sendBtn" @click="sendName">send</div>
             </form>
-            <div v-if="error1" class="errorMsg">大文字を使わないでください</div>
-            <div v-if="error2" class="errorMsg">特殊記号文字を使わないでください</div>
           </div>
         </transition>
       </div>
@@ -34,20 +33,12 @@ export default {
   data() {
     return {
       name: '',
-      error1: false,
-      error2: false,
     };
   },
   methods: {
     ...mapActions(['getAccessToken']),
     sendName() {
-      this.error1 = false;
-      this.error2 = false;
-      const reg1 = new RegExp(/[A-Z]/g);
-      const reg2 = new RegExp(/['!#$%&()*+,.:;=?"@[\]|^{}-]/g);
-      if (this.name.match(reg1)) this.error1 = true;
-      if (this.name.match(reg2)) this.error2 = true;
-      if (!this.error1 && !this.error2) this.getAccessToken();
+      this.getAccessToken();
     },
   },
 };
@@ -65,7 +56,6 @@ export default {
 .initMsg {
   width: 80%;
   height: 30%;
-  /* background: #fff; */
   position: absolute;
   top: 50%;
   left: 50%;
