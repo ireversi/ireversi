@@ -40,5 +40,11 @@ module.exports = {
         jest: true,
       },
     },
+    {
+      files: ['api/tests/**/*.js'],
+      rules: {
+        'no-undef': 0,
+      },
+    },
   ],
 };

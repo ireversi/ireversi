@@ -3,7 +3,7 @@ const swaggerJSDoc = require('swagger-jsdoc'); // jsのなかに書いて読ん�
 
 module.exports = ['v1', 'v2'].map(version => ({
   version,
-  spec: (swaggerJSDoc({
+  spec: swaggerJSDoc({
     swaggerDefinition: {
       swagger: '2.0',
       info: {
@@ -15,10 +15,10 @@ module.exports = ['v1', 'v2'].map(version => ({
       consumes: ['application/x-www-form-urlencoded'], // ルールとか
       produces: ['application/json'],
     },
-    apis: klawSync(`./swagger/${version}`, { nodir: true }).map(f => f.path),
+    apis: klawSync(`./api/swagger/${version}`, { nodir: true }).map(f => f.path),
     // ymlファイルを全部登録する必要がある
     // mapで全部見てる
-  })),
+  }),
   option: {
     explorer: true,
   },
