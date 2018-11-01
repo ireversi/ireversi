@@ -4,8 +4,16 @@
         <transition name="instruction">
           <div class="initMsg">
             <div class="title">名前を入力してください</div>
+            <div class="condition">アルファベット小文字、数字、アンダースコアのみが使えます</div>
             <form class="form" @submit.prevent="sendName">
-              <input type="text" class="input">
+              <input type="text"
+                class="input"
+                v-model="name"
+                minlength="4"
+                maxlength="15"
+                pattern="^[a-z0-9]([_a-z0-9]){2,13}[a-z0-9]$"
+                required
+              >
               <div class="sendBtn" @click="sendName">send</div>
             </form>
           </div>
@@ -21,6 +29,11 @@ export default {
   props: [
     'nameInput',
   ],
+  data() {
+    return {
+      name: '',
+    };
+  },
   methods: {
     ...mapActions(['getAccessToken']),
     sendName() {
@@ -42,7 +55,6 @@ export default {
 .initMsg {
   width: 80%;
   height: 30%;
-  /* background: #fff; */
   position: absolute;
   top: 50%;
   left: 50%;
@@ -57,12 +69,23 @@ export default {
   font-family: serif;
 }
 
-.form {
+.condition {
   margin: 30px auto 0;
+  font-size: 12px;
+  color: white;
+}
+
+.form {
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   width: auto;
   text-align: center;
+}
+
+.errorMsg{
+  font-size: 18px;
+  color:red;
 }
 
 .input {
@@ -100,7 +123,6 @@ export default {
 }
 
 /* モーダル部分 */
-
 .modal-enter {
   opacity: 0;
 }
@@ -112,9 +134,6 @@ export default {
 .modal-enter-active{
   transition: opacity 2s;
 }
-
-/* 案内部分 */
-
 
 @media screen and (max-width: 800px){
   .startBtn {
