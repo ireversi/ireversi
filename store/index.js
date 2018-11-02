@@ -1,7 +1,8 @@
 const USER_KEY_NAME = 'iReversiUserId';
-const GRID_MIN = 6;
-const GRID_MAX = 40;
-const DEFAULT_GRID_X = 10;
+
+const GRID_MIN = 5;
+const GRID_MAX = 101;
+const DEFAULT_GRID_X = 11;
 const TOPSCORES = 5;
 
 export const state = () => ({
@@ -51,11 +52,19 @@ export const mutations = {
     state.size = size;
     state.score = score;
   },
-  zoomout(state) {
-    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 2));
+  zoomout(state, targetPos) {
+    if (state.gridX + 1 > GRID_MIN && state.gridX + 1 < GRID_MAX) {
+      state.moveDist.x -= (window.innerWidth * targetPos.x) / (state.gridX * (state.gridX));
+      state.moveDist.y -= (window.innerWidth * targetPos.y) / (state.gridX * (state.gridX));
+    }
+    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 1));
   },
-  zoomin(state) {
-    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 2));
+  zoomin(state, targetPos) {
+    if (state.gridX - 1 > GRID_MIN && state.gridX - 1 < GRID_MAX) {
+      state.moveDist.x += (window.innerWidth * targetPos.x) / (state.gridX * (state.gridX));
+      state.moveDist.y += (window.innerWidth * targetPos.y) / (state.gridX * (state.gridX));
+    }
+    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 1));
   },
   setInitPos(state, position) {
     // 基準地点設定
