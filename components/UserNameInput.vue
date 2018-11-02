@@ -18,10 +18,10 @@
             </form>
             <nav>
               <ul>
-                <li v-for="i in languages" :key="i.code">
+                <li v-for="(i, n) in languages" :key="i.code">
                   <a href="#" @click.prevent="ChangeLanguage(i.code)" class="lang">
                     <!-- 仮で決め打ちしています。 -->
-                    <img src="../assets/image/han.png" class="flag"><br>
+                    <img :src="`${getFlag(n)}`" class="flag"><br>
                     {{ i.language }}
                   </a>
                 </li>
@@ -35,6 +35,10 @@
 
 <script>
 import { mapActions } from 'vuex';
+import koreaImg from '@/assets/image/han.png';
+import japanImg from '@/assets/image/ja.png';
+import usImg from '@/assets/image/en.png';
+import indonesiaImg from '@/assets/image/in.png';
 
 export default {
   props: [
@@ -51,11 +55,6 @@ export default {
         { language: '日本語', code: 'ja' },
       ],
       templates: {
-        ja: {
-          t: '名前を入力してください',
-          c: 'アルファベット小文字、数字、アンダースコアのみが使えます',
-          b: '送信',
-        },
         en: {
           t: 'Enter your name',
           c: 'Only available small letters, numbers and underbar',
@@ -71,15 +70,18 @@ export default {
           c: 'Hanya tersedia huruf kecil, angka dan underbar',
           b: 'kirim',
         },
+        ja: {
+          t: '名前を入力してください',
+          c: 'アルファベット小文字、数字、アンダースコアのみが使えます',
+          b: '送信',
+        },
       },
     };
   },
   computed: {
-    // getFlag() {
-    //   return (i) => {
-    //     return require(`../assets/image/${i}.png`);
-    //   };
-    // },
+    getFlag() {
+      return n => ([usImg, koreaImg, indonesiaImg, japanImg][n]);
+    },
   },
   methods: {
     ...mapActions(['getAccessToken']),
