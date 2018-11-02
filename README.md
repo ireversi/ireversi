@@ -1,41 +1,51 @@
 # iReversi
 
-> My breathtaking Nuxt.js project
+[![CircleCI (develop branch)](https://circleci.com/gh/ireversi/ireversi/tree/develop.svg?style=shield)](https://circleci.com/gh/ireversi/ireversi)
+[![Tested with Jest](https://img.shields.io/badge/tested_with-Jest-99424f.svg)](https://github.com/facebook/jest)
+[![Coveralls github](https://img.shields.io/codecov/c/github/ireversi/ireversi/develop.svg)](https://codecov.io/gh/ireversi/ireversi)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-## Build Setup
+## Play
 
-### npm
+**[iReversi](https://ireversi.io/)**
 
-```bash
-# install dependencies
-$ npm install
-
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm start
-
-# generate static project
-$ npm run generate
-```
-
-### Yarn
+## Develop
 
 ```bash
-# install dependencies
-$ yarn install
+# Install dependencies
+$ npm install # Or yarn
 
-# serve with hot reload at localhost:3000
-$ yarn run dev
+# Serve with hot reload at localhost:3000
+$ npm run dev # Or yarn dev
 
-# build for production and launch server
-$ yarn run build
-$ yarn start
-
-# generate static project
-$ yarn run generate
+# Testing JavaScript
+$ npm test # Or yarn test
 ```
 
-For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+### Environment Variables
+
+> Create a `.env` file in the root directory of your project. ([dotenv](https://github.com/motdotla/dotenv#readme))
+
+```sh
+# Set `baseURL` for axios
+AXIOS_BASE # Required
+
+# Test ignore patterns
+# Default:  []
+JEST_IGNORE
+
+# MongoDB URI
+# Default: mongodb://localhost:27017/ireversi
+MONGO_URI
+
+# API server port
+# Default: 10000
+PORT
+```
+
+### API documents (Staging)
+
+Use Swagger
+
+[v1](https://ireversi-server.now.sh/api-docs/v1/) /
+[v2](https://ireversi-server.now.sh/api-docs/v2/)
