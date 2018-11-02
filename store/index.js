@@ -82,6 +82,8 @@ export const mutations = {
     // 基準地点設定
     state.dragFlg = true;
     state.dragInit = position;
+    state.swipeInit.x = state.moveDist.x;
+    state.swipeInit.y = state.moveDist.y;
   },
   pinchStart(state, distance) {
     // 基準距離設定
@@ -121,9 +123,6 @@ export const mutations = {
   resetInitPos(state) { // touchend
     state.pinchInit = 0;
     state.dragFlg = false;
-    // 次の起点場所情報の保存
-    state.swipeInit.x = state.moveDist.x;
-    state.swipeInit.y = state.moveDist.y;
     state.touchTime = new Date().getTime();
   },
   setAccessToken(state, { accessToken, userId }) {
