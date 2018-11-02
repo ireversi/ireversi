@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
+    "@nuxtjs/google-analytics": "^2.0.2",
     "dotenv": "^6.0.0",
     "element-ui": "^2.2.1",
     "express": "^4.16.3",
