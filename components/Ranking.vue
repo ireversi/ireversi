@@ -1,13 +1,13 @@
 <template>
   <div class="ranking">
-    <div v-for="i in 5" :key="i">
+    <div v-for="(obj, i) in topScores" :key="i">
       <div class="rank">
-        <span :style="`background:${rankingColor(i)};color:${i <= 3 ? '#fff': ''}`">
-          <span class="num">{{ i }}</span>
+        <span :style="`background:${rankingColor(i + 1)}`">
+          <span class="num">{{ i + 1 }}</span>
         </span>
       </div>
-      <div class="userName">Name</div>
-      <div class="score">10</div>
+      <div class="userName">{{ obj.userId }}</div>
+      <div class="score">{{ obj.score }}</div>
     </div>
     <div class="your-score">
       <div class="rank">-</div>
@@ -24,6 +24,7 @@ export default {
   computed: {
     ...mapState([
       'score',
+      'topScores',
     ]),
     rankingColor() {
       return (i) => {
