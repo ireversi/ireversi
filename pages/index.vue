@@ -100,12 +100,6 @@ export default {
     LoadingIcon,
     UserNameInput,
   },
-  async fetch({ store }) {
-    // await store.dispatch('getAccessToken');
-    if (this.token) {
-      await store.dispatch('getBoard');
-    }
-  },
   mounted() {
     const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
@@ -115,6 +109,7 @@ export default {
         await sleep(this.productionCheck ? 300 : 1000);
         if (this.token) {
           await this.getBoard();
+          await this.getTopScores();
         }
       }
     })();
@@ -245,7 +240,7 @@ export default {
   },
   methods: {
     ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'setInitPos', 'gridMove', 'resetInitPos', 'pinchStart', 'pinchMove']),
-    ...mapActions(['getBoard', 'putPiece']),
+    ...mapActions(['getBoard', 'putPiece', 'getTopScores']),
     onTouchStart(e) {
       // ダブルタップ無効化
       if (new Date().getTime() - this.touchTime < 350) {

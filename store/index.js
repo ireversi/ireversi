@@ -2,6 +2,7 @@ const USER_KEY_NAME = 'iReversiUserId';
 const GRID_MIN = 6;
 const GRID_MAX = 40;
 const DEFAULT_GRID_X = 10;
+const TOPSCORES = 5;
 
 export const state = () => ({
   userId: null,
@@ -18,6 +19,7 @@ export const state = () => ({
   pinchInit: 0, // pinch基準距離
   touchTime: 0, // ダブルタッチ無効判定に使用
   dragFlg: false,
+  topScores: [],
 });
 
 export const plugins = [
@@ -108,6 +110,18 @@ export const mutations = {
     state.userId = userId;
     // state.userName = userName:
   },
+  setTopScores(state, scores) {
+    for (let i = 0; i < TOPSCORES; i += 1) {
+      state.topScores[i] = {};
+      if (scores[i]) {
+        state.topScores[i].userId = scores[i].userId;
+        state.topScores[i].score = scores[i].score;
+      } else {
+        state.topScores[i].userId = '-';
+        state.topScores[i].score = 0;
+      }
+    }
+  },
 };
 
 export const actions = {
@@ -127,5 +141,9 @@ export const actions = {
   async resetGame({ dispatch }, keyword) {
     await this.$axios.$delete('/piece', { keyword });
     await dispatch('getBoard');
+  },
+  async getTopScores({ commit }) {
+    const topScores = await this.$axios.$get(`/topScore?number=${TOPSCORES}`);
+    commit('setTopScores', topScores);
   },
 };
