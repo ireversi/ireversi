@@ -111,16 +111,13 @@ export const mutations = {
     // state.userName = userName:
   },
   setTopScores(state, scores) {
+    const copiedTopScores = [...state.topScores];
     for (let i = 0; i < TOPSCORES; i += 1) {
-      state.topScores[i] = {};
-      if (scores[i]) {
-        state.topScores[i].userId = scores[i].userId;
-        state.topScores[i].score = scores[i].score;
-      } else {
-        state.topScores[i].userId = '-';
-        state.topScores[i].score = 0;
-      }
+      copiedTopScores[i] = {};
+      copiedTopScores[i].userId = scores[i] ? scores[i].userId : '-';
+      copiedTopScores[i].score = scores[i] ? scores[i].score : 0;
     }
+    state.topScores = copiedTopScores;
   },
 };
 
