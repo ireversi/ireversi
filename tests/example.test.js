@@ -9,18 +9,12 @@ describe('Example: Vuex test', () => {
 
   it('Get state', () => {
     // Given
-    const { grid } = store.state.practice.fujii.index;
+    const { gridX } = store.state;
 
     // When
-    store.commit('practice/fujii/index/zoomout');
+    store.commit('zoomout');
 
     // Then
-    expect(store.state.practice.fujii.index.grid).toBe(grid + 2);
+    expect(store.state.gridX).toBe(gridX + 2);
   });
 });
-
-
-// swipe機能テスト
-// 3秒ローディングアイコンカウントテスト
-// レーザーテスト(座標方向データ取得テスト)
-// スコアカウントテスト
