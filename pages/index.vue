@@ -300,15 +300,21 @@ export default {
     },
     handleScroll(e) {
       e.preventDefault();
+      // カーソルの下にあるpieceの座標
       const targetPos = {
         x: Math.round((this.moveDist.x + e.pageX - this.$window.width / 2) / this.calcGridWidth()),
         y: Math.round((this.moveDist.y - e.pageY + this.$window.height / 2) / this.calcGridWidth()),
       };
+      // pieceの中心とカーソルの位置との差分
+      const adjustPos = {
+        x: e.pageX - this.calcObjPos(targetPos).x,
+        y: -(e.pageY - this.calcObjPos(targetPos).y),
+      };
       // ホイール移動量取得
       if (e.deltaY > 0) {
-        this.zoomout(targetPos);
+        this.zoomout({ targetPos, adjustPos });
       } else if (e.deltaY < 0) {
-        this.zoomin(targetPos);
+        this.zoomin({ targetPos, adjustPos });
       }
     },
     setCountTime() {

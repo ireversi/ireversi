@@ -52,17 +52,29 @@ export const mutations = {
     state.size = size;
     state.score = score;
   },
-  zoomout(state, targetPos) {
-    if (state.gridX + 1 > GRID_MIN && state.gridX + 1 < GRID_MAX) {
-      state.moveDist.x -= (window.innerWidth * targetPos.x) / (state.gridX * (state.gridX));
-      state.moveDist.y -= (window.innerWidth * targetPos.y) / (state.gridX * (state.gridX));
+  zoomout(state, { targetPos, adjustPos }) {
+    if (state.gridX + 1 >= GRID_MIN && state.gridX + 1 <= GRID_MAX) {
+      // gridX変更分位置調整
+      state.moveDist.x -= (window.innerWidth * targetPos.x) / (state.gridX * (state.gridX + 1))
+      // piece中心とカーソル位置との差分調整
+                          + adjustPos.x * (state.gridX / (state.gridX + 1));
+      // gridX変更分位置調整調整
+      state.moveDist.y -= (window.innerWidth * targetPos.y) / (state.gridX * (state.gridX + 1))
+      // piece中心とカーソル位置との差分調整
+                          + adjustPos.y * (state.gridX / (state.gridX + 1));
     }
     state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 1));
   },
-  zoomin(state, targetPos) {
-    if (state.gridX - 1 > GRID_MIN && state.gridX - 1 < GRID_MAX) {
-      state.moveDist.x += (window.innerWidth * targetPos.x) / (state.gridX * (state.gridX));
-      state.moveDist.y += (window.innerWidth * targetPos.y) / (state.gridX * (state.gridX));
+  zoomin(state, { targetPos, adjustPos }) {
+    if (state.gridX - 1 >= GRID_MIN && state.gridX - 1 <= GRID_MAX) {
+      // gridX変更分位置調整
+      state.moveDist.x += (window.innerWidth * targetPos.x) / (state.gridX * (state.gridX - 1))
+      // piece中心とカーソル位置との差分調整
+                          - adjustPos.x * (state.gridX / (state.gridX - 1));
+      // gridX変更分位置調整
+      state.moveDist.y += (window.innerWidth * targetPos.y) / (state.gridX * (state.gridX - 1))
+      // piece中心とカーソル位置との差分調整
+                          - adjustPos.y * (state.gridX / (state.gridX - 1));
     }
     state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 1));
   },
