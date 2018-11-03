@@ -7,7 +7,7 @@ jobs:
     working_directory: ~/repo
 
     environment:
-      API_PORT: 10000
+      PORT: 10000
       AXIOS_BASE: http://localhost:10000/api
 
     steps:
@@ -28,10 +28,11 @@ jobs:
 
       - run: npm run lint
       - run: npm test
-      - run: |
-        if [ $CIRCLE_BRANCH = "master" ] ; then
-          npm run coverage
-        fi
+      - run:
+          command: |
+            if [ $CIRCLE_BRANCH = "master" ] ; then
+              npm run coverage
+            fi
 
   server_deploy:
     docker:
@@ -41,8 +42,10 @@ jobs:
 
     steps:
       - run: sudo pip install awscli
-      - run: [ $CIRCLE_BRANCH = "master" ] && group=$AWS_PROD_GROUP || group=$AWS_STG_GROUP
-      - run: aws deploy create-deployment --application-name $AWS_APP_NAME --deployment-group-name $group --github-location repository="$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME",commitId="$CIRCLE_SHA1"
+      - run:
+          command: |
+            [ $CIRCLE_BRANCH = "master" ] && group=$AWS_PROD_GROUP || group=$AWS_STG_GROUP
+            aws deploy create-deployment --application-name $AWS_APP_NAME --deployment-group-name $group --github-location repository="$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME",commitId="$CIRCLE_SHA1"
 
   client_deploy:
     docker:
