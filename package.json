@@ -26,9 +26,8 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint:fix": "npm run lint -- --fix",
     "test": "npm-run-all --serial test:*",
-    "test:api": "jest --config api/jest.config.js",
+    "test:api": "jest --config api/jest.config.js --coverage",
     "test:api:watch": "npm run test:api -- --watch",
-    "test:api:coverage": "npm run test:api -- --coverage",
     "test:client": "jest",
     "test:client:watch": "npm run test:client -- --watch",
     "coverage": "codecov"
