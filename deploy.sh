@@ -2,4 +2,5 @@
 
 cd /home/ec2-user/ireversi
 npm i
-npm run restart
+npm run stop
+npm run deploy

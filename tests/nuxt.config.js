@@ -15,6 +15,7 @@ const config = {
   axios,
   env,
   modules,
+  plugins: ['@/plugins/axios'],
   mode: 'universal',
   dev: false,
   rootDir: resolve(__dirname, '..'),

@@ -1,7 +1,9 @@
 const USER_KEY_NAME = 'iReversiUserId';
-const GRID_MIN = 6;
-const GRID_MAX = 40;
-const DEFAULT_GRID_X = 10;
+
+const GRID_MIN = 5;
+const GRID_MAX = 101;
+const DEFAULT_GRID_X = 11;
+const TOPSCORES = 5;
 
 export const state = () => ({
   userId: null,
@@ -18,6 +20,7 @@ export const state = () => ({
   pinchInit: 0, // pinch基準距離
   touchTime: 0, // ダブルタッチ無効判定に使用
   dragFlg: false,
+  topScores: [],
 });
 
 export const plugins = [
@@ -49,16 +52,38 @@ export const mutations = {
     state.size = size;
     state.score = score;
   },
-  zoomout(state) {
-    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 2));
+  zoomout(state, { targetPos, adjustPos }) {
+    if (state.gridX + 1 >= GRID_MIN && state.gridX + 1 <= GRID_MAX) {
+      // gridX変更分位置調整
+      state.moveDist.x -= (window.innerWidth * targetPos.x) / (state.gridX * (state.gridX + 1))
+      // piece中心とカーソル位置との差分調整
+                          + adjustPos.x * (state.gridX / (state.gridX + 1));
+      // gridX変更分位置調整調整
+      state.moveDist.y -= (window.innerWidth * targetPos.y) / (state.gridX * (state.gridX + 1))
+      // piece中心とカーソル位置との差分調整
+                          + adjustPos.y * (state.gridX / (state.gridX + 1));
+    }
+    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 1));
   },
-  zoomin(state) {
-    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 2));
+  zoomin(state, { targetPos, adjustPos }) {
+    if (state.gridX - 1 >= GRID_MIN && state.gridX - 1 <= GRID_MAX) {
+      // gridX変更分位置調整
+      state.moveDist.x += (window.innerWidth * targetPos.x) / (state.gridX * (state.gridX - 1))
+      // piece中心とカーソル位置との差分調整
+                          - adjustPos.x * (state.gridX / (state.gridX - 1));
+      // gridX変更分位置調整
+      state.moveDist.y += (window.innerWidth * targetPos.y) / (state.gridX * (state.gridX - 1))
+      // piece中心とカーソル位置との差分調整
+                          - adjustPos.y * (state.gridX / (state.gridX - 1));
+    }
+    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 1));
   },
   setInitPos(state, position) {
     // 基準地点設定
     state.dragFlg = true;
     state.dragInit = position;
+    state.swipeInit.x = state.moveDist.x;
+    state.swipeInit.y = state.moveDist.y;
   },
   pinchStart(state, distance) {
     // 基準距離設定
@@ -98,9 +123,6 @@ export const mutations = {
   resetInitPos(state) { // touchend
     state.pinchInit = 0;
     state.dragFlg = false;
-    // 次の起点場所情報の保存
-    state.swipeInit.x = state.moveDist.x;
-    state.swipeInit.y = state.moveDist.y;
     state.touchTime = new Date().getTime();
   },
   setAccessToken(state, { accessToken, userId }) {
@@ -108,12 +130,21 @@ export const mutations = {
     state.userId = userId;
     // state.userName = userName:
   },
+  setTopScores(state, scores) {
+    const copiedTopScores = [...state.topScores];
+    for (let i = 0; i < TOPSCORES; i += 1) {
+      copiedTopScores[i] = {};
+      copiedTopScores[i].userId = scores[i] ? scores[i].userId : '-';
+      copiedTopScores[i].score = scores[i] ? scores[i].score : 0;
+    }
+    state.topScores = copiedTopScores;
+  },
 };
 
 export const actions = {
-  async getAccessToken({ commit, state }) {
+  async getAccessToken({ commit, state }, username) {
     if (!state.token) {
-      const userData = await this.$axios.$post('/user_id_generate');
+      const userData = await this.$axios.$post('/user_id_generate', { username });
       commit('setAccessToken', userData);
     }
   },
@@ -127,5 +158,9 @@ export const actions = {
   async resetGame({ dispatch }, keyword) {
     await this.$axios.$delete('/piece', { keyword });
     await dispatch('getBoard');
+  },
+  async getTopScores({ commit }) {
+    const topScores = await this.$axios.$get(`/topScore?number=${TOPSCORES}`);
+    commit('setTopScores', topScores);
   },
 };

@@ -1,5 +1,11 @@
 require('dotenv').config();
 
+const {
+  NODE_ENV,
+  AXIOS_BASE,
+  GOOGLE_ANALYTICS,
+} = process.env;
+
 module.exports = {
   mode: 'spa',
 
@@ -42,6 +48,9 @@ module.exports = {
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
+    ['@nuxtjs/google-analytics', {
+      id: GOOGLE_ANALYTICS,
+    }],
   ],
   /*
   ** Axios module configuration
@@ -50,14 +59,8 @@ module.exports = {
   // See https://github.com/nuxt-community/axios-module#options
   },
   env: {
-    NODE_ENV: process.env.NODE_ENV,
-    AXIOS_BASE: process.env.AXIOS_BASE,
-    FUJII_PATH: process.env.FUJII_PATH,
-    KIDO_PATH: process.env.KIDO_PATH,
-    MATSUDA_PATH: process.env.MATSUDA_PATH,
-    KIMURA_PATH: process.env.KIMURA_PATH,
-    KAI_PATH: process.env.KAI_PATH,
-    ANDO_PATH: process.env.ANDO_PATH,
+    NODE_ENV,
+    AXIOS_BASE: NODE_ENV !== 'test' && AXIOS_BASE ? AXIOS_BASE : 'http://localhost:10000/api',
   },
   router: {
     middleware: 'baseURL',

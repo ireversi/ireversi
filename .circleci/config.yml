@@ -1,48 +1,51 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
 version: 2
 jobs:
   test:
     docker:
-      # specify the version you desire here
-      - image: circleci/node:10.12
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
+      - image: circleci/node:10.13
 
     working_directory: ~/repo
-
-    environment:
-      AXIOS_BASE: https://ireversi-server.now.sh/api
 
     steps:
       - checkout
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: yarn install
+      - run: npm install
 
       - save_cache:
           paths:
+            - ~/.mongodb-binaries
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # run tests!
-      - run: yarn lint
-      - run: yarn test
+      - run: npm run lint
+      - run: npm test
+      - run:
+          command: |
+            if [ $CIRCLE_BRANCH = "master" ] ; then
+              npm run coverage
+            fi
 
-  deploy:
+  server_deploy:
     docker:
-      - image: circleci/node:10.12
+      - image: circleci/python:3.6.4
+
+    working_directory: ~/repo
+
+    steps:
+      - run: sudo pip install awscli
+      - run:
+          command: |
+            [ $CIRCLE_BRANCH = "master" ] && group=$AWS_PROD_GROUP || group=$AWS_STG_GROUP
+            aws deploy create-deployment --application-name $AWS_APP_NAME --deployment-group-name $group --github-location repository="$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME",commitId="$CIRCLE_SHA1"
+
+  client_deploy:
+    docker:
+      - image: circleci/node:10.13
 
     working_directory: ~/repo
 
@@ -54,14 +57,14 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
 
-      - run: yarn install
+      - run: npm install
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: yarn generate
+      - run: npm run generate
       - run: sudo apt-get update
       - run: sudo apt-get install -y awscli
       - run: aws s3 sync dist s3://$AWS_BUCKET --delete
@@ -71,7 +74,15 @@ workflows:
   test_and_staging:
     jobs:
       - test
-      - deploy:
+      - server_deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+      - client_deploy:
           requires:
             - test
           filters:

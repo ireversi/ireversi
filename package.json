@@ -26,15 +26,15 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint:fix": "npm run lint -- --fix",
     "test": "npm-run-all --serial test:*",
-    "test:api": "jest --config api/jest.config.js",
+    "test:api": "jest --config api/jest.config.js --coverage",
     "test:api:watch": "npm run test:api -- --watch",
-    "test:api:coverage": "npm run test:api -- --coverage",
     "test:client": "jest",
     "test:client:watch": "npm run test:client -- --watch",
     "coverage": "codecov"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
+    "@nuxtjs/google-analytics": "^2.0.2",
     "dotenv": "^6.0.0",
     "element-ui": "^2.2.1",
     "express": "^4.16.3",
@@ -47,6 +47,7 @@
     "random-hash": "^4.0.1",
     "swagger-jsdoc": "^3.0.2",
     "swagger-ui-express": "^3.0.10",
+    "universal-url": "^1.0.1",
     "vue-touch": "^2.0.0-beta.4"
   },
   "devDependencies": {
