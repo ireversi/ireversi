@@ -142,9 +142,9 @@ export const mutations = {
 };
 
 export const actions = {
-  async getAccessToken({ commit, state }) {
+  async getAccessToken({ commit, state }, username) {
     if (!state.token) {
-      const userData = await this.$axios.$post('/user_id_generate');
+      const userData = await this.$axios.$post('/user_id_generate', { username });
       commit('setAccessToken', userData);
     }
   },

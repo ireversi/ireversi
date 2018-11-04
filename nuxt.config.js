@@ -60,7 +60,7 @@ module.exports = {
   },
   env: {
     NODE_ENV,
-    AXIOS_BASE,
+    AXIOS_BASE: NODE_ENV !== 'test' && AXIOS_BASE ? AXIOS_BASE : 'http://localhost:10000/api',
   },
   router: {
     middleware: 'baseURL',
