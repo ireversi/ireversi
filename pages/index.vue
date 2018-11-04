@@ -72,7 +72,11 @@
 
       </svg>
       <Ranking />
+      <Question  @open="openDeveloperInfo"/>
       <!-- <LoadingIcon :loading="loading" /> -->
+    </div>
+    <div v-if="DeveloperInfo">
+      <AboutDevelopers @close="closeDeveloperInfo"/>
     </div>
   </div>
 </template>
@@ -82,6 +86,8 @@ import Modal from '~/components/Modal.vue';
 import UserNameInput from '~/components/UserNameInput.vue';
 import Ranking from '~/components/Ranking.vue';
 import LoadingIcon from '~/components/LoadingIcon.vue';
+import Question from '~/components/Question.vue';
+import AboutDevelopers from '~/components/AboutDevelopers.vue';
 
 import { mapState, mapMutations, mapActions } from 'vuex';
 
@@ -92,6 +98,7 @@ export default {
       loading: false,
       nameInput: false,
       flicker: false,
+      DeveloperInfo: false,
     };
   },
   components: {
@@ -99,6 +106,8 @@ export default {
     Ranking,
     LoadingIcon,
     UserNameInput,
+    Question,
+    AboutDevelopers,
   },
   mounted() {
     const sleep = time => new Promise(resolve => setTimeout(resolve, time));
@@ -308,6 +317,12 @@ export default {
     },
     judgeUserName() {
       if (!this.token) this.nameInput = true;
+    },
+    openDeveloperInfo() {
+      this.DeveloperInfo = true;
+    },
+    closeDeveloperInfo() {
+      this.DeveloperInfo = false;
     },
   },
 };

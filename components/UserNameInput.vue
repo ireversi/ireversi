@@ -85,7 +85,7 @@ export default {
   methods: {
     ...mapActions(['getAccessToken']),
     sendName() {
-      this.getAccessToken();
+      this.getAccessToken(this.name);
     },
     ChangeLanguage(i) {
       this.language = i;

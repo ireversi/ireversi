@@ -1,11 +1,12 @@
 const USER_KEY_NAME = 'iReversiUserId';
 const GRID_MIN = 6;
-const GRID_MAX = 40;
+const GRID_MAX = 200;
 const DEFAULT_GRID_X = 10;
 const TOPSCORES = 5;
 
 export const state = () => ({
   userId: null,
+  userName: null,
   token: null,
   pieces: null,
   candidates: null,
@@ -105,10 +106,10 @@ export const mutations = {
     state.swipeInit.y = state.moveDist.y;
     state.touchTime = new Date().getTime();
   },
-  setAccessToken(state, { accessToken, userId }) {
+  setAccessToken(state, { accessToken, userId, userName }) {
     state.token = accessToken;
     state.userId = userId;
-    // state.userName = userName:
+    state.userName = userName;
   },
   setTopScores(state, scores) {
     const copiedTopScores = [...state.topScores];
@@ -122,9 +123,9 @@ export const mutations = {
 };
 
 export const actions = {
-  async getAccessToken({ commit, state }) {
+  async getAccessToken({ commit, state }, username) {
     if (!state.token) {
-      const userData = await this.$axios.$post('/user_id_generate');
+      const userData = await this.$axios.$post('/user_id_generate', { username });
       commit('setAccessToken', userData);
     }
   },
