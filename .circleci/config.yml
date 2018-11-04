@@ -7,7 +7,6 @@ jobs:
     working_directory: ~/repo
 
     environment:
-      PORT: 10000
       AXIOS_BASE: http://localhost:10000/api
 
     steps:
