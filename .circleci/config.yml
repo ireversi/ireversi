@@ -1,0 +1,93 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: circleci/node:10.13
+
+    working_directory: ~/repo
+
+    environment:
+      AXIOS_BASE: http://localhost:10000/api
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - ~/.mongodb-binaries
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run: npm run lint
+      - run: npm test
+      - run:
+          command: |
+            if [ $CIRCLE_BRANCH = "master" ] ; then
+              npm run coverage
+            fi
+
+  server_deploy:
+    docker:
+      - image: circleci/python:3.6.4
+
+    working_directory: ~/repo
+
+    steps:
+      - run: sudo pip install awscli
+      - run:
+          command: |
+            [ $CIRCLE_BRANCH = "master" ] && group=$AWS_PROD_GROUP || group=$AWS_STG_GROUP
+            aws deploy create-deployment --application-name $AWS_APP_NAME --deployment-group-name $group --github-location repository="$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME",commitId="$CIRCLE_SHA1"
+
+  client_deploy:
+    docker:
+      - image: circleci/node:10.13
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run: npm run generate
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y awscli
+      - run: aws s3 sync dist s3://$AWS_BUCKET --delete
+
+workflows:
+  version: 2
+  test_and_staging:
+    jobs:
+      - test
+      - server_deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+      - client_deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
