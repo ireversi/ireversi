@@ -47,6 +47,19 @@
           :style="`fill:${piece.userId === userId && flicker ? '' : userPieceColor(piece)};`"
         />
 
+        <!-- デバッグ用座標表示 -->
+        <text
+          v-for="(piece, i) in pieces"
+          v-if="!productionCheck"
+          :key="'text' + i"
+          :x="calcObjPos(piece).x"
+          :y="calcObjPos(piece).y"
+          :font-size="calcGridWidth() * 0.2"
+          style="fill: #fff; text-anchor: middle; dominant-baseline: central"
+        >
+          {{ piece.x }}, {{  piece.y }}
+        </text>
+
         <circle
           class="candidate"
           v-for="(candidate, i) in candidates"
@@ -191,8 +204,12 @@ export default {
         const gridWidth = this.calcGridWidth();
         const centerPos = this.calcCenterPos();
         return {
-          x: centerPos.x + (gridWidth * object.x - this.moveDist.x),
-          y: centerPos.y - (gridWidth * object.y - this.moveDist.y),
+          x: centerPos.x // 中心座標
+             + (gridWidth * object.x
+             - this.moveDist.x), // 原点移動量調整
+          y: centerPos.y // 中心座標
+             - (gridWidth * object.y
+             - this.moveDist.y), // 原点移動量調整
         };
       };
     },
@@ -292,11 +309,21 @@ export default {
     },
     handleScroll(e) {
       e.preventDefault();
+      // カーソルの下にあるpieceの座標
+      const targetPos = {
+        x: Math.round((this.moveDist.x + e.pageX - this.$window.width / 2) / this.calcGridWidth()),
+        y: Math.round((this.moveDist.y - e.pageY + this.$window.height / 2) / this.calcGridWidth()),
+      };
+      // pieceの中心とカーソルの位置との差分
+      const adjustPos = {
+        x: e.pageX - this.calcObjPos(targetPos).x,
+        y: -(e.pageY - this.calcObjPos(targetPos).y),
+      };
       // ホイール移動量取得
       if (e.deltaY > 0) {
-        this.zoomout();
+        this.zoomout({ targetPos, adjustPos });
       } else if (e.deltaY < 0) {
-        this.zoomin();
+        this.zoomin({ targetPos, adjustPos });
       }
     },
     setCountTime() {

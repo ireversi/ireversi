@@ -22,6 +22,7 @@
     "dotenv": "^6.0.0",
     "element-ui": "^2.2.1",
     "nuxt": "^1.0.0",
+    "universal-url": "^1.0.1",
     "vue-touch": "^2.0.0-beta.4"
   },
   "devDependencies": {

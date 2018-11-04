@@ -1,7 +1,7 @@
 const USER_KEY_NAME = 'iReversiUserId';
-const GRID_MIN = 6;
-const GRID_MAX = 200;
-const DEFAULT_GRID_X = 10;
+const GRID_MIN = 5;
+const GRID_MAX = 101;
+const DEFAULT_GRID_X = 11;
 const TOPSCORES = 5;
 
 export const state = () => ({
@@ -52,16 +52,38 @@ export const mutations = {
     state.size = size;
     state.score = score;
   },
-  zoomout(state) {
-    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 2));
+  zoomout(state, { targetPos, adjustPos }) {
+    if (state.gridX + 1 >= GRID_MIN && state.gridX + 1 <= GRID_MAX) {
+      // gridX変更分位置調整
+      state.moveDist.x -= (window.innerWidth * targetPos.x) / (state.gridX * (state.gridX + 1))
+      // piece中心とカーソル位置との差分調整
+                          + adjustPos.x * (state.gridX / (state.gridX + 1));
+      // gridX変更分位置調整調整
+      state.moveDist.y -= (window.innerWidth * targetPos.y) / (state.gridX * (state.gridX + 1))
+      // piece中心とカーソル位置との差分調整
+                          + adjustPos.y * (state.gridX / (state.gridX + 1));
+    }
+    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 1));
   },
-  zoomin(state) {
-    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 2));
+  zoomin(state, { targetPos, adjustPos }) {
+    if (state.gridX - 1 >= GRID_MIN && state.gridX - 1 <= GRID_MAX) {
+      // gridX変更分位置調整
+      state.moveDist.x += (window.innerWidth * targetPos.x) / (state.gridX * (state.gridX - 1))
+      // piece中心とカーソル位置との差分調整
+                          - adjustPos.x * (state.gridX / (state.gridX - 1));
+      // gridX変更分位置調整
+      state.moveDist.y += (window.innerWidth * targetPos.y) / (state.gridX * (state.gridX - 1))
+      // piece中心とカーソル位置との差分調整
+                          - adjustPos.y * (state.gridX / (state.gridX - 1));
+    }
+    state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 1));
   },
   setInitPos(state, position) {
     // 基準地点設定
     state.dragFlg = true;
     state.dragInit = position;
+    state.swipeInit.x = state.moveDist.x;
+    state.swipeInit.y = state.moveDist.y;
   },
   pinchStart(state, distance) {
     // 基準距離設定
@@ -101,9 +123,6 @@ export const mutations = {
   resetInitPos(state) { // touchend
     state.pinchInit = 0;
     state.dragFlg = false;
-    // 次の起点場所情報の保存
-    state.swipeInit.x = state.moveDist.x;
-    state.swipeInit.y = state.moveDist.y;
     state.touchTime = new Date().getTime();
   },
   setAccessToken(state, { accessToken, userId, userName }) {

@@ -12,15 +12,6 @@ describe('V2 test', () => {
     const USERNAME = 'username'; // 4文字以上15文字以下、アルファベット小文字、数字、アンダースコアのみ
     await store.dispatch('getAccessToken', USERNAME);
 
-
-    console.log(store.state.token);
-    console.log(store.state.token);
-    console.log(store.state.token);
-    console.log(store.state.token);
-    console.log(store.state.token);
-    console.log(store.state.token);
-
-    store.$axios.setHeader('Authorization', store.state.token);
     const { pieces, candidates, standbys } = await store.$axios.$get('/board');
 
     // When
