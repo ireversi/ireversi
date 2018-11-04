@@ -12,9 +12,9 @@ describe('Example: Vuex test', () => {
     const { gridX } = store.state;
 
     // When
-    store.commit('zoomout');
+    // store.commit('Any');
 
     // Then
-    expect(store.state.gridX).toBe(gridX + 2);
+    expect(gridX).toBe(11);
   });
 });
