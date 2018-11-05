@@ -139,7 +139,8 @@ export const actions = {
     }
   },
   async getBoard({ commit }) {
-    commit('setBoard', await this.$axios.$get('/board'));
+    const response = await this.$axios.$get('/board');
+    commit('setBoard', response);
   },
   async putPiece({ dispatch }, params) {
     await this.$axios.$post('/piece', params);
