@@ -1,8 +1,9 @@
 # iReversi
 
 [![CircleCI (develop branch)](https://circleci.com/gh/ireversi/ireversi/tree/develop.svg?style=shield)](https://circleci.com/gh/ireversi/ireversi)
+[![node](https://img.shields.io/badge/node->%3D10.13.0-brightgreen.svg)](https://nodejs.org/dist/latest-v10.x/docs/api/)
 [![Tested with Jest](https://img.shields.io/badge/tested_with-Jest-99424f.svg)](https://github.com/facebook/jest)
-[![Coveralls github](https://img.shields.io/codecov/c/github/ireversi/ireversi/develop.svg)](https://codecov.io/gh/ireversi/ireversi)
+[![Coveralls github](https://img.shields.io/codecov/c/github/ireversi/ireversi-server/develop.svg)](https://codecov.io/gh/ireversi/ireversi-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ## Play
@@ -15,23 +16,36 @@
 # Install dependencies
 $ npm install # Or yarn
 
-# Serve with hot reload at localhost:3000
+# Develop iReversi
 $ npm run dev # Or yarn dev
 
-# Testing JavaScript
+# Client origin
+#   http://localhost:3000
+# API server origin
+#   http://localhost:10000
+
+# Test JavaScript files
 $ npm test # Or yarn test
 ```
 
-### Environment Variables
+### Database
 
-> Create a `.env` file in the root directory of your project. ([dotenv](https://github.com/motdotla/dotenv#readme))
+iReversi depends on [MongoDB](https://docs.mongodb.com/).
+
+- Download  
+  [MongoDB Download Center](https://www.mongodb.com/download-center/community)
+- Cloud  
+  [MongoDB Cloud Database Solutions](https://www.mongodb.com/cloud)
+
+### Environment Variables
 
 ```sh
 # Set `baseURL` for axios
-AXIOS_BASE # Required
+# Default: http://localhost:10000/api
+AXIOS_BASE
 
 # Test ignore patterns
-# Default:  []
+# Default: []
 JEST_IGNORE
 
 # MongoDB URI
@@ -43,9 +57,16 @@ MONGO_URI
 PORT
 ```
 
+Example of a `.env` file. (Using [dotenv](https://github.com/motdotla/dotenv#readme))
+
+```sh
+# .env
+AXIOS_BASE=http://localhost:3025/api
+JEST_IGNORE=<rootDir>.*fileOrDirectoryName
+MONGO_URI=mongodb://your.mongodb.server:27017/ireversi
+PORT=3025
+```
+
 ### API documents (Staging)
 
-Use Swagger
-
-[v1](https://ireversi-server.now.sh/api-docs/v1/) /
-[v2](https://ireversi-server.now.sh/api-docs/v2/)
+[Document for iReversi API v2](https://stg-server.ireversi.io/api-docs/v2/). (Using [Swagger](https://swagger.io/docs/))
