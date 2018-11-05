@@ -1,5 +1,5 @@
 <template>
-  <div v-if="checkWifi" class="bar">test</div>
+  <div v-if="checkWifi" sclass="bar">test</div>
 </template>
 
 <script>
@@ -10,6 +10,11 @@ export default {
         return false;
       }
       return true;
+    },
+    methods: {
+      check() {
+        console.log("no connection");
+      }
     },
   },
 };
