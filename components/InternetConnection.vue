@@ -1,17 +1,19 @@
 <template>
-  <div v-if="checkWifi" @click="check()" class="bar">test</div>
+
+  <div v-if="connection" @click="check()" class="bar">Lost Internet Connection</div>
 </template>
 
 <script>
 export default {
-  computed: {
-    checkWifi() {
-      return true;
-    },
+
+  data() {
+    return {
+      connection: true,
+    };
   },
   methods: {
     check() {
-      console.log(this);
+      this.connection = false;
     },
   },
 };
@@ -19,9 +21,10 @@ export default {
 
 <style scoped>
 .bar {
+  position: absolute;
   width: 100%;
-  background-color:aqua;
-  position: relative;
+  background-color:red;
   z-index: 100;
+  text-align: center;
 }
 </style>

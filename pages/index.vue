@@ -92,6 +92,7 @@
     <div v-if="DeveloperInfo">
       <AboutDevelopers @close="closeDeveloperInfo"/>
     </div>
+    <InternetConnection />
   </div>
 </template>
 
