@@ -1,20 +1,17 @@
 <template>
-  <div v-if="checkWifi" sclass="bar">test</div>
+  <div v-if="connection" @click="check()" class="bar">Lost Internet Connection</div>
 </template>
 
 <script>
 export default {
-  computed: {
-    checkWifi() {
-      if (navigator.onLine) {
-        return false;
-      }
-      return true;
-    },
-    methods: {
-      check() {
-        console.log("no connection");
-      }
+  data() {
+    return {
+      connection: true,
+    };
+  },
+  methods: {
+    check() {
+      this.connection = false;
     },
   },
 };
@@ -22,8 +19,10 @@ export default {
 
 <style scoped>
 .bar {
+  position: absolute;
   width: 100%;
-  background-color:aqua;
-  position: relative;
+  background-color:red;
+  z-index: 100;
+  text-align: center;
 }
 </style>
