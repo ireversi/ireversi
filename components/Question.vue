@@ -3,7 +3,7 @@
     <div @click="changeFlag" class="question">?</div>
     <transition name="menu">
       <div class="menu">
-        <div v-if="flag" class="message"><a>iReversiについて</a></div>
+        <!-- <div v-if="flag" class="message"><a>iReversiについて</a></div> -->
         <div v-if="flag" class="message">
           <a href="#" @click.prevent="openDeveloperInfo">開発者について</a>
         </div>
@@ -85,13 +85,13 @@ export default {
   margin-top: 10px;
 }
 
-a, a:visited{
+.message > a, .message > a:visited{
   position: relative;
   display: inline-block;
   text-decoration: none;
   color: #fff;
 }
-a::after {
+.message > a::after {
   position: absolute;
   bottom: -1px;
   left: 0;
@@ -103,7 +103,7 @@ a::after {
   transform-origin: center top;
   transition: transform .3s;
 }
-a:hover::after {
+.message > a:hover::after {
   transform: scale(1, 1);
 }
 
