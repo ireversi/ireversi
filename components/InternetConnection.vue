@@ -1,19 +1,16 @@
 <template>
-
-  <div v-if="connection" @click="check()" class="bar">Lost Internet Connection</div>
+  <div v-if="checkConnection" @click="check()" class="bar">Lost Internet Connection</div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
 
-  data() {
-    return {
-      connection: true,
-    };
-  },
-  methods: {
-    check() {
-      this.connection = false;
+  computed: {
+    ...mapState(['offline']),
+    checkConnection() {
+      return this.offline;
     },
   },
 };

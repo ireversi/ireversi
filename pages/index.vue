@@ -1,6 +1,5 @@
 <template>
   <div class="main">
-    <InternetConnection />
     <Modal @judgename='judgeUserName'/>
 
     <div v-if="!token" class="userInputScreen">
@@ -92,7 +91,7 @@
     <div v-if="DeveloperInfo">
       <AboutDevelopers @close="closeDeveloperInfo"/>
     </div>
-    <InternetConnection />
+    <Internet-Connection />
   </div>
 </template>
 

@@ -1,4 +1,6 @@
+
 const USER_KEY_NAME = 'iReversiUserId';
+
 const GRID_MIN = 5;
 const GRID_MAX = 101;
 const DEFAULT_GRID_X = 11;
@@ -6,7 +8,6 @@ const TOPSCORES = 5;
 
 export const state = () => ({
   userId: null,
-  userName: null,
   token: null,
   pieces: null,
   candidates: null,
@@ -21,6 +22,7 @@ export const state = () => ({
   touchTime: 0, // ダブルタッチ無効判定に使用
   dragFlg: false,
   topScores: [],
+  offline: false,
 });
 
 export const plugins = [
@@ -115,10 +117,10 @@ export const mutations = {
     state.dragFlg = false;
     state.touchTime = new Date().getTime();
   },
-  setAccessToken(state, { accessToken, userId, userName }) {
+  setAccessToken(state, { accessToken, userId }) {
     state.token = accessToken;
     state.userId = userId;
-    state.userName = userName;
+    // state.userName = userName:
   },
   setTopScores(state, scores) {
     const copiedTopScores = [...state.topScores];
@@ -128,6 +130,9 @@ export const mutations = {
       copiedTopScores[i].score = scores[i] ? scores[i].score : 0;
     }
     state.topScores = copiedTopScores;
+  },
+  updateConnection(state, status) {
+    state.offline = status;
   },
 };
 
@@ -139,8 +144,14 @@ export const actions = {
     }
   },
   async getBoard({ commit }) {
-    const response = await this.$axios.$get('/board');
-    commit('setBoard', response);
+    await this.$axios.$get(
+      '/board',
+    ).then((response) => {
+      commit('setBoard', response);
+      commit('updateConnection', false);
+    }).catch(() => {
+      commit('updateConnection', true);
+    });
   },
   async putPiece({ dispatch }, params) {
     await this.$axios.$post('/piece', params);
