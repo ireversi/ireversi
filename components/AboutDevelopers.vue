@@ -2,10 +2,10 @@
     <transition name="modal">
       <div v-if="overlay" class="modalLayer">
         <div class="initMsg">
-          <div class="title">開発者について</div>
+          <div class="title">{{ showTitle }}</div>
           <div class="contents">
             <div v-for="(n, i) in profiles" :key="i">
-              <div class="card" :style="`background: center/cover url(${getProfileImg(i)})`"></div>
+              <div class="card" :style="`background: center/cover url(${n.img})`"></div>
               <div class="info">
                 <div class="name">{{ n.name }}</div>
                 <div class="task">{{ n.task }}</div>
@@ -37,43 +37,56 @@ export default {
           task: 'Front End',
           twitter: '',
           url: '',
+          img: AndoImg,
         },
         {
           name: 'Yohei Fujii',
           task: 'Front End',
           twitter: '@yohei_fujii1127',
           url: 'https://twitter.com/yohei_fujii1127',
+          img: FujiiImg,
         },
         {
           name: 'Hisanori Ito',
           task: 'Back End',
           twitter: '',
           url: '',
+          img: ItoImg,
         },
         {
           name: 'Shohei Kai',
           task: 'Back End',
           twitter: '@show60',
           url: 'https://twitter.com/show60',
+          img: KaiImg,
         },
         {
           name: 'Kotaro Kido',
           task: 'Back End',
           twitter: '',
           url: '',
+          img: KidoImg,
         },
         {
           name: 'Kosuke Kimura',
           task: 'Back End',
           twitter: '',
           url: '',
+          img: KimuraImg,
         },
       ],
     };
   },
   computed: {
-    getProfileImg() {
-      return n => ([AndoImg, FujiiImg, ItoImg, KaiImg, KidoImg, KimuraImg][n]);
+    showTitle() {
+      const titleSelection = {
+        ja: '開発者について',
+        en: 'About Developers',
+        han: '개발자에 대해',
+        in: 'tentang pengembang',
+      };
+      const language = localStorage.getItem('iReversi-Language');
+      return titleSelection[language];
     },
   },
   methods: {

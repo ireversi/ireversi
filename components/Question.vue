@@ -5,7 +5,7 @@
       <div class="menu">
         <!-- <div v-if="flag" class="message"><a>iReversiについて</a></div> -->
         <div v-if="flag" class="message">
-          <a href="#" @click.prevent="openDeveloperInfo">開発者について</a>
+          <a href="#" @click.prevent="openDeveloperInfo">{{ showTitle }}</a>
         </div>
       </div>
     </transition>
@@ -18,6 +18,18 @@ export default {
     return {
       flag: false,
     };
+  },
+  computed: {
+    showTitle() {
+      const titleSelection = {
+        ja: '開発者について',
+        en: 'About Developers',
+        han: '개발자에 대해',
+        in: 'tentang pengembang',
+      };
+      const language = localStorage.getItem('iReversi-Language');
+      return titleSelection[language];
+    },
   },
   methods: {
     changeFlag() {
@@ -34,9 +46,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .container {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   right: 0;
   width: auto;
@@ -78,7 +90,6 @@ export default {
 
 .message:hover {
   transform: scale(1.2);
-  /* border-bottom: 1px solid #fff; */
 }
 
 .message + .message {
