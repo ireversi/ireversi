@@ -89,14 +89,14 @@
       - piece
     summary: "delete a piece or all pieces"
     parameters:
-      - name: "pieces"
-        description: "Add items to be deleted"
-        in: "body"
-        schema:
-          $ref: "#/definitions/Positions"
+      # - name: "pieces"
+      #   description: "Add items to be deleted"
+      #   in: "body"
+      #   schema:
+      #     $ref: "#/definitions/Positions"
       - name: "keyword"
-        in: "formData"
-        description: "Please enter keyword 'deleteAll' if you want to delete all pieces."
+        in: "query"
+        description: "Please enter keyword if you want to delete all pieces."
         required: false
         type: "string"
     responses:
@@ -320,7 +320,7 @@ definitions:
     type: "string"
     description: "generate new userId"
     properties:
-      userId:        
+      userId:
         name: "userId"
         type: "string"
         description: "userId"
