@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": ">=10"
+    "node": ">=10.13.0"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production npm run server",
@@ -76,11 +76,5 @@
     "*.{js,vue}": [
       "eslint -f codeframe"
     ]
-  },
-  "now": {
-    "alias": "ireversi-server.now.sh",
-    "engines": {
-      "node": ">=10"
-    }
   }
 }
