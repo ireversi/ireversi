@@ -204,6 +204,17 @@ export default {
         };
       };
     },
+    touchCneter() {
+      return (touches) => {
+        const x1 = touches[0].pageX;
+        const y1 = touches[0].pageY;
+        const x2 = touches[1].pageX;
+        const y2 = touches[1].pageY;
+
+        // pinch中心座標
+        return { x: (x1 + x2) / 2, y: (y1 + y2) / 2 };
+      };
+    },
     touchDistance() {
       return (touches) => {
         const x1 = touches[0].pageX;
@@ -213,6 +224,25 @@ export default {
 
         // pinch距離算出
         return Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
+      };
+    },
+    zoomTarget() {
+      return (position) => {
+        // カーソルの下にあるpieceの座標
+        const targetPos = {
+          x: Math.round((this.moveDist.x + position.x - this.$window.width / 2)
+                        / this.calcGridWidth()),
+          y: Math.round((this.moveDist.y - position.y + this.$window.height / 2)
+                        / this.calcGridWidth()),
+        };
+
+        // pieceの中心とカーソルの位置との差分
+        const adjustPos = {
+          x: position.x - this.calcObjPos(targetPos).x,
+          y: -(position.y - this.calcObjPos(targetPos).y),
+        };
+
+        return { targetPos, adjustPos };
       };
     },
     userPieceColor() {
@@ -256,8 +286,8 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'setInitPos', 'gridMove', 'resetInitPos', 'pinchStart', 'pinchMove']),
-    ...mapActions(['getBoard', 'putPiece', 'getTopScores']),
+    ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'setInitPos', 'gridMove', 'resetInitPos', 'pinchStart']),
+    ...mapActions(['getBoard', 'putPiece', 'getTopScores', 'pinchMove']),
     onTouchStart(e) {
       // ダブルタップ無効化
       if (new Date().getTime() - this.touchTime < 350) {
@@ -295,21 +325,16 @@ export default {
       if (touches && touches.length >= 2) {
         const distance = this.touchDistance(touches);
 
-        this.pinchMove(distance);
+        const touchCenter = this.touchCneter(touches);
+        const { targetPos, adjustPos } = this.zoomTarget(touchCenter);
+
+        this.pinchMove({ distance, targetPos, adjustPos });
       }
     },
     handleScroll(e) {
       e.preventDefault();
-      // カーソルの下にあるpieceの座標
-      const targetPos = {
-        x: Math.round((this.moveDist.x + e.pageX - this.$window.width / 2) / this.calcGridWidth()),
-        y: Math.round((this.moveDist.y - e.pageY + this.$window.height / 2) / this.calcGridWidth()),
-      };
-      // pieceの中心とカーソルの位置との差分
-      const adjustPos = {
-        x: e.pageX - this.calcObjPos(targetPos).x,
-        y: -(e.pageY - this.calcObjPos(targetPos).y),
-      };
+      const { targetPos, adjustPos } = this.zoomTarget({ x: e.pageX, y: e.pageY });
+
       // ホイール移動量取得
       if (e.deltaY > 0) {
         this.zoomout({ targetPos, adjustPos });
