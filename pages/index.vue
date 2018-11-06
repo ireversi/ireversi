@@ -91,7 +91,6 @@
     <div v-if="DeveloperInfo">
       <AboutDevelopers @close="closeDeveloperInfo"/>
     </div>
-    <!-- <Internet-Connection /> -->
   </div>
 </template>
 
@@ -102,7 +101,6 @@ import Ranking from '~/components/Ranking.vue';
 import LoadingIcon from '~/components/LoadingIcon.vue';
 import Question from '~/components/Question.vue';
 import AboutDevelopers from '~/components/AboutDevelopers.vue';
-// import InternetConnection from '~/components/InternetConnection.vue';
 
 import { mapState, mapMutations, mapActions } from 'vuex';
 
@@ -123,7 +121,6 @@ export default {
     UserNameInput,
     Question,
     AboutDevelopers,
-    // InternetConnection,
   },
   mounted() {
     const sleep = time => new Promise(resolve => setTimeout(resolve, time));
