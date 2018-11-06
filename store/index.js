@@ -1,5 +1,4 @@
 const USER_KEY_NAME = 'iReversiUserId';
-
 const GRID_MIN = 5;
 const GRID_MAX = 101;
 const DEFAULT_GRID_X = 11;
@@ -7,6 +6,7 @@ const TOPSCORES = 5;
 
 export const state = () => ({
   userId: null,
+  userName: null,
   token: null,
   pieces: null,
   candidates: null,
@@ -110,25 +110,15 @@ export const mutations = {
       // }
     }
   },
-  pinchMove(state, distance) {
-    const cellWidth = window.innerWidth / state.gridX;
-    if (Math.abs(distance - state.pinchInit) > cellWidth) {
-      if ((distance - state.pinchInit) > 0) {
-        state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 1));
-      } else if ((distance - state.pinchInit) < 0) {
-        state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 1));
-      }
-    }
-  },
   resetInitPos(state) { // touchend
     state.pinchInit = 0;
     state.dragFlg = false;
     state.touchTime = new Date().getTime();
   },
-  setAccessToken(state, { accessToken, userId }) {
+  setAccessToken(state, { accessToken, userId, userName }) {
     state.token = accessToken;
     state.userId = userId;
-    // state.userName = userName:
+    state.userName = userName;
   },
   setTopScores(state, scores) {
     const copiedTopScores = [...state.topScores];
@@ -162,5 +152,16 @@ export const actions = {
   async getTopScores({ commit }) {
     const topScores = await this.$axios.$get(`/topScore?number=${TOPSCORES}`);
     commit('setTopScores', topScores);
+  },
+  pinchMove({ state, commit }, { distance, targetPos, adjustPos }) {
+    const cellWidth = window.innerWidth / state.gridX;
+
+    if (Math.abs(distance - state.pinchInit) > cellWidth) {
+      if ((distance - state.pinchInit) > 0) {
+        commit('zoomin', { targetPos, adjustPos });
+      } else if ((distance - state.pinchInit) < 0) {
+        commit('zoomout', { targetPos, adjustPos });
+      }
+    }
   },
 };
