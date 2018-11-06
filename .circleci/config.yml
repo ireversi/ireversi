@@ -64,7 +64,7 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: cross-env NODE_ENV=production npm run generate
+      - run: npm run generate
       - run: sudo apt-get update
       - run: sudo apt-get install -y awscli
       - run: aws s3 sync dist s3://$AWS_BUCKET --delete
