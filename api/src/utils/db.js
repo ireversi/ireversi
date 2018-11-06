@@ -8,6 +8,7 @@ const {
 } = require('../config.js');
 
 let isDBPrepared = false;
+let mongod;
 
 module.exports = {
   async connectDB() {
@@ -30,7 +31,7 @@ module.exports = {
     if (!isDBPrepared) {
       isDBPrepared = true; // 一回だけ立てれるように
 
-      const mongod = new MongoMemoryServer(); // メモリー上で起動するサーバー
+      mongod = new MongoMemoryServer(); // メモリー上で起動するサーバー
       const conn = mongoose.connect(await mongod.getConnectionString(), {
         // testのときにMongoDB使うと不安定になるかも
         // ローカルで動くMongoDB作ったほうがいい
@@ -55,5 +56,13 @@ module.exports = {
     if (nodeEnv !== 'test') throw new Error('You can drop db on test mode only');
 
     await mongoose.connection.dropDatabase();
+  },
+  async stopDB() {
+    if (isDBPrepared) {
+      isDBPrepared = false;
+
+      await mongoose.disconnect();
+      await mongod.stop();
+    }
   },
 };
