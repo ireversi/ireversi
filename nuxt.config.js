@@ -48,16 +48,14 @@ module.exports = {
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
-    ['@nuxtjs/google-analytics', {
-      id: GOOGLE_ANALYTICS,
-    }],
     '@nuxtjs/toast',
+    ...(NODE_ENV === 'production' ? [['@nuxtjs/google-analytics', { id: GOOGLE_ANALYTICS }]] : []),
   ],
   /*
   ** Axios module configuration
   */
   axios: {
-  // See https://github.com/nuxt-community/axios-module#options
+    // See https://github.com/nuxt-community/axios-module#options
   },
   env: {
     NODE_ENV,

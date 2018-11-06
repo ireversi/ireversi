@@ -3,12 +3,29 @@ const jwt = require('jsonwebtoken');
 const app = require('../../../../../src/routes/app.js');
 const PieceStore = require('../../../../../src/models/v2/PieceStore.js');
 const generateToken = require('../../../../../src/routes/api/v2/userIdGenerate/generateToken.js');
+const UserStore = require('../../../../../src/models/v2/UserStore');
 
 const basePath = '/api/v2';
 const zero = 0;
 
-function userIdGenerate() {
+function searchUserName(userId) {
+  const users = UserStore.getUserData();
+  let userName = 'origin';
+  users.forEach((elm) => {
+    if (elm.userId === userId) {
+      userName = elm.username;
+    }
+  });
+  return userName;
+}
+
+function userIdGenerate(username) {
   const token = generateToken.generate();
+  UserStore.addUserData({
+    accessToken: token,
+    userId: jwt.decode(token).userId,
+    username,
+  });
   return token;
 }
 
@@ -17,7 +34,7 @@ function jwtDecode(token) {
   return decoded;
 }
 
-function convertRanking(result, number) {
+async function convertRanking(result, number) {
   const scores = [];
   // まずはuserIdの重複しないリストを作成
   // userIdの重複削除
@@ -31,6 +48,7 @@ function convertRanking(result, number) {
   // userIdの各々について検索。score計算。
   idsArr.forEach((elm) => {
     let score = 0;
+    const username = searchUserName(elm);
     result.forEach((cnt) => {
       if (elm === cnt) {
         score += 1;
@@ -39,6 +57,7 @@ function convertRanking(result, number) {
     const idscore = {
       userId: elm,
       score,
+      username,
     };
     scores.push(idscore);
   });
@@ -51,6 +70,7 @@ function convertRanking(result, number) {
   });
   const rank = number;
   const slicedScores = sortedScores.slice(0, rank);
+
   return slicedScores;
 }
 
@@ -64,14 +84,14 @@ describe('score', () => {
     PieceStore.initPieces();
 
     // Given
-    const id1 = jwtDecode(userIdGenerate()).userId;
-    const id2 = jwtDecode(userIdGenerate()).userId;
-    const id3 = jwtDecode(userIdGenerate()).userId;
-    const id4 = jwtDecode(userIdGenerate()).userId;
-    const id5 = jwtDecode(userIdGenerate()).userId;
-    const id6 = jwtDecode(userIdGenerate()).userId;
-    const id7 = jwtDecode(userIdGenerate()).userId;
-    const id8 = jwtDecode(userIdGenerate()).userId;
+    const id1 = jwtDecode(userIdGenerate('test1')).userId;
+    const id2 = jwtDecode(userIdGenerate('test2')).userId;
+    const id3 = jwtDecode(userIdGenerate('test3')).userId;
+    const id4 = jwtDecode(userIdGenerate('test4')).userId;
+    const id5 = jwtDecode(userIdGenerate('test5')).userId;
+    const id6 = jwtDecode(userIdGenerate('test6')).userId;
+    const id7 = jwtDecode(userIdGenerate('test7')).userId;
+    const id8 = jwtDecode(userIdGenerate('test8')).userId;
 
     // "I"は初期化した時の最初のピース
     // 1:13,2:4,3:5,4:4,5:2,6:2,7:4,8:1
@@ -97,8 +117,9 @@ describe('score', () => {
         PieceStore.addPiece(ans);
       }
     });
-    const matchers = convertRanking(result, number);
-    const id1Jwt = userIdGenerate();
+    const matchers = await convertRanking(result, number);
+
+    const id1Jwt = userIdGenerate('test');
 
     // When
     const response = await chai.request(app)

@@ -125,6 +125,7 @@ export const mutations = {
       copiedTopScores[i] = {};
       copiedTopScores[i].userId = scores[i] ? scores[i].userId : '-';
       copiedTopScores[i].score = scores[i] ? scores[i].score : 0;
+      copiedTopScores[i].username = scores[i] ? scores[i].username : '-';
     }
     state.topScores = copiedTopScores;
   },
