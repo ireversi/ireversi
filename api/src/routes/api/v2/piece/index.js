@@ -19,16 +19,12 @@ router.route('/')
     res.json({ status, piece });
   })
   .delete(async (req, res) => {
-    console.log('きたよー');
-    console.log(req.query);
-
-
     if (req.query.keyword !== config.deletePass) {
       res.sendStatus(204); // パスワードが違う場合
     } else {
-      const pieces = PieceStore.deletePieces();
+      await PieceStore.deletePieces();
       await db.deleteMongo();
-      res.json(pieces);
+      res.sendStatus(204); // パスワードが違う場合
     }
   });
 module.exports = router;

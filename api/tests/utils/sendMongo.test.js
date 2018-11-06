@@ -123,7 +123,7 @@ describe('MongoDB', () => {
       // 1ピースずつ確認
       for (let i = 0; i < matchesDB.length; i += 1) {
         // Then
-        await expect(resPieces[i]).toEqual(matchesDB[i].piece);
+        expect(resPieces[i]).toEqual(matchesDB[i].piece);
       }
       expect(resPieces).toHaveLength(matchesDB.length); // x: 0, y: 0のデフォルト値を考慮
     });
