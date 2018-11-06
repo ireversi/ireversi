@@ -15,9 +15,9 @@ module.exports = {
       } else {
         for (let i = 0; i < standbySendMongo.length; i += 1) {
           const sendMongoModel = new BoardHistoryModel(standbySendMongo[i]);
-          new BoardHistoryModel(sendMongoModel).save();
+          await new BoardHistoryModel(sendMongoModel).save();
         }
-        storePlayHistory.deleteStandbySendMongo();
+        await storePlayHistory.deleteStandbySendMongo();
       }
     }
   },
