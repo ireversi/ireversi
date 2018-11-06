@@ -7,4 +7,5 @@ module.exports = { // 環境変数
   port: process.env.PORT || 10000,
   mongoURI: process.env.MONGO_URI || 'mongodb://localhost:27017/ireversi',
   waitTime: 3500,
+  deletePass: process.env.DELETEPASS,
 };
