@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const generateToken = require('./generateToken');
+const UserStore = require('../../../../../src/models/v2/UserStore');
 
 router.route('/').post((req, res) => {
   const ans = {};
@@ -17,6 +18,7 @@ router.route('/').post((req, res) => {
     ans.accessToken = accessToken;
     ans.userId = userId;
     ans.username = username;
+    UserStore.addUserData(ans);
   } else {
     ans.accessToken = null;
     ans.userId = null;

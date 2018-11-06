@@ -17,6 +17,7 @@ const restoreMongo = require('./utils/restoreMongo.js');
 
   // asyncでMongoのstateに接続して、復元してからlistenでサーバに接続する
   await restoreMongo.restoreMongo();
+  await restoreMongo.restoreUserMongo();
 
   specs.forEach(({ version, spec, option }) => {
     const docsPath = `/api-docs/${version}`; // ドキュメントのURL決める

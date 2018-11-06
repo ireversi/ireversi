@@ -1,5 +1,20 @@
 const router = require('express').Router();
 const PieceStore = require('../../../../../src/models/v2/PieceStore.js');
+const UserStore = require('../../../../../src/models/v2/UserStore');
+
+function searchUserName(userId) {
+  const users = UserStore.getUserData();
+  let name = 'origin';
+  users.forEach((elm) => {
+    if (elm.userId === 1) {
+      name = 'origin';
+    }
+    if (elm.userId === userId) {
+      name = elm.username;
+    }
+  });
+  return name;
+}
 
 function convertRanking(result, number) {
   const scores = [];
@@ -11,8 +26,9 @@ function convertRanking(result, number) {
     idsArr.splice(idx, 1);
   }
   // userIdの各々について検索。score計算。
-  idsArr.forEach((elm) => {
+  idsArr.forEach(async (elm) => {
     let score = 0;
+    const username = searchUserName(elm);
     result.forEach((cnt) => {
       if (elm === cnt) {
         score += 1;
@@ -21,6 +37,7 @@ function convertRanking(result, number) {
     const idscore = {
       userId: elm,
       score,
+      username,
     };
     scores.push(idscore);
   });
