@@ -3,7 +3,7 @@
 [![CircleCI (develop branch)](https://circleci.com/gh/ireversi/ireversi/tree/develop.svg?style=shield)](https://circleci.com/gh/ireversi/ireversi)
 [![node](https://img.shields.io/badge/node->%3D10.13.0-brightgreen.svg)](https://nodejs.org/dist/latest-v10.x/docs/api/)
 [![Tested with Jest](https://img.shields.io/badge/tested_with-Jest-99424f.svg)](https://github.com/facebook/jest)
-[![Coveralls github](https://img.shields.io/codecov/c/github/ireversi/ireversi-server/develop.svg)](https://codecov.io/gh/ireversi/ireversi-server)
+[![Coveralls github](https://img.shields.io/codecov/c/github/ireversi/ireversi/master.svg)](https://codecov.io/gh/ireversi/ireversi)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ## Play
