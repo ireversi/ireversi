@@ -11,6 +11,7 @@ const sendMongo = require('../../src/utils/sendMongo.js');
 const {
   prepareDB,
   deleteAllDataFromDB,
+  stopDB,
 } = require('../../src/utils/db.js');
 
 const generateToken = require('../../src/routes/api/v2/userIdGenerate/generateToken');
@@ -43,6 +44,7 @@ function searchIndex(jwtIds, jwtId) {
 describe('MongoDB', () => {
   beforeAll(prepareDB);
   afterEach(deleteAllDataFromDB);
+  afterAll(stopDB);
 
   // MongoDBのデータを残して次のテストを行う
   describe('piece', () => {

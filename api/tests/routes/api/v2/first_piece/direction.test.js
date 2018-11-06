@@ -10,6 +10,7 @@ const BoardHistoryModel = require('../../../../../src/models/v2/BoardHistoryMode
 const { // テストのたびにDBをクリア
   prepareDB,
   deleteAllDataFromDB,
+  stopDB,
 } = require('../../../../../src/utils/db.js');
 
 const waitTime = PieceStore.getWaitTime();
@@ -55,6 +56,7 @@ function searchIndex(jwtIds, jwtId) {
 describe('direction', () => {
   beforeAll(prepareDB);
   afterEach(deleteAllDataFromDB);
+  afterAll(stopDB);
 
   // 前提条件を揃えるテスト
   // positionに値を投げて、返り値のstandbyと期待値が合うか

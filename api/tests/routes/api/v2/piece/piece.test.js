@@ -12,6 +12,7 @@ const sendMongo = require('../../../../../src/utils/sendMongo.js');
 const {
   prepareDB,
   deleteAllDataFromDB,
+  stopDB,
 } = require('../../../../../src/utils/db.js');
 
 const generateToken = require('../../../../../src/routes/api/v2/userIdGenerate/generateToken');
@@ -45,6 +46,7 @@ function searchIndex(jwtIds, jwtId) {
 describe('piece', () => {
   beforeAll(prepareDB);
   afterEach(deleteAllDataFromDB);
+  afterAll(stopDB);
 
   describe('piece', () => {
     // デバッグ検証、candidates残り確認
