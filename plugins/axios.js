@@ -11,12 +11,10 @@ export default ({ $axios, store }) => {
       config.data = params.toString();
       config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
     }
-
     if (store.state.token) config.headers.Authorization = store.state.token;
   });
   $axios.onError((error) => {
     const code = parseInt(error.response && error.response.status, 10);
-    // codeが見つからないです。
     if (code === 500) {
       Vue.toasted.error('Internal Server Error');
     } else if (code === 404) {
