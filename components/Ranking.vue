@@ -6,7 +6,7 @@
           <span class="num">{{ i + 1 }}</span>
         </span>
       </div>
-      <div class="userName">{{ obj.userId }}</div>
+      <div class="userName">{{ obj.username }}</div>
       <div class="score">{{ obj.score }}</div>
     </div>
     <div class="your-score">
