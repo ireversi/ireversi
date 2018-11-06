@@ -10,11 +10,11 @@ module.exports = {
 
     // Mongoのデータが日付順に格納されているとは限らないため並び替え
     // eslint-disable-next-line
-    await mg.sort((a, b) => (a._id > b._id ? 1 : -1));
+    mg.sort((a, b) => (a._id > b._id ? 1 : -1));
 
     for (let i = 0; i < mg.length; i += 1) {
       const { x, y, userId } = mg[i].piece;
-      await PieceStore.judgePiece(x, y, userId, restore);
+      PieceStore.judgePiece(x, y, userId, restore);
     }
   },
 };

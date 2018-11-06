@@ -22,7 +22,7 @@ router.route('/')
     if (req.query.keyword !== config.deletePass) {
       res.sendStatus(204); // パスワードが違う場合
     } else {
-      Promise.all([PieceStore.deletePieces(), db.deleteMongo()]);
+      await Promise.all([PieceStore.deletePieces(), db.deleteMongo()]);
       res.sendStatus(204);
     }
   });

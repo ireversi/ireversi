@@ -52,8 +52,7 @@ describe('MongoDB', () => {
     it('cannot be put on the same place3', async () => {
       // Reset
       await chai.request(app).delete(`${basePath}`);
-      await PieceStore.deletePieces();
-      await storePlayHistory.deleteStandbySendMongo();
+      await Promise.all([PieceStore.deletePieces(), storePlayHistory.deleteStandbySendMongo()]);
 
       // Mongoに送信開始
       sendMongo.startSendingMongo();
@@ -68,7 +67,7 @@ describe('MongoDB', () => {
       //       0  , 4:4,   5:5,  7:10,  8:11,
       // ]
 
-      const pieces = await array2Pieces.array2Pieces(
+      const pieces = array2Pieces.array2Pieces(
         [
           `${jwtIds[11].decode}:17`, `${jwtIds[10].decode}:16`, `${jwtIds[14].decode}:22`, `${jwtIds[15].decode}:23`, `${jwtIds[9].decode}:13`,
           `${jwtIds[7].decode}:18`, `${jwtIds[4].decode}:15`, `${jwtIds[7].decode}:19`, `${jwtIds[12].decode}:20`, `${jwtIds[4].decode}:12`,
@@ -90,9 +89,11 @@ describe('MongoDB', () => {
       await sleep(2700); // 3000ミリ秒待機
 
       // DBに送るのを一旦停止
-      await sendMongo.stopSendingMongo();
-      await PieceStore.deletePieces(); // 配列を空に。
-      await storePlayHistory.deleteStandbySendMongo(); // Mongoに送る前の配列も空に。
+      await Promise.all([
+        sendMongo.stopSendingMongo(),
+        PieceStore.deletePieces(),
+        storePlayHistory.deleteStandbySendMongo(),
+      ]);
 
       /*
       ここからサーバ・DBに再接続して、期待値を与えテストする
@@ -104,12 +105,12 @@ describe('MongoDB', () => {
       // MongoDBから値を取得して、judgePieceして、Piecesに入っていく
       await restoreMongo.restoreMongo();
 
-      const resPieces = await PieceStore.getPieces();
-      await resPieces.shift(); // x:0, y:0, userId:1 を削除
+      const resPieces = PieceStore.getPieces();
+      resPieces.shift(); // x:0, y:0, userId:1 を削除
 
       // Piecesに復元した盤面と照合するための期待値(下部でmatchesDBに再度変換)
       // 復元するときにjudgePieceしているので、めくり終えたあとの盤面を再現
-      const matches = await array2Matchers.array2Matchers(
+      const matches = array2Matchers.array2Matchers(
         [
           `${jwtIds[11].decode}:17`, `${jwtIds[10].decode}:16`, `${jwtIds[14].decode}:22`, `${jwtIds[15].decode}:23`, `${jwtIds[9].decode}:13`,
           `${jwtIds[7].decode}:18`, `${jwtIds[7].decode}:15`, `${jwtIds[7].decode}:19`, `${jwtIds[15].decode}:20`, `${jwtIds[9].decode}:12`,
