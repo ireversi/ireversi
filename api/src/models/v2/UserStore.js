@@ -35,13 +35,4 @@ module.exports = {
     }
     return flag;
   },
-  serarchUserName(userId) {
-    let ans = null;
-    users.forEach((elm) => {
-      if (elm.userId === userId) {
-        ans = elm.username;
-      }
-    });
-    return ans;
-  },
 };
