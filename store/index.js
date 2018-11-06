@@ -1,6 +1,4 @@
-
 const USER_KEY_NAME = 'iReversiUserId';
-
 const GRID_MIN = 5;
 const GRID_MAX = 101;
 const DEFAULT_GRID_X = 11;
@@ -22,7 +20,6 @@ export const state = () => ({
   touchTime: 0, // ダブルタッチ無効判定に使用
   dragFlg: false,
   topScores: [],
-  offline: false,
 });
 
 export const plugins = [
@@ -131,9 +128,6 @@ export const mutations = {
     }
     state.topScores = copiedTopScores;
   },
-  updateConnection(state, status) {
-    state.offline = status;
-  },
 };
 
 export const actions = {
@@ -144,14 +138,7 @@ export const actions = {
     }
   },
   async getBoard({ commit }) {
-    await this.$axios.$get(
-      '/board',
-    ).then((response) => {
-      commit('setBoard', response);
-      commit('updateConnection', false);
-    }).catch(() => {
-      commit('updateConnection', true);
-    });
+    commit('setBoard', await this.$axios.$get('/board'));
   },
   async putPiece({ dispatch }, params) {
     await this.$axios.$post('/piece', params);
