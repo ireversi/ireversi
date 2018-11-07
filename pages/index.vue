@@ -102,6 +102,8 @@ import LoadingIcon from '~/components/LoadingIcon.vue';
 import Question from '~/components/Question.vue';
 import AboutDevelopers from '~/components/AboutDevelopers.vue';
 
+import Vue from 'vue';
+
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
@@ -126,12 +128,27 @@ export default {
     const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
     (async () => {
+      let toastStatus = false;
+      let toastCount = 0; // エラー回数
       // eslint-disable-next-line
       while (true) {
         await sleep(this.productionCheck ? 300 : 1000);
         if (this.token) {
-          await this.getBoard();
-          await this.getTopScores();
+          // eslint-disable-next-line
+          await this.getBoard().then(() => { // 成功時
+            toastStatus = false;
+            toastCount = 0;
+            Vue.toasted.clear();
+          // eslint-disable-next-line
+          }).catch((error) => { // 失敗時
+            toastCount += 1;
+            toastStatus = true;
+            if (toastStatus && toastCount === 1) {
+              Vue.toasted.error(error);
+            }
+          });
+          await this.getTopScores().catch(() => {
+          });
         }
       }
     })();

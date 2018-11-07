@@ -85,6 +85,6 @@ module.exports = {
   },
   toast: {
     position: 'top-center', /* トーストの表示位置 */
-    duration: 3000, /* トーストの表示されている時間（今回は2秒に設定） */
+    // duration: 3000, /* トーストの表示されている時間（今回は2秒に設定） */
   },
 };
