@@ -67,6 +67,6 @@ MONGO_URI=mongodb://your.mongodb.server:27017/ireversi
 PORT=3025
 ```
 
-### API documents (Staging)
+### API documents
 
-[Document for iReversi API v2](https://stg-server.ireversi.io/api-docs/v2/). (Using [Swagger](https://swagger.io/docs/))
+[Document for iReversi API v2](https://server.ireversi.io/api-docs/v2/). (Using [Swagger](https://swagger.io/docs/))
