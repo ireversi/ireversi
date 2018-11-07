@@ -11,11 +11,13 @@
                 class="input"
                 v-model="name"
                 minlength="4"
-                maxlength="15"
+                maxlength="10"
                 pattern="^[a-z0-9]([_a-z0-9]){2,13}[a-z0-9]$"
                 required
               >
-              <div class="sendBtn" @click="sendName">{{ templates[language].b }}</div>
+              <div class="sendBtn" @click="sendName">
+                {{ templates[language].b }}
+              </div>
             </form>
             <nav>
               <ul>
@@ -59,25 +61,25 @@ export default {
           t: 'Enter your name',
           c: 'Only available small letters, numbers and underbar',
           b: 'send',
-          a: 'Input with more than 4 and less than 15 letters',
+          a: 'Input with more than 4 and less than 10 letters',
         },
         han: {
           t: '이름을 입력해주세요',
           c: '알파벳 소문자, 숫자, 그리고 밑줄만 이용 가능합니다',
           b: '전송',
-          a: '4 자 이상 15 자 이하',
+          a: '4 자 이상 10 자 이하',
         },
         in: {
           t: 'Masukkan Nama Anda',
           c: 'Hanya tersedia huruf kecil, angka dan underbar',
           b: 'kirim',
-          a: 'Dari 4 sampai 15 huruf',
+          a: 'Dari 4 sampai 10 huruf',
         },
         ja: {
           t: '名前を入力してください',
           c: 'アルファベット小文字、数字、アンダースコアのみが使えます',
           b: '送信',
-          a: '4文字以上15文字未満のみ',
+          a: '4文字以上10文字未満のみ',
         },
       },
     };
