@@ -6,6 +6,7 @@ const TOPSCORES = 5;
 
 export const state = () => ({
   userId: null,
+  userName: null,
   token: null,
   pieces: null,
   candidates: null,
@@ -114,10 +115,10 @@ export const mutations = {
     state.dragFlg = false;
     state.touchTime = new Date().getTime();
   },
-  setAccessToken(state, { accessToken, userId }) {
+  setAccessToken(state, { accessToken, userId, username }) {
     state.token = accessToken;
     state.userId = userId;
-    // state.userName = userName:
+    state.userName = username;
   },
   setTopScores(state, scores) {
     const copiedTopScores = [...state.topScores];
@@ -138,7 +139,11 @@ export const actions = {
       commit('setAccessToken', userData);
     }
   },
-  async getBoard({ commit }) {
+  async getBoard({ state, commit }) {
+    if (state.userName === 'origin' || !state.userName) {
+      localStorage.removeItem(USER_KEY_NAME);
+      this.$router.go(0);
+    }
     commit('setBoard', await this.$axios.$get('/board'));
   },
   async putPiece({ dispatch }, params) {
