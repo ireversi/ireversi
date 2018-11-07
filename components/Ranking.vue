@@ -1,9 +1,6 @@
 <template>
   <div class="ranking">
     <div class="title">
-      <div>Ranking</div>
-    </div>
-    <div class="title">
       <div>Players: {{ userCounts }}</div>
     </div>
     <div v-for="(obj, i) in topScores" :key="i">
