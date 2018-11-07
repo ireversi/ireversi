@@ -12,6 +12,7 @@ const sendMongo = require('../../../../../src/utils/sendMongo.js');
 const {
   prepareDB,
   deleteAllDataFromDB,
+  stopDB,
 } = require('../../../../../src/utils/db.js');
 
 const generateToken = require('../../../../../src/routes/api/v2/userIdGenerate/generateToken');
@@ -45,6 +46,7 @@ function searchIndex(jwtIds, jwtId) {
 describe('piece', () => {
   beforeAll(prepareDB);
   afterEach(deleteAllDataFromDB);
+  afterAll(stopDB);
 
   describe('piece', () => {
     // デバッグ検証、candidates残り確認
@@ -103,9 +105,8 @@ describe('piece', () => {
       expect(pieceData).toHaveLength(matchesDB.length);
 
       // matchesから
-      for (let i = 0; i < pieceData.length; i += 1) {
-        const pc = pieceData[i];
-        expect(pc.piece).toEqual(expect.objectContaining(matchesDB[i].piece));
+      for (let i = 0; i < matchesDB.length; i += 1) {
+        expect(pieceData).toContainEqual(expect.objectContaining({ piece: matchesDB[i].piece }));
       }
       await sendMongo.stopSendingMongo();
     });

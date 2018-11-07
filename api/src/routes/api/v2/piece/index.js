@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
+const config = require('../../../../config.js');
+
 const PieceStore = require('../../../../models/v2/PieceStore.js');
 const db = require('../../../../utils/db.js');
 
@@ -17,8 +19,11 @@ router.route('/')
     res.json({ status, piece });
   })
   .delete(async (req, res) => {
-    const pieces = PieceStore.deletePieces();
-    await db.deleteMongo();
-    res.json(pieces);
+    if (req.query.keyword !== config.deletePass) {
+      res.sendStatus(204); // パスワードが違う場合
+    } else {
+      await Promise.all([PieceStore.deletePieces(), db.deleteMongo()]);
+      res.sendStatus(204);
+    }
   });
 module.exports = router;

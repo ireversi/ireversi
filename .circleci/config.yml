@@ -6,9 +6,6 @@ jobs:
 
     working_directory: ~/repo
 
-    environment:
-      AXIOS_BASE: http://localhost:10000/api
-
     steps:
       - checkout
 

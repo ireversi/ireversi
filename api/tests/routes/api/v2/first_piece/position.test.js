@@ -14,6 +14,7 @@ const sendMongo = require('../../../../../src/utils/sendMongo.js');
 const { // テストのたびにDBをクリア
   prepareDB,
   deleteAllDataFromDB,
+  stopDB,
 } = require('../../../../../src/utils/db.js');
 
 const basePath = '/api/v2/first_piece';
@@ -47,6 +48,7 @@ function searchIndex(jwtIds, jwtId) {
 describe('piece', () => {
   beforeAll(prepareDB);
   afterEach(deleteAllDataFromDB);
+  afterAll(stopDB);
 
   // テスト：positionが置けるか。
   it('is stoodby in a board array', async () => {

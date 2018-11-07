@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": ">=10"
+    "node": ">=10.13.0"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production npm run server",
@@ -22,7 +22,7 @@
     "update": "pm2 update",
     "logs": "pm2 logs",
     "monit": "pm2 monit",
-    "generate": "nuxt generate",
+    "generate": "cross-env NODE_ENV=production nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint:fix": "npm run lint -- --fix",
     "test": "npm-run-all --serial test:*",
@@ -35,6 +35,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
     "@nuxtjs/google-analytics": "^2.0.2",
+    "@nuxtjs/toast": "^3.0.1",
     "dotenv": "^6.0.0",
     "element-ui": "^2.2.1",
     "express": "^4.16.3",
@@ -52,6 +53,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
+    "babel-preset-env": "^1.7.0",
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
     "codecov": "^3.0.4",
@@ -76,11 +78,5 @@
     "*.{js,vue}": [
       "eslint -f codeframe"
     ]
-  },
-  "now": {
-    "alias": "ireversi-server.now.sh",
-    "engines": {
-      "node": ">=10"
-    }
   }
 }
