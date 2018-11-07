@@ -6,7 +6,6 @@ const TOPSCORES = 5;
 
 export const state = () => ({
   userId: null,
-  userName: null,
   token: null,
   pieces: null,
   candidates: null,
@@ -115,10 +114,10 @@ export const mutations = {
     state.dragFlg = false;
     state.touchTime = new Date().getTime();
   },
-  setAccessToken(state, { accessToken, userId, userName }) {
+  setAccessToken(state, { accessToken, userId }) {
     state.token = accessToken;
     state.userId = userId;
-    state.userName = userName;
+    // state.userName = userName:
   },
   setTopScores(state, scores) {
     const copiedTopScores = [...state.topScores];
@@ -126,6 +125,7 @@ export const mutations = {
       copiedTopScores[i] = {};
       copiedTopScores[i].userId = scores[i] ? scores[i].userId : '-';
       copiedTopScores[i].score = scores[i] ? scores[i].score : 0;
+      copiedTopScores[i].username = scores[i] ? scores[i].username : '-';
     }
     state.topScores = copiedTopScores;
   },

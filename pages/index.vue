@@ -91,7 +91,6 @@
     <div v-if="DeveloperInfo">
       <AboutDevelopers @close="closeDeveloperInfo"/>
     </div>
-    <InternetConnection />
   </div>
 </template>
 
@@ -102,11 +101,8 @@ import Ranking from '~/components/Ranking.vue';
 import LoadingIcon from '~/components/LoadingIcon.vue';
 import Question from '~/components/Question.vue';
 import AboutDevelopers from '~/components/AboutDevelopers.vue';
-import InternetConnection from '~/components/InternetConnection.vue';
 
 import { mapState, mapMutations, mapActions } from 'vuex';
-
-// const isOnline = navigator.onLine;
 
 export default {
   data() {
@@ -125,7 +121,6 @@ export default {
     UserNameInput,
     Question,
     AboutDevelopers,
-    InternetConnection,
   },
   mounted() {
     const sleep = time => new Promise(resolve => setTimeout(resolve, time));
@@ -135,7 +130,6 @@ export default {
       while (true) {
         await sleep(this.productionCheck ? 300 : 1000);
         if (this.token) {
-          // console.log(isOnline);
           await this.getBoard();
           await this.getTopScores();
         }

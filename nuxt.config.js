@@ -48,6 +48,7 @@ module.exports = {
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
+    '@nuxtjs/toast',
     ...(NODE_ENV === 'production' ? [['@nuxtjs/google-analytics', { id: GOOGLE_ANALYTICS }]] : []),
   ],
   /*
@@ -81,5 +82,9 @@ module.exports = {
         });
       }
     },
+  },
+  toast: {
+    position: 'top-center', /* トーストの表示位置 */
+    duration: 3000, /* トーストの表示されている時間（今回は2秒に設定） */
   },
 };
