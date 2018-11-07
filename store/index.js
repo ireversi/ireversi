@@ -6,12 +6,14 @@ const TOPSCORES = 5;
 
 export const state = () => ({
   userId: null,
+  userName: null,
   token: null,
   pieces: null,
   candidates: null,
   standbys: null,
   size: null,
   score: 0,
+  userCounts: 0,
   gridX: DEFAULT_GRID_X, // Expect: Integer
   moveDist: { x: 0, y: 0 }, // 原点の移動量
   swipeInit: { x: 0, y: 0 }, // swipe基準点
@@ -44,12 +46,14 @@ export const mutations = {
     standbys,
     size,
     score,
+    userCounts,
   }) {
     state.pieces = pieces;
     state.candidates = candidates;
     state.standbys = standbys;
     state.size = size;
     state.score = score;
+    state.userCounts = userCounts;
   },
   zoomout(state, { targetPos, adjustPos }) {
     if (state.gridX + 1 >= GRID_MIN && state.gridX + 1 <= GRID_MAX) {
@@ -114,10 +118,10 @@ export const mutations = {
     state.dragFlg = false;
     state.touchTime = new Date().getTime();
   },
-  setAccessToken(state, { accessToken, userId }) {
+  setAccessToken(state, { accessToken, userId, username }) {
     state.token = accessToken;
     state.userId = userId;
-    // state.userName = userName:
+    state.userName = username;
   },
   setTopScores(state, scores) {
     const copiedTopScores = [...state.topScores];
@@ -138,7 +142,11 @@ export const actions = {
       commit('setAccessToken', userData);
     }
   },
-  async getBoard({ commit }) {
+  async getBoard({ state, commit }) {
+    if (state.userName === 'origin' || !state.userName) {
+      localStorage.removeItem(USER_KEY_NAME);
+      this.$router.go(0);
+    }
     commit('setBoard', await this.$axios.$get('/board'));
   },
   async putPiece({ dispatch }, params) {
