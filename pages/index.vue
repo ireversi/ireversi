@@ -137,7 +137,7 @@ export default {
       let toastCount = 0; // エラー回数
       // eslint-disable-next-line
       while (true) {
-        await sleep(this.productionCheck ? 500 : 500);
+        await sleep(500);
         if (this.token) {
           // eslint-disable-next-line
           await this.getBoard().then(() => { // 成功時
