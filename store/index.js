@@ -13,6 +13,7 @@ export const state = () => ({
   standbys: null,
   size: null,
   score: 0,
+  userCounts: 0,
   gridX: DEFAULT_GRID_X, // Expect: Integer
   moveDist: { x: 0, y: 0 }, // 原点の移動量
   swipeInit: { x: 0, y: 0 }, // swipe基準点
@@ -45,12 +46,14 @@ export const mutations = {
     standbys,
     size,
     score,
+    userCounts,
   }) {
     state.pieces = pieces;
     state.candidates = candidates;
     state.standbys = standbys;
     state.size = size;
     state.score = score;
+    state.userCounts = userCounts;
   },
   zoomout(state, { targetPos, adjustPos }) {
     if (state.gridX + 1 >= GRID_MIN && state.gridX + 1 <= GRID_MAX) {

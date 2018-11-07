@@ -25,7 +25,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .modalLayer {
   width: 100%;
   height: 100%;
