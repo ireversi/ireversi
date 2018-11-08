@@ -157,36 +157,44 @@ export default {
         }
       }
     })();
-    let flag = true;
+    // let flag = true;
     // 白色 = rgba(255, 255, 255)
     // ボードの色 = rbga(0, 85, 46);
-    const vsRed = 255 / (255 - 85);
+    // const vsRed = 255 / (255 - 85);
     // const vsGreen = (255 - 85) / 46;
-    const vsBlue = (255 - 46) / (255 - 85);
+    // const vsBlue = (255 - 46) / (255 - 85);
     (async () => {
       // eslint-disable-next-line
       while (true) {
-      // await sleep(1400);
-      // this.flicker = true;
+        await sleep(1000);
+        this.red = 0;
+        this.green = 85;
+        this.blue = 46;
+        await sleep(500);
+        this.red = 255;
+        this.green = 255;
+        this.blue = 255;
+
+        // this.flicker = true;
 
         // 白から透明の場合
-        await sleep(1);
-        if (flag) {
-          this.red -= vsRed;
-          this.green -= 1;
-          this.blue -= vsBlue;
-        }
-        if (!flag) {
-          this.red += vsRed;
-          this.green += 1;
-          this.blue += vsBlue;
-        }
-        if (this.red <= 0) {
-          await sleep(100);
-          flag = false;
-        } else if (this.red >= 255) {
-          flag = true;
-        }
+        // await sleep(1);
+        // if (flag) {
+        //   this.red -= vsRed;
+        //   this.green -= 1;
+        //   this.blue -= vsBlue;
+        // }
+        // if (!flag) {
+        //   this.red += vsRed;
+        //   this.green += 1;
+        //   this.blue += vsBlue;
+        // }
+        // if (this.red <= 0) {
+        //   await sleep(100);
+        //   flag = false;
+        // } else if (this.red >= 255) {
+        //   flag = true;
+        // }
 
         // 白黒の場合
         // if (flag) this.userPieceColorVal += 10;
@@ -199,7 +207,7 @@ export default {
 
         // 虹色変化の場合
         // this.userPieceColorHue += 10;
-      // this.flicker = false;
+        // this.flicker = false;
       }
     })();
 
@@ -405,7 +413,6 @@ export default {
     handleScroll(e) {
       e.preventDefault();
       const { targetPos, adjustPos } = this.zoomTarget({ x: e.pageX, y: e.pageY });
-
       // ホイール移動量取得
       if (e.deltaY > 0) {
         this.zoomout({ targetPos, adjustPos });
