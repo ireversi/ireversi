@@ -413,7 +413,6 @@ export default {
     handleScroll(e) {
       e.preventDefault();
       const { targetPos, adjustPos } = this.zoomTarget({ x: e.pageX, y: e.pageY });
-      console.log(targetPos, adjustPos, e.deltaY);
       // ホイール移動量取得
       if (e.deltaY > 0) {
         this.zoomout({ targetPos, adjustPos });
