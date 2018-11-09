@@ -1,5 +1,8 @@
 <template>
   <div class="ranking">
+    <div class="title">
+      <div>Players: {{ userCounts }}</div>
+    </div>
     <div v-for="(obj, i) in topScores" :key="i">
       <div class="rank">
         <span :style="`background:${rankingColor(i + 1)}`">
@@ -24,6 +27,7 @@ export default {
   computed: {
     ...mapState([
       'score',
+      'userCounts',
       'topScores',
     ]),
     rankingColor() {
@@ -61,6 +65,10 @@ export default {
   line-height: 40px;
   height: 40px;
   border-bottom: 1px solid #888;
+}
+
+.title > div {
+  margin: 0 auto;
 }
 
 .rank {

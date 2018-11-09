@@ -44,7 +44,7 @@
           :r="calcGridWidth() * 0.3"
           :cx="calcObjPos(piece).x"
           :cy="calcObjPos(piece).y"
-          :style="`fill:${piece.userId === userId && flicker ? '' : userPieceColor(piece)};`"
+          :style="`fill:${userPieceColor(piece)}`"
         />
 
         <!-- デバッグ用座標表示 -->
@@ -102,6 +102,8 @@ import LoadingIcon from '~/components/LoadingIcon.vue';
 import Question from '~/components/Question.vue';
 import AboutDevelopers from '~/components/AboutDevelopers.vue';
 
+import Vue from 'vue';
+
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
@@ -112,6 +114,11 @@ export default {
       nameInput: false,
       flicker: false,
       DeveloperInfo: false,
+      // userPieceColorHue: 0, // 虹色変化用
+      // userPieceColorVal: 0, // 白黒変化用
+      red: 255, // 白から透明用
+      green: 255,
+      blue: 255,
     };
   },
   components: {
@@ -126,23 +133,81 @@ export default {
     const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
     (async () => {
+      let toastStatus = false;
+      let toastCount = 0; // エラー回数
       // eslint-disable-next-line
       while (true) {
-        await sleep(this.productionCheck ? 300 : 1000);
+        await sleep(500);
         if (this.token) {
-          await this.getBoard();
-          await this.getTopScores();
+          // eslint-disable-next-line
+          await this.getBoard().then(() => { // 成功時
+            toastStatus = false;
+            toastCount = 0;
+            Vue.toasted.clear();
+          // eslint-disable-next-line
+          }).catch((error) => { // 失敗時
+            toastCount += 1;
+            toastStatus = true;
+            if (toastStatus && toastCount === 1) {
+              Vue.toasted.error(error);
+            }
+          });
+          await this.getTopScores().catch(() => {
+          });
         }
       }
     })();
-
+    // let flag = true;
+    // 白色 = rgba(255, 255, 255)
+    // ボードの色 = rbga(0, 85, 46);
+    // const vsRed = 255 / (255 - 85);
+    // const vsGreen = (255 - 85) / 46;
+    // const vsBlue = (255 - 46) / (255 - 85);
     (async () => {
       // eslint-disable-next-line
       while (true) {
-        await sleep(1400);
-        this.flicker = true;
-        await sleep(100);
-        this.flicker = false;
+        await sleep(1000);
+        this.red = 0;
+        this.green = 85;
+        this.blue = 46;
+        await sleep(500);
+        this.red = 255;
+        this.green = 255;
+        this.blue = 255;
+
+        // this.flicker = true;
+
+        // 白から透明の場合
+        // await sleep(1);
+        // if (flag) {
+        //   this.red -= vsRed;
+        //   this.green -= 1;
+        //   this.blue -= vsBlue;
+        // }
+        // if (!flag) {
+        //   this.red += vsRed;
+        //   this.green += 1;
+        //   this.blue += vsBlue;
+        // }
+        // if (this.red <= 0) {
+        //   await sleep(100);
+        //   flag = false;
+        // } else if (this.red >= 255) {
+        //   flag = true;
+        // }
+
+        // 白黒の場合
+        // if (flag) this.userPieceColorVal += 10;
+        // if (!flag) this.userPieceColorVal -= 10;
+        // if (this.userPieceColorVal >= 255) {
+        //   flag = false;
+        // } else if (this.userPieceColorVal <= 0) {
+        //   flag = true;
+        // }
+
+        // 虹色変化の場合
+        // this.userPieceColorHue += 10;
+        // this.flicker = false;
       }
     })();
 
@@ -256,33 +321,38 @@ export default {
     },
     userPieceColor() {
       return (p) => {
-        if (p.userId !== 1) { // 初期の盤面のuserId === 1の駒があるため
-          // [0-9]数字配列
-          const numArray = [...Array(10)].map((i, n) => n);
-          // アルファベット小文字配列
-          const alphabets = [];
-          for (let n = 'a'.charCodeAt(0); n <= 'z'.charCodeAt(0); n += 1) {
-            alphabets.push(String.fromCodePoint(n));
-          }
-          // アルファベット大文字配列
-          const ALPHABETS = alphabets.map(el => el.toUpperCase());
-          // 62通りの文字配列
-          const letterArray = [...numArray, ...alphabets, ...ALPHABETS];
-          const LETTERARRAY_LENGTH = letterArray.length;
-          // アルファベット数字対応表{'a':10, 'b':11, ...}
-          const obj = {};
-          for (let num = 0; num < LETTERARRAY_LENGTH; num += 1) {
-            obj[letterArray[num]] = num;
-          }
-          const COLOR_RANGE = 360;
-          const firstLetterNum = obj[p.userId.split('')[0]];
-          const secondLetterNum = obj[p.userId.split('')[1]];
-          const hue = COLOR_RANGE / (LETTERARRAY_LENGTH ** 2)
-                      * (firstLetterNum * LETTERARRAY_LENGTH + secondLetterNum);
-          const color = `hsl(${hue}, 100%, 50% )`;
+        if (p.userId === 1) return '#000'; // 初期の盤面のuserId === 1の駒があるため
+        if (p.userId === this.userId) {
+          // const color = `rgba(${this.userPieceColorVal}, //白から黒の場合
+          //  -- ${this.userPieceColorVal}, ${this.userPieceColorVal})`;
+          const color = `rgba(${this.red}, ${this.green}, ${this.blue})`;
+          // const color = `hsl(${this.userPieceColorHue}, 100%, 50%)`; //虹色変化の場合
           return color;
         }
-        return '#000'; // ユーザーID = 1の時の場合用
+        // [0-9]数字配列
+        const numArray = [...Array(10)].map((i, n) => n);
+        // アルファベット小文字配列
+        const alphabets = [];
+        for (let n = 'a'.charCodeAt(0); n <= 'z'.charCodeAt(0); n += 1) {
+          alphabets.push(String.fromCodePoint(n));
+        }
+        // アルファベット大文字配列
+        const ALPHABETS = alphabets.map(el => el.toUpperCase());
+        // 62通りの文字配列
+        const letterArray = [...numArray, ...alphabets, ...ALPHABETS];
+        const LETTERARRAY_LENGTH = letterArray.length;
+        // アルファベット数字対応表{'a':10, 'b':11, ...}
+        const obj = {};
+        for (let num = 0; num < LETTERARRAY_LENGTH; num += 1) {
+          obj[letterArray[num]] = num;
+        }
+        const COLOR_RANGE = 360;
+        const firstLetterNum = obj[p.userId.split('')[0]];
+        const secondLetterNum = obj[p.userId.split('')[1]];
+        const hue = COLOR_RANGE / (LETTERARRAY_LENGTH ** 2)
+                    * (firstLetterNum * LETTERARRAY_LENGTH + secondLetterNum);
+        const color = `hsl(${hue}, 100%, 50% )`;
+        return color;
       };
     },
     yourPiece() {
@@ -343,7 +413,6 @@ export default {
     handleScroll(e) {
       e.preventDefault();
       const { targetPos, adjustPos } = this.zoomTarget({ x: e.pageX, y: e.pageY });
-
       // ホイール移動量取得
       if (e.deltaY > 0) {
         this.zoomout({ targetPos, adjustPos });
