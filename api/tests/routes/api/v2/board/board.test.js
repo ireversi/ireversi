@@ -1,11 +1,14 @@
 const chai = require('chai');
 const jwt = require('jsonwebtoken');
 const app = require('../../../../../src/routes/app.js');
+const BoardStore = require('../../../../../src/models/v2/BoardStore.js');
 const PieceStore = require('../../../../../src/models/v2/PieceStore.js');
 const generateToken = require('../../../../../src/routes/api/v2/userIdGenerate/generateToken');
 
 const basePath = '/api/v2/board';
 const zero = 0;
+
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 function userIdGenerate() {
   const token = generateToken.generate();
@@ -153,5 +156,59 @@ describe('board after turnover', () => {
     // Then
     expect(response.body.candidates).toHaveLength(matchers.length);
     expect(response.body.candidates).toEqual(expect.arrayContaining(matchers));
+  });
+});
+
+describe('the number of online users', () => {
+  it('gets updated the number of online users every 2 seconds', async () => {
+    await chai.request(app).delete(`${basePath}`);
+    PieceStore.deletePieces();
+    BoardStore.resetUserCounts();
+
+    // Given
+    const users = 4;
+    const time = 2000;
+    const tokens = [];
+    for (let i = 0; i < users; i += 1) {
+      tokens[i] = userIdGenerate();
+      await chai.request(app)
+        .get(`${basePath}`)
+        .set('Authorization', tokens[i]);
+    }
+
+    // When
+    await sleep(time);
+    const response = await chai.request(app)
+      .get(`${basePath}`)
+      .set('Authorization', tokens[users - 1]);
+
+    // Then
+    expect(response.body.userCounts).toEqual(users);
+  });
+
+  it('is reset the number of online users after 4 seconds from last request', async () => {
+    await chai.request(app).delete(`${basePath}`);
+    PieceStore.deletePieces();
+    BoardStore.resetUserCounts();
+
+    // Given
+    const users = 4;
+    const time = 4000;
+    const tokens = [];
+    for (let i = 0; i < users; i += 1) {
+      tokens[i] = userIdGenerate();
+      await chai.request(app)
+        .get(`${basePath}`)
+        .set('Authorization', tokens[i]);
+    }
+
+    // When
+    await sleep(time);
+    const response = await chai.request(app)
+      .get(`${basePath}`)
+      .set('Authorization', tokens[users - 1]);
+
+    // Then
+    expect(response.body.userCounts).toEqual(0);
   });
 });
