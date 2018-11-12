@@ -11,7 +11,7 @@ const sleep = time => new Promise(resolve => setTimeout(resolve, time));
   while (true) {
     userCounts = onlineUsers.length;
     onlineUsers.length = 0;
-    await sleep(5000);
+    await sleep(2000);
   }
 })();
 
@@ -33,5 +33,9 @@ module.exports = {
       size,
       userCounts,
     };
+  },
+  resetUserCounts() {
+    onlineUsers.length = 0;
+    userCounts = 0;
   },
 };
