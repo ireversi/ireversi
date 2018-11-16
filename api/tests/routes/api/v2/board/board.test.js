@@ -1,6 +1,7 @@
 const chai = require('chai');
 const jwt = require('jsonwebtoken');
 const app = require('../../../../../src/routes/app.js');
+const testUtil = require('../../../../../src/utils/testUtil');
 const BoardStore = require('../../../../../src/models/v2/BoardStore.js');
 const PieceStore = require('../../../../../src/models/v2/PieceStore.js');
 const generateToken = require('../../../../../src/routes/api/v2/userIdGenerate/generateToken');
@@ -8,57 +9,25 @@ const generateToken = require('../../../../../src/routes/api/v2/userIdGenerate/g
 const basePath = '/api/v2/board';
 const ZERO = 0;
 const INIT = 1;
-const TEST_USER_NUMBER = 10;
-let testUsers = [];
 
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
-function setTestUser() {
-  testUsers = [...Array(TEST_USER_NUMBER)].map(() => generateToken.generate());
+function makeTestUser(num) {
+  return [...Array(num)].map(() => generateToken.generate());
 }
-
-const u = n => jwt.decode(testUsers[n]).userId;
-
-function array2PieceMatchers(array) {
-  const size = Math.sqrt(array.length);
-  return (array.map((p, idx) => (p !== 0 ? {
-    x: Math.floor(idx % size) - Math.floor(size / 2),
-    y: Math.floor(idx / size) - Math.floor(size / 2),
-    userId: p,
-  } : p))).filter(p => p !== 0);
-}
-
-function array2CandidateMatchers(array) {
-  const size = Math.sqrt(array.length);
-  return (array.map((p, idx) => (p !== 0 ? {
-    x: Math.floor(idx % size) - Math.floor(size / 2),
-    y: Math.floor(idx / size) - Math.floor(size / 2),
-  } : p))).filter(p => p !== 0);
-}
-
-function setTesPieces(pieces, size) {
-  pieces.forEach((p, idx) => {
-    if (p !== 0) {
-      PieceStore.addPiece({
-        x: Math.floor(idx % size) - Math.floor(size / 2),
-        y: Math.floor(idx / size) - Math.floor(size / 2),
-        userId: p,
-      });
-    }
-  });
-}
-
 
 describe('check board pieces', () => {
-  // 利用するテストユーザーをセットする。ユーザー数はTEST_USER_NUMBERにて設定
-  setTestUser(TEST_USER_NUMBER);
-
   // 置いた駒が全て取得できることを確認
   it('gets all', async () => {
+    // Reset
     await chai.request(app).delete(`${basePath}`);
     PieceStore.initPieces();
 
     // Given
+    const userNumber = 10;
+    const testUsers = makeTestUser(userNumber);
+    const u = n => jwt.decode(testUsers[n]).userId;
+
     const putPieces = [
       ZERO, ZERO, ZERO, ZERO, ZERO,
       ZERO, u(0), u(1), u(2), ZERO,
@@ -66,10 +35,15 @@ describe('check board pieces', () => {
       ZERO, u(5), u(6), u(7), ZERO,
       ZERO, ZERO, ZERO, ZERO, ZERO,
     ];
+    testUtil.setTesPieces(putPieces);
 
-    const pieceMatchers = array2PieceMatchers(putPieces);
-    const size = Math.sqrt(putPieces.length);
-    setTesPieces(putPieces, size);
+    const pieceMatchers = testUtil.array2PieceMatchers([
+      ZERO, ZERO, ZERO, ZERO, ZERO,
+      ZERO, u(0), u(1), u(2), ZERO,
+      ZERO, u(3), INIT, u(4), ZERO,
+      ZERO, u(5), u(6), u(7), ZERO,
+      ZERO, ZERO, ZERO, ZERO, ZERO,
+    ]);
 
     // When
     const response = await chai.request(app)
@@ -83,13 +57,16 @@ describe('check board pieces', () => {
 });
 
 describe('check board pieces and candidates', () => {
-  // 一つ駒を置く
   it('gets pieces after turnover some pieces', async () => {
+    // Reset
     await chai.request(app).delete(`${basePath}`);
     PieceStore.deletePieces();
 
     // Given
-    // piece set
+    const userNumber = 10;
+    const testUsers = makeTestUser(userNumber);
+    const u = n => jwt.decode(testUsers[n]).userId;
+
     const putPieces = [
       ZERO, ZERO, ZERO, ZERO, ZERO,
       ZERO, ZERO, ZERO, ZERO, ZERO,
@@ -97,10 +74,9 @@ describe('check board pieces and candidates', () => {
       ZERO, ZERO, u(0), ZERO, ZERO,
       ZERO, ZERO, ZERO, ZERO, ZERO,
     ];
-    const size = Math.sqrt(putPieces.length);
-    setTesPieces(putPieces, size);
+    testUtil.setTesPieces(putPieces);
 
-    const pieceMatchers = array2PieceMatchers([
+    const pieceMatchers = testUtil.array2PieceMatchers([
       ZERO, ZERO, ZERO, ZERO, ZERO,
       ZERO, ZERO, ZERO, ZERO, ZERO,
       ZERO, ZERO, INIT, ZERO, ZERO,
@@ -108,7 +84,7 @@ describe('check board pieces and candidates', () => {
       ZERO, ZERO, ZERO, ZERO, ZERO,
     ]);
 
-    const candidateMatchers = array2CandidateMatchers([
+    const candidateMatchers = testUtil.array2CandidateMatchers([
       ZERO, ZERO, ZERO, ZERO, ZERO,
       ZERO, ZERO, u(1), ZERO, ZERO,
       ZERO, u(1), ZERO, u(1), ZERO,
@@ -132,52 +108,52 @@ describe('check board pieces and candidates', () => {
 
 describe('the number of online users', () => {
   it('gets updated the number of online users every 2 seconds', async () => {
+    // Init
     await chai.request(app).delete(`${basePath}`);
     PieceStore.deletePieces();
     BoardStore.resetUserCounts();
 
     // Given
-    const users = 4;
+    const userNumber = 10;
+    const testUsers = makeTestUser(userNumber);
     const time = 2000;
-    const tokens = [];
-    for (let i = 0; i < users; i += 1) {
-      tokens[i] = generateToken.generate();
+    for (let i = 0; i < testUsers.length; i += 1) {
       await chai.request(app)
         .get(`${basePath}`)
-        .set('Authorization', tokens[i]);
+        .set('Authorization', testUsers[i]);
     }
 
     // When
     await sleep(time);
     const response = await chai.request(app)
       .get(`${basePath}`)
-      .set('Authorization', tokens[users - 1]);
+      .set('Authorization', testUsers[0]);
 
     // Then
-    expect(response.body.userCounts).toEqual(users);
+    expect(response.body.userCounts).toEqual(userNumber);
   });
 
   it('is reset the number of online users after 4 seconds from last request', async () => {
+    // Init
     await chai.request(app).delete(`${basePath}`);
     PieceStore.deletePieces();
     BoardStore.resetUserCounts();
 
     // Given
-    const users = 4;
+    const userNumber = 10;
+    const testUsers = makeTestUser(userNumber);
     const time = 4000;
-    const tokens = [];
-    for (let i = 0; i < users; i += 1) {
-      tokens[i] = generateToken.generate();
+    for (let i; i < testUsers.length; i += 1) {
       await chai.request(app)
         .get(`${basePath}`)
-        .set('Authorization', tokens[i]);
+        .set('Authorization', testUsers[i]);
     }
 
     // When
     await sleep(time);
     const response = await chai.request(app)
       .get(`${basePath}`)
-      .set('Authorization', tokens[users - 1]);
+      .set('Authorization', testUsers[userNumber - 1]);
 
     // Then
     expect(response.body.userCounts).toEqual(0);
