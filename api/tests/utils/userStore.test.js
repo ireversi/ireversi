@@ -6,7 +6,7 @@ const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
 
 describe('users', () => {
   // 初期化
-  UserStore.DeleteUserData();
+  UserStore.deleteAllUserData();
 
   // 1プレイヤー分登録する。
   it('can get and add userData', async () => {

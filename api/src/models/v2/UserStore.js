@@ -10,8 +10,10 @@ module.exports = {
     const User = new UserModel(userData);
     await User.save();
   },
-  DeleteUserData() {
+  async deleteAllUserData() {
     users.length = 0;
+    const User = new UserModel();
+    await User.remove();
   },
   initUserData(userMongo) {
     userMongo.forEach((elm) => {
@@ -21,18 +23,5 @@ module.exports = {
   },
   getUserData() {
     return users;
-  },
-  searchDuplication(userId) {
-    let dup = 0;
-    let flag = false;
-    users.forEach((elm) => {
-      if (elm.userId === userId) {
-        dup += 1;
-      }
-    });
-    if (dup > 0) {
-      flag = true;
-    }
-    return flag;
   },
 };
