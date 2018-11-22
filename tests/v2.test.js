@@ -27,7 +27,7 @@ describe('V2 test', () => {
 
   it('sets a board', async () => {
     // Given
-    const USERNAME = 'userName'; // 4文字以上15文字以下、アルファベット小文字、数字、アンダースコアのみ
+    const USERNAME = 'username'; // 4文字以上15文字以下、アルファベット小文字、数字、アンダースコアのみ
     await store.dispatch('getAccessToken', USERNAME);
 
     const { pieces, candidates, standbys } = await store.$axios.$get('/board');
