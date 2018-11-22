@@ -7,22 +7,22 @@ router.route('/').post((req, res) => {
   const ans = {};
   const accessToken = generateToken.generate();
   const { userId } = jwt.decode(accessToken);
-  const { username } = req.body;
+  const { userName } = req.body;
 
-  // 正規表現でusernameのvalidation
+  // 正規表現でuserNameのvalidation
   // 数値、アルファベット、_以外が出たらtrueを返す正規表現
   const reg = /^[a-z0-9]([_a-z0-9]){2,13}[a-z0-9]$/;
 
   // 禁止文字の検索、最短の検索、最長の検索
-  if (reg.test(username) && username !== null && username !== undefined) {
+  if (reg.test(userName) && userName !== null && userName !== undefined) {
     ans.accessToken = accessToken;
     ans.userId = userId;
-    ans.username = username;
+    ans.userName = userName;
     UserStore.addUserData(ans);
   } else {
     ans.accessToken = null;
     ans.userId = null;
-    ans.username = null;
+    ans.userName = null;
   }
   res.json(ans);
 });

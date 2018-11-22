@@ -21,7 +21,13 @@ module.exports = {
     });
     return true;
   },
-  getUserData() {
-    return users;
+  // getUserData() {
+  getUserData(user) {
+    if (user === undefined) { return users; }
+    if (user.userId) { return users.find(u => u.userId === user.userId); }
+    if (user.userName) { return users.find(u => u.userName === user.userName); }
+    if (user.accessToken) { return users.find(u => u.accessToken === user.accessToken); }
+    return null;
+    // return users;
   },
 };

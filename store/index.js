@@ -118,10 +118,10 @@ export const mutations = {
     state.dragFlg = false;
     state.touchTime = new Date().getTime();
   },
-  setAccessToken(state, { accessToken, userId, username }) {
+  setAccessToken(state, { accessToken, userId, userName }) {
     state.token = accessToken;
     state.userId = userId;
-    state.userName = username;
+    state.userName = userName;
   },
   setTopScores(state, scores) {
     const copiedTopScores = [...state.topScores];
@@ -129,16 +129,16 @@ export const mutations = {
       copiedTopScores[i] = {};
       copiedTopScores[i].userId = scores[i] ? scores[i].userId : '-';
       copiedTopScores[i].score = scores[i] ? scores[i].score : 0;
-      copiedTopScores[i].username = scores[i] ? scores[i].username : '-';
+      copiedTopScores[i].userName = scores[i] ? scores[i].userName : '-';
     }
     state.topScores = copiedTopScores;
   },
 };
 
 export const actions = {
-  async getAccessToken({ commit, state }, username) {
+  async getAccessToken({ commit, state }, userName) {
     if (!state.token) {
-      const userData = await this.$axios.$post('/user_id_generate', { username });
+      const userData = await this.$axios.$post('/user_id_generate', { userName });
       commit('setAccessToken', userData);
     }
   },

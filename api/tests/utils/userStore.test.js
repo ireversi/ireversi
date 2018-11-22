@@ -13,11 +13,11 @@ describe('users', () => {
     // Given
     jwt1 = generateToken.generate();
     id1 = jwt.decode(jwt1).userId;
-    username1 = 'testname';
+    userName1 = 'testname';
     UserStore.addUserData({
       accessToken: jwt1,
       userId: id1,
-      username: username1,
+      userName: userName1,
     });
     await sleep(2000);
     // await Promise.all(matchers.map(m => PieceModel(m).save()));
@@ -27,7 +27,7 @@ describe('users', () => {
     // Then
     expect(response[0].accessToken).toEqual(jwt1);
     expect(response[0].userId).toEqual(id1);
-    expect(response[0].username).toEqual(username1);
+    expect(response[0].userName).toEqual(userName1);
   });
 
 
@@ -36,11 +36,11 @@ describe('users', () => {
     // Given
     jwt2 = generateToken.generate();
     id2 = jwt.decode(jwt1).userId;
-    username2 = 'testname2';
+    userName2 = 'testname2';
     UserStore.addUserData({
       accessToken: jwt2,
       userId: id2,
-      username: username2,
+      userName: userName2,
     });
     // await Promise.all(matchers.map(m => PieceModel(m).save()));
     // When
@@ -48,6 +48,6 @@ describe('users', () => {
     // Then
     expect(response[1].accessToken).toEqual(jwt2);
     expect(response[1].userId).toEqual(id2);
-    expect(response[1].username).toEqual(username2);
+    expect(response[1].userName).toEqual(userName2);
   });
 });

@@ -10,21 +10,21 @@ const zero = 0;
 
 function searchUserName(userId) {
   const users = UserStore.getUserData();
-  let userName = 'origin';
+  let username = 'origin';
   users.forEach((elm) => {
     if (elm.userId === userId) {
-      userName = elm.username;
+      username = elm.userName;
     }
   });
-  return userName;
+  return username;
 }
 
-function userIdGenerate(username) {
+function userIdGenerate(userName) {
   const token = generateToken.generate();
   UserStore.addUserData({
     accessToken: token,
     userId: jwt.decode(token).userId,
-    username,
+    userName,
   });
   return token;
 }
@@ -48,7 +48,7 @@ async function convertRanking(result, number) {
   // userIdの各々について検索。score計算。
   idsArr.forEach((elm) => {
     let score = 0;
-    const username = searchUserName(elm);
+    const userName = searchUserName(elm);
     result.forEach((cnt) => {
       if (elm === cnt) {
         score += 1;
@@ -57,7 +57,7 @@ async function convertRanking(result, number) {
     const idscore = {
       userId: elm,
       score,
-      username,
+      userName,
     };
     scores.push(idscore);
   });
