@@ -63,7 +63,7 @@ describe('piece', () => {
       const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
 
       // When
-      const testPieces = await testUtil.setTesPieces2(putPieces);
+      const testPieces = await testUtil.setTesPieces(putPieces);
       const boardPieces = await testUtil.getBoardPieces('u0');
 
       // Then
@@ -137,7 +137,7 @@ describe('piece', () => {
     const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
 
     // When
-    const testPieces = await testUtil.setTesPieces2(putPieces);
+    const testPieces = await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
 
     // Then
@@ -198,7 +198,7 @@ describe('piece', () => {
     // MongoDB確認のため、matchesからstatus: falseのオブジェクトを抜いた配列
     const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
 
-    const testPieces = await testUtil.setTesPieces2(putPieces);
+    const testPieces = await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
 
     // Then
@@ -259,7 +259,7 @@ describe('piece', () => {
     // MongoDB確認のため、matchesからstatus: falseのオブジェクトを抜いた配列
     const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
 
-    const testPieces = await testUtil.setTesPieces2(putPieces);
+    const testPieces = await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
 
     // Then
@@ -320,7 +320,7 @@ describe('piece', () => {
     // MongoDB確認のため、matchesからstatus: falseのオブジェクトを抜いた配列
     const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
 
-    const testPieces = await testUtil.setTesPieces2(putPieces);
+    const testPieces = await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
 
     // Then
@@ -381,7 +381,7 @@ describe('piece', () => {
     // MongoDB確認のため、matchesからstatus: falseのオブジェクトを抜いた配列
     const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
 
-    const testPieces = await testUtil.setTesPieces2(putPieces);
+    const testPieces = await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
 
     // Then
@@ -442,7 +442,7 @@ describe('piece', () => {
     // MongoDB確認のため、matchesからstatus: falseのオブジェクトを抜いた配列
     const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
 
-    const testPieces = await testUtil.setTesPieces2(putPieces);
+    const testPieces = await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
 
     // Then
