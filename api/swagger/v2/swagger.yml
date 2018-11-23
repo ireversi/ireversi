@@ -345,7 +345,7 @@ definitions:
     summary: "generate new userId by JWT"
     description: "userIdの新規生成"
     parameters:
-      - name: username
+      - name: userName
         in: "formData"
         description: "input user name"
         type: string
