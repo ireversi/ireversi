@@ -35,7 +35,7 @@ describe('check board pieces', () => {
     ]);
 
     // When
-    await testUtil.setTesPieces2(putPieces);
+    await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
 
     // Then
@@ -78,7 +78,7 @@ describe('check board pieces and candidates', () => {
     ]);
 
     // When
-    await testUtil.setTesPieces2(putPieces);
+    await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u1');
 
     // Then
