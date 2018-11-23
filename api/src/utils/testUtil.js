@@ -24,15 +24,15 @@ async function putPieces(pieceOrder) {
 async function makePlayOrder(pieces) {
   const size = Math.sqrt(pieces.length);
   return pieces.map((p, idx) => (Array.isArray(p) ? p : [p])
-    .map(u => (u === 0 ? 0 : {
+    .map(u => (u === 0 ? [] : {
       n: +u.split(':')[1],
       piece: {
         x: Math.floor(idx % size) - Math.floor(size / 2),
         y: Math.floor(idx / size) - Math.floor(size / 2),
         userId: `test${u.split(':')[0]}`,
       },
-    })).filter(e => e !== 0)).filter(e => e.length !== 0)
-    .reduce((acc, cv) => acc.concat(cv))
+    }))).reduce((acc, cv) => [...acc, ...cv])
+    .filter(e => e.length !== 0)
     .sort((a, b) => a.n - b.n)
     .map(p => p.piece);
 }
@@ -40,7 +40,7 @@ async function makePlayOrder(pieces) {
 async function makeTestMatchers(pieces) {
   const size = Math.sqrt(pieces.length);
   return pieces.map((p, idx) => (Array.isArray(p) ? p : [p])
-    .map(u => (u === 0 ? 0 : {
+    .map(u => (u === 0 ? [] : {
       n: +u.split(':')[1],
       status: u.split(':')[2] === 'T',
       piece: {
@@ -48,8 +48,8 @@ async function makeTestMatchers(pieces) {
         y: Math.floor(idx / size) - Math.floor(size / 2),
         userId: UserStore.getUserData({ userName: `test${u.split(':')[0]}` }).userId,
       },
-    })).filter(e => e !== 0)).filter(e => e.length !== 0)
-    .reduce((acc, cv) => acc.concat(cv))
+    }))).reduce((acc, cv) => [...acc, ...cv])
+    .filter(e => e.length !== 0)
     .sort((a, b) => a.n - b.n)
     .map(p => ({ status: p.status, piece: p.piece }));
 }
@@ -58,7 +58,6 @@ async function makeTestMatchers(pieces) {
 module.exports = {
   initTestParameter() {
     PieceStore.deletePieces();
-    // await chai.request(app).delete(`${basePath}`);
     UserStore.deleteAllUserData();
     BoardStore.resetUserCounts();
     storePlayHistory.deleteStandbySendMongo();
