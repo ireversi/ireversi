@@ -80,7 +80,7 @@ describe('score', () => {
 
   // 一つ駒を置く
   it('gets score', async () => {
-    await chai.request(app).delete(`${basePath}`);
+    await chai.request(app).delete(basePath);
     PieceStore.initPieces();
 
     // Given

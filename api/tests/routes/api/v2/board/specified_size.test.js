@@ -53,7 +53,7 @@ describe('board/specified_size', () => {
 
   // 一つ駒を置く
   it('gets specified range', async () => {
-    await chai.request(app).delete(`${basePath}`);
+    await chai.request(app).delete(basePath);
     PieceStore.deletePieces();
     // Given
     // const xMin = 1;
