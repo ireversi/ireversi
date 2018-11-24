@@ -108,8 +108,8 @@ describe('board/specified_size', () => {
 
     // When
     // const response = await chai.request(app)
-    //   .get(`${basePath}/board/specified_size?x_min=${xMin}&x_max=${xMax}&
-    // y_min=${yMin}&y_max=${yMax}`)
+    //   .get(`${basePath}/board/specified_size`)
+    //   .query({x_min: xMin, x_max: xMax, y_min: yMin, y_max: yMax})
     //   .set('Authorization', jwtIds[0].jwtId);
     // Then
     // expect(response.body).toHaveLength(matchers.length);

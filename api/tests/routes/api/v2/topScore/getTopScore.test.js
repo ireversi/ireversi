@@ -104,7 +104,7 @@ describe('score', () => {
       id1, id7, id7, zero, id7, id6,
     ];
     // 上位何名まで反映するか
-    number = 5;
+    num = 5;
 
     const size = Math.sqrt(result.length);
     result.forEach((elm, index) => {
@@ -117,14 +117,16 @@ describe('score', () => {
         PieceStore.addPiece(ans);
       }
     });
-    const matchers = await convertRanking(result, number);
+    const matchers = await convertRanking(result, num);
 
     const id1Jwt = userIdGenerate('test');
 
     // When
     const response = await chai.request(app)
-      .get(`${basePath}/topScore?number=${number}`)
+      .get(`${basePath}/topScore`)
+      .query({ number: num })
       .set('Authorization', id1Jwt);
+
     // Then
     expect(response.body).toEqual(expect.arrayContaining(matchers));
   });
