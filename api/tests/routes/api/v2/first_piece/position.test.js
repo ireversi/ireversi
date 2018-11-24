@@ -53,7 +53,7 @@ describe('piece', () => {
   // テスト：positionが置けるか。
   it('is stoodby in a board array', async () => {
     // Reset
-    await chai.request(app).delete(`${basePath}`);
+    await chai.request(app).delete(basePath);
     PieceStore.deletePieces();
     PieceStore.deleteStandbys();
 
@@ -105,7 +105,7 @@ describe('piece', () => {
   // 置けないコマの場合、Boardに入っていないことを確認するテストも同時に行う。
   it('is confirmed to be in standbys of board array', async () => {
     // Reset
-    await chai.request(app).delete(`${basePath}`);
+    await chai.request(app).delete(basePath);
     PieceStore.deletePieces();
     PieceStore.deleteStandbys();
 
@@ -158,7 +158,7 @@ describe('piece', () => {
   // テスト：他コマ（デフォルトコマ）の上には置けない。それ以外は置ける。
   it('is stoodby in a board array', async () => {
     // Reset
-    await chai.request(app).delete(`${basePath}`);
+    await chai.request(app).delete(basePath);
     PieceStore.deletePieces();
     PieceStore.deleteStandbys();
 
@@ -211,7 +211,7 @@ describe('piece', () => {
   // 送った値がBoard内のstandbysに入っているか、waitTimeで待機したあとに消えているかで比較
   it('is confirmed to be in standbys of board array', async () => {
     // Reset
-    await chai.request(app).delete(`${basePath}`);
+    await chai.request(app).delete(basePath);
     PieceStore.deletePieces();
     PieceStore.deleteStandbys();
 
@@ -271,7 +271,7 @@ describe('piece', () => {
 
   it('is saved in MongoDB', async () => {
     // Reset
-    await chai.request(app).delete(`${basePath}`);
+    await chai.request(app).delete(basePath);
     PieceStore.deletePieces();
     PieceStore.deleteStandbys();
     storePlayHistory.deleteStandbySendMongo();

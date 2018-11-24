@@ -62,7 +62,7 @@ describe('direction', () => {
   // positionに値を投げて、返り値のstandbyと期待値が合うか
   // positionと同様のテスト
   it('needed a standbied position', async () => {
-    await chai.request(app).delete(`${basePath}`);
+    await chai.request(app).delete(basePath);
     PieceStore.deletePieces();
 
     // userIdのtokenを生成
@@ -113,7 +113,7 @@ describe('direction', () => {
 
   // userIdと方角を与えて、レーザービーム打てるかのテスト
   it('let player shoot lazer beem', async () => {
-    await chai.request(app).delete(`${basePath}`);
+    await chai.request(app).delete(basePath);
     PieceStore.deletePieces();
 
     // userIdのtokenを生成
@@ -201,7 +201,7 @@ describe('direction', () => {
 
   // userIdと方角を与えるが、レーザービーム打てないテスト
   it('start remaining timer3', async () => {
-    await chai.request(app).delete(`${basePath}`);
+    await chai.request(app).delete(basePath);
     PieceStore.deletePieces();
 
     // userIdのtokenを生成
@@ -288,7 +288,7 @@ describe('direction', () => {
 
   // MongoDBに保存されているかのテスト
   it('can be saved in MongoDB', async () => {
-    await chai.request(app).delete(`${basePath}`);
+    await chai.request(app).delete(basePath);
     PieceStore.deletePieces();
 
     // userIdのtokenを生成
