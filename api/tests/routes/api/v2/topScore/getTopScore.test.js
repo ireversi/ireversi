@@ -29,10 +29,7 @@ function userIdGenerate(userName) {
   return token;
 }
 
-function jwtDecode(token) {
-  const decoded = jwt.decode(token);
-  return decoded;
-}
+const jwtDecode = token => jwt.decode(token);
 
 async function convertRanking(result, number) {
   const scores = [];
@@ -104,7 +101,7 @@ describe('score', () => {
       id1, id7, id7, zero, id7, id6,
     ];
     // 上位何名まで反映するか
-    const num = 5;
+    const number = 5;
 
     const size = Math.sqrt(result.length);
     result.forEach((elm, index) => {
@@ -117,14 +114,14 @@ describe('score', () => {
         PieceStore.addPiece(ans);
       }
     });
-    const matchers = await convertRanking(result, num);
+    const matchers = await convertRanking(result, number);
 
     const id1Jwt = userIdGenerate('test');
 
     // When
     const response = await chai.request(app)
       .get(`${basePath}/topScore`)
-      .query({ number: num })
+      .query({ number })
       .set('Authorization', id1Jwt);
 
     // Then
