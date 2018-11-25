@@ -27,7 +27,7 @@ function genJwtArr(number) {
   const jwtIds = [];
   for (i = 0; i < number; i += 1) {
     const jwtElm = {};
-    tempJwt = generateToken.generate();
+    const tempJwt = generateToken.generate();
     jwtElm.jwtId = tempJwt;
     jwtElm.decode = jwt.decode(tempJwt).userId;
     jwtIds.push(jwtElm);

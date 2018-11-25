@@ -30,7 +30,7 @@ function userIdGenerate(userName) {
 }
 
 function jwtDecode(token) {
-  decoded = jwt.decode(token);
+  const decoded = jwt.decode(token);
   return decoded;
 }
 
@@ -104,7 +104,7 @@ describe('score', () => {
       id1, id7, id7, zero, id7, id6,
     ];
     // 上位何名まで反映するか
-    num = 5;
+    const num = 5;
 
     const size = Math.sqrt(result.length);
     result.forEach((elm, index) => {

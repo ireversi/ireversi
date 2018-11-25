@@ -29,7 +29,7 @@ describe('calcSize', () => {
   // 一つ駒を置く
   it('calcs size', async () => {
     // Given
-    userId = 2;
+    // userId = 2; ←不要なソースのため、一旦コメント化
     const testCase = convertComparisonResult(
       [
         0, 0, 0, 0, 0,
