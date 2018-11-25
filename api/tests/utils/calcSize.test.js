@@ -29,7 +29,6 @@ describe('calcSize', () => {
   // 一つ駒を置く
   it('calcs size', async () => {
     // Given
-    userId = 2;
     const testCase = convertComparisonResult(
       [
         0, 0, 0, 0, 0,

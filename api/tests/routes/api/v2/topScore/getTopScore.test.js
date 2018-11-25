@@ -29,10 +29,7 @@ function userIdGenerate(userName) {
   return token;
 }
 
-function jwtDecode(token) {
-  decoded = jwt.decode(token);
-  return decoded;
-}
+const jwtDecode = token => jwt.decode(token);
 
 async function convertRanking(result, number) {
   const scores = [];
@@ -104,7 +101,7 @@ describe('score', () => {
       id1, id7, id7, zero, id7, id6,
     ];
     // 上位何名まで反映するか
-    number = 5;
+    const number = 5;
 
     const size = Math.sqrt(result.length);
     result.forEach((elm, index) => {
@@ -123,8 +120,10 @@ describe('score', () => {
 
     // When
     const response = await chai.request(app)
-      .get(`${basePath}/topScore?number=${number}`)
+      .get(`${basePath}/topScore`)
+      .query({ number })
       .set('Authorization', id1Jwt);
+
     // Then
     expect(response.body).toEqual(expect.arrayContaining(matchers));
   });

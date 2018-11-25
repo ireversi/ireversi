@@ -13,7 +13,7 @@ function genJwtArr(number) {
   const jwtIds = [];
   for (i = 0; i < number; i += 1) {
     const jwtElm = {};
-    tempJwt = generateToken.generate();
+    const tempJwt = generateToken.generate();
     jwtElm.jwtId = tempJwt;
     jwtElm.decode = jwt.decode(tempJwt).userId;
     jwtIds.push(jwtElm);
@@ -49,7 +49,7 @@ describe('board/specified_size', () => {
   // afterEach(deleteAllDataFromDB);
 
   // userIdの生成
-  jwtIds = genJwtArr(9);
+  const jwtIds = genJwtArr(9);
 
   // 一つ駒を置く
   it('gets specified range', async () => {
@@ -108,8 +108,8 @@ describe('board/specified_size', () => {
 
     // When
     // const response = await chai.request(app)
-    //   .get(`${basePath}/board/specified_size?x_min=${xMin}&x_max=${xMax}&
-    // y_min=${yMin}&y_max=${yMax}`)
+    //   .get(`${basePath}/board/specified_size`)
+    //   .query({x_min: xMin, x_max: xMax, y_min: yMin, y_max: yMax})
     //   .set('Authorization', jwtIds[0].jwtId);
     // Then
     // expect(response.body).toHaveLength(matchers.length);

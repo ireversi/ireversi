@@ -11,9 +11,9 @@ describe('users', () => {
   // 1プレイヤー分登録する。
   it('can get and add userData', async () => {
     // Given
-    jwt1 = generateToken.generate();
-    id1 = jwt.decode(jwt1).userId;
-    userName1 = 'testname';
+    const jwt1 = generateToken.generate();
+    const id1 = jwt.decode(jwt1).userId;
+    const userName1 = 'testname';
     UserStore.addUserData({
       accessToken: jwt1,
       userId: id1,
@@ -34,9 +34,9 @@ describe('users', () => {
   // 次のプレイヤー分登録する。
   it('can get and add userData 2nd', async () => {
     // Given
-    jwt2 = generateToken.generate();
-    id2 = jwt.decode(jwt1).userId;
-    userName2 = 'testname2';
+    const jwt2 = generateToken.generate();
+    const id2 = jwt.decode(jwt2).userId;
+    const userName2 = 'testname2';
     UserStore.addUserData({
       accessToken: jwt2,
       userId: id2,
