@@ -28,7 +28,7 @@
     "test": "npm-run-all --serial test:*",
     "test:api": "jest --config api/jest.config.js --coverage",
     "test:api:watch": "npm run test:api -- --watch",
-    "test:client": "jest --runInBand",
+    "test:client": "jest --runInBand --forceExit",
     "test:client:watch": "npm run test:client -- --watch",
     "coverage": "codecov"
   },

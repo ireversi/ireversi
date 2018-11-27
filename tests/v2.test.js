@@ -12,7 +12,7 @@ describe('V2 test', () => {
   beforeAll(async () => {
     await build();
     await prepareDB();
-    await new Promise(resolve => app.listen(port, resolve));
+    app.listen(port);
   });
 
   beforeEach(async () => {
