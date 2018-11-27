@@ -1,16 +1,16 @@
-const { getStore } = require('./setup.js');
+const { getStore, build, teardown } = require('./setup.js');
 const app = require('../api/src/routes/app.js');
 const { port } = require('../api/src/config.js');
-const {
-  prepareDB,
-  deleteAllDataFromDB,
-} = require('../api/src/utils/db.js');
+const { prepareDB, deleteAllDataFromDB, stopDB } = require('../api/src/utils/db.js');
 const PieceStore = require('../api/src/models/v2/PieceStore.js');
+
+jest.setTimeout(30000);
 
 describe('V2 test', () => {
   let store;
 
   beforeAll(async () => {
+    await build();
     await prepareDB();
     await new Promise(resolve => app.listen(port, resolve));
   });
@@ -23,6 +23,11 @@ describe('V2 test', () => {
   afterEach(async () => {
     PieceStore.deletePieces();
     await deleteAllDataFromDB();
+  });
+
+  afterAll(async () => {
+    teardown();
+    await stopDB();
   });
 
   it('sets a board', async () => {
