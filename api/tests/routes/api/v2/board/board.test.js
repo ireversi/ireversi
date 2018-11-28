@@ -10,7 +10,7 @@ const {
   prepareDB,
   deleteAllDataFromDB,
   stopDB,
-} = require('../utils/db.js');
+} = require('../../../../../src/utils/db.js');
 
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 

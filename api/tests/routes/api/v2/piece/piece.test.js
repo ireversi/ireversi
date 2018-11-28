@@ -13,7 +13,7 @@ const {
   prepareDB,
   deleteAllDataFromDB,
   stopDB,
-} = require('../utils/db.js');
+} = require('../../../../../src/utils/db.js');
 
 describe('piece', () => {
   // set DB
