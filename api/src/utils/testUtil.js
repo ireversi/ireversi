@@ -7,12 +7,6 @@ const UserStore = require('../models/v2/UserStore.js');
 const BoardStore = require('../models/v2/BoardStore.js');
 const app = require('../routes/app.js');
 
-const {
-  prepareDB,
-  deleteAllDataFromDB,
-  stopDB,
-} = require('../utils/db.js');
-
 const basePath = '/api/v2';
 
 async function putPieces(pieceOrder) {
@@ -107,10 +101,6 @@ function isNumber(val) {
 }
 
 module.exports = {
-  prepareDB,
-  deleteAllDataFromDB,
-  stopDB,
-
   testPreProcess() {
     BoardStore.resetUserCounts();
     PieceStore.resetAllData();

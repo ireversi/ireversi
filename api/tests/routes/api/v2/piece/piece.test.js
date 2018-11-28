@@ -9,11 +9,17 @@ const ZERO0000 = 0;
 const CENTER = 0;
 const CENTERRR = 0;
 
+const {
+  prepareDB,
+  deleteAllDataFromDB,
+  stopDB,
+} = require('../utils/db.js');
+
 describe('piece', () => {
   // set DB
-  beforeAll(testUtil.prepareDB);
-  afterEach(testUtil.deleteAllDataFromDB);
-  afterAll(testUtil.stopDB);
+  beforeAll(prepareDB);
+  afterEach(deleteAllDataFromDB);
+  afterAll(stopDB);
 
   describe('piece', () => {
     // 既に駒が置いてある場所にはおけない。

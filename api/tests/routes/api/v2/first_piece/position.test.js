@@ -10,13 +10,19 @@ const ZERO0000 = 0;
 const CENTER = 0;
 const CENTERRR = 0;
 
+const {
+  prepareDB,
+  deleteAllDataFromDB,
+  stopDB,
+} = require('../utils/db.js');
+
 const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
 
 describe('piece', () => {
   // set DB
-  beforeAll(testUtil.prepareDB);
-  afterEach(testUtil.deleteAllDataFromDB);
-  afterAll(testUtil.stopDB);
+  beforeAll(prepareDB);
+  afterEach(deleteAllDataFromDB);
+  afterAll(stopDB);
 
   // テスト：positionが置けるか。
   it('is stoodby in a board array', async () => {

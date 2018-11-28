@@ -6,13 +6,19 @@ const ZERO00 = 0;
 const INIT = 1;
 const CENTER = 0;
 
+const {
+  prepareDB,
+  deleteAllDataFromDB,
+  stopDB,
+} = require('../utils/db.js');
+
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 describe('piece', () => {
   // set DB
-  beforeAll(testUtil.prepareDB);
-  afterEach(testUtil.deleteAllDataFromDB);
-  afterAll(testUtil.stopDB);
+  beforeAll(prepareDB);
+  afterEach(deleteAllDataFromDB);
+  afterAll(stopDB);
 
   describe('check board pieces', () => {
   // 置いた駒が全て取得できることを確認

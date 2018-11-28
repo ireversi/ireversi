@@ -7,13 +7,19 @@ const ZERO0000 = 0;
 const CENTER = 0;
 const CENTERRR = 0;
 
+const {
+  prepareDB,
+  deleteAllDataFromDB,
+  stopDB,
+} = require('../utils/db.js');
+
 const waitTime = testUtil.getWaitTime();
 
 describe('direction', () => {
   // set DB
-  beforeAll(testUtil.prepareDB);
-  afterEach(testUtil.deleteAllDataFromDB);
-  afterAll(testUtil.stopDB);
+  beforeAll(prepareDB);
+  afterEach(deleteAllDataFromDB);
+  afterAll(stopDB);
 
   // 前提条件を揃えるテスト
   // positionに値を投げて、返り値のstandbyと期待値が合うか

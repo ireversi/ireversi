@@ -14,11 +14,17 @@ const CENTERRRR = 0;
 
 const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
 
+const {
+  prepareDB,
+  deleteAllDataFromDB,
+  stopDB,
+} = require('../utils/db.js');
+
 describe('score', () => {
   // set DB
-  beforeAll(testUtil.prepareDB);
-  afterEach(testUtil.deleteAllDataFromDB);
-  afterAll(testUtil.stopDB);
+  beforeAll(prepareDB);
+  afterEach(deleteAllDataFromDB);
+  afterAll(stopDB);
 
   // 一つ駒を置く
   it('gets score', async () => {
