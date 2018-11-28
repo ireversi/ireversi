@@ -36,7 +36,7 @@ describe('calcCandidate', () => {
         0, 5, 0,
       ],
     );
-    userId = 2;
+    const userId = 2;
 
     // When
     const response = calcScore.calc(userId, testCase);

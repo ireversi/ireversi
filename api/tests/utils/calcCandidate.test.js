@@ -39,7 +39,7 @@ describe('calcCandidate', () => {
   // 一つ駒を置く
   it('calcs candidates for first piece', async () => {
     // Given
-    userId = 10;
+    const userId = 10;
 
     const testCase = convertComparisonResult(
       [
@@ -75,7 +75,7 @@ describe('calcCandidate', () => {
   // 一つ駒を置く
   it('calcs candidates for first piece', async () => {
     // Given
-    userId = 10;
+    const userId = 10;
     const testCase = convertComparisonResult(
       [
         0, 0, 0, 0,
@@ -105,7 +105,7 @@ describe('calcCandidate', () => {
 describe('calcCandidate', () => {
   it('calcs candidates for more than two pieces', async () => {
   // Given
-    userId = 2;
+    const userId = 2;
 
     const testCase = convertComparisonResult(
       [
@@ -137,7 +137,7 @@ describe('calcCandidate', () => {
 describe('calcCandidate', () => {
   it('calcs candidates to resolve Ando-san issue', async () => {
   // Given
-    userId = 2;
+    const userId = 2;
 
     const testCase = convertComparisonResult(
       [
