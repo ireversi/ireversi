@@ -141,8 +141,6 @@ module.exports = {
   },
   getStandbys() {
     const stbs = board.standbys;
-    // console.log('start');
-    // console.log(stbs);
     if (stbs.length >= 1) {
       for (let i = 0; i < stbs.length; i += 1) {
         const remaining = StandbyStore.getRemaining(stbs[i].created);
@@ -152,10 +150,8 @@ module.exports = {
         } else {
           board.standbys[i].remaining = remaining;
         }
-        // console.log(stbs);
       }
     }
-    // console.log('finish');
     return board.standbys;
   },
   getCandidates() {
