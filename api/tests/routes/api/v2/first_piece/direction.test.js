@@ -21,6 +21,10 @@ describe('direction', () => {
   afterEach(deleteAllDataFromDB);
   afterAll(stopDB);
 
+  beforeEach(() => {
+    jest.setTimeout(20000);
+  });
+
   // 前提条件を揃えるテスト
   // positionに値を投げて、返り値のstandbyと期待値が合うか
   it('needed a standbied position', async () => {

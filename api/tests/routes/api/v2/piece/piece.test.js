@@ -21,6 +21,10 @@ describe('piece', () => {
   afterEach(deleteAllDataFromDB);
   afterAll(stopDB);
 
+  beforeEach(() => {
+    jest.setTimeout(20000);
+  });
+
   describe('piece', () => {
     // 既に駒が置いてある場所にはおけない。
     it('cannot be put on the same place', async () => {

@@ -20,6 +20,10 @@ describe('piece', () => {
   afterEach(deleteAllDataFromDB);
   afterAll(stopDB);
 
+  beforeEach(() => {
+    jest.setTimeout(20000);
+  });
+
   describe('check board pieces', () => {
   // 置いた駒が全て取得できることを確認
     it('gets all', async () => {

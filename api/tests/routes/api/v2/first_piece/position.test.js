@@ -24,6 +24,10 @@ describe('piece', () => {
   afterEach(deleteAllDataFromDB);
   afterAll(stopDB);
 
+  beforeEach(() => {
+    jest.setTimeout(20000);
+  });
+
   // テスト：positionが置けるか。
   it('is stoodby in a board array', async () => {
     // Reset
