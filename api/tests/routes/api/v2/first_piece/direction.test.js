@@ -7,19 +7,13 @@ const ZERO0000 = 0;
 const CENTER = 0;
 const CENTERRR = 0;
 
-const {
-  prepareDB,
-  deleteAllDataFromDB,
-  stopDB,
-} = require('../../../../../src/utils/db.js');
-
 const waitTime = testUtil.getWaitTime();
 
 describe('direction', () => {
   // set DB
-  beforeAll(prepareDB);
-  afterEach(deleteAllDataFromDB);
-  afterAll(stopDB);
+  beforeAll(testUtil.prepareDB);
+  afterEach(testUtil.deleteAllDataFromDB);
+  afterAll(testUtil.stopDB);
 
   beforeEach(() => {
     jest.setTimeout(20000);

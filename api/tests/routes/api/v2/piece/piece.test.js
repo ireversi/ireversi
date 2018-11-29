@@ -9,21 +9,11 @@ const ZERO0000 = 0;
 const CENTER = 0;
 const CENTERRR = 0;
 
-const {
-  prepareDB,
-  deleteAllDataFromDB,
-  stopDB,
-} = require('../../../../../src/utils/db.js');
-
 describe('piece', () => {
   // set DB
-  beforeAll(prepareDB);
-  afterEach(deleteAllDataFromDB);
-  afterAll(stopDB);
-
-  beforeEach(() => {
-    jest.setTimeout(20000);
-  });
+  beforeAll(testUtil.prepareDB);
+  afterEach(testUtil.deleteAllDataFromDB);
+  afterAll(testUtil.stopDB);
 
   describe('piece', () => {
     // 既に駒が置いてある場所にはおけない。

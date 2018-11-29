@@ -6,19 +6,13 @@ const ZERO00 = 0;
 const INIT = 1;
 const CENTER = 0;
 
-const {
-  prepareDB,
-  deleteAllDataFromDB,
-  stopDB,
-} = require('../../../../../src/utils/db.js');
-
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 describe('piece', () => {
   // set DB
-  beforeAll(prepareDB);
-  afterEach(deleteAllDataFromDB);
-  afterAll(stopDB);
+  beforeAll(testUtil.prepareDB);
+  afterEach(testUtil.deleteAllDataFromDB);
+  afterAll(testUtil.stopDB);
 
   beforeEach(() => {
     jest.setTimeout(20000);

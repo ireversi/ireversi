@@ -14,17 +14,11 @@ const CENTERRRR = 0;
 
 const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
 
-const {
-  prepareDB,
-  deleteAllDataFromDB,
-  stopDB,
-} = require('../../../../../src/utils/db.js');
-
 describe('score', () => {
   // set DB
-  beforeAll(prepareDB);
-  afterEach(deleteAllDataFromDB);
-  afterAll(stopDB);
+  beforeAll(testUtil.prepareDB);
+  afterEach(testUtil.deleteAllDataFromDB);
+  afterAll(testUtil.stopDB);
 
   beforeEach(() => {
     jest.setTimeout(20000);

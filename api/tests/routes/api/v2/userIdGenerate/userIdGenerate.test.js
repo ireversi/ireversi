@@ -1,16 +1,10 @@
 const testUtil = require('../../../../../src/utils/testUtil');
 
-const {
-  prepareDB,
-  deleteAllDataFromDB,
-  stopDB,
-} = require('../../../../../src/utils/db.js');
-
 describe('userId generate', () => {
   // set DB
-  beforeAll(prepareDB);
-  afterEach(deleteAllDataFromDB);
-  afterAll(stopDB);
+  beforeAll(testUtil.prepareDB);
+  afterEach(testUtil.deleteAllDataFromDB);
+  afterAll(testUtil.stopDB);
 
   // 一つ駒を置く
   it('generates userId and request userName', async () => {
