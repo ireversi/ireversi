@@ -1,6 +1,7 @@
 const BoardHistoryModel = require('../models/v2/BoardHistoryModel.js');
 
 const standbySendMongo = [];
+const propFilter = '-_id -__v';
 
 module.exports = {
   addPieceMongo(x, y, userId, created) {
@@ -47,6 +48,10 @@ module.exports = {
   },
   getStandbySendMongo() {
     return standbySendMongo;
+  },
+  async getBoardHistory() {
+    const boardHistory = await BoardHistoryModel.find({}, propFilter);
+    return boardHistory;
   },
   deleteStandbySendMongo() {
     standbySendMongo.length = 0;

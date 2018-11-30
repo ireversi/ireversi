@@ -1,130 +1,107 @@
-const chai = require('chai');
-const jwt = require('jsonwebtoken');
-const app = require('../../../../../src/routes/app.js');
-const PieceStore = require('../../../../../src/models/v2/PieceStore.js');
-const generateToken = require('../../../../../src/routes/api/v2/userIdGenerate/generateToken.js');
-const UserStore = require('../../../../../src/models/v2/UserStore');
 
-const basePath = '/api/v2';
-const zero = 0;
+const testUtil = require('../../../../../src/utils/testUtil');
 
-function searchUserName(userId) {
-  const users = UserStore.getUserData();
-  let username = 'origin';
-  users.forEach((elm) => {
-    if (elm.userId === userId) {
-      username = elm.userName;
-    }
-  });
-  return username;
-}
+// const INIT = 1;
+const ZERO = 0;
+const ZERO00 = 0;
+const ZERO000 = 0;
+const ZERO0000 = 0;
+const ZERO00000 = 0;
+// const CENTER = 0;
+const CENTERR = 0;
+// const CENTERRR = 0;
+const CENTERRRR = 0;
 
-function userIdGenerate(userName) {
-  const token = generateToken.generate();
-  UserStore.addUserData({
-    accessToken: token,
-    userId: jwt.decode(token).userId,
-    userName,
-  });
-  return token;
-}
-
-const jwtDecode = token => jwt.decode(token);
-
-async function convertRanking(result, number) {
-  const scores = [];
-  // まずはuserIdの重複しないリストを作成
-  // userIdの重複削除
-  const ids = new Set(result);
-  const idsArr = [...ids];
-  // ゼロを削除
-  const idx = idsArr.indexOf(0);
-  if (idx !== -1) {
-    idsArr.splice(idx, 1);
-  }
-  // userIdの各々について検索。score計算。
-  idsArr.forEach((elm) => {
-    let score = 0;
-    const userName = searchUserName(elm);
-    result.forEach((cnt) => {
-      if (elm === cnt) {
-        score += 1;
-      }
-    });
-    const idscore = {
-      userId: elm,
-      score,
-      userName,
-    };
-    scores.push(idscore);
-  });
-
-  // scoresの並び替え
-  const sortedScores = scores.sort((a, b) => {
-    if (a.score > b.score) return -1;
-    if (a.score < b.score) return 1;
-    return 0;
-  });
-  const rank = number;
-  const slicedScores = sortedScores.slice(0, rank);
-
-  return slicedScores;
-}
+const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
 
 describe('score', () => {
-  // beforeAll(prepareDB);
-  // afterEach(deleteAllDataFromDB);
+  // set DB
+  beforeAll(testUtil.prepareDB);
+  afterEach(testUtil.deleteAllDataFromDB);
+  afterAll(testUtil.stopDB);
+
+  beforeEach(() => {
+    jest.setTimeout(20000);
+  });
 
   // 一つ駒を置く
   it('gets score', async () => {
-    await chai.request(app).delete(basePath);
-    PieceStore.initPieces();
+    // Reset
+    testUtil.testPreProcess();
 
     // Given
-    const id1 = jwtDecode(userIdGenerate('test1')).userId;
-    const id2 = jwtDecode(userIdGenerate('test2')).userId;
-    const id3 = jwtDecode(userIdGenerate('test3')).userId;
-    const id4 = jwtDecode(userIdGenerate('test4')).userId;
-    const id5 = jwtDecode(userIdGenerate('test5')).userId;
-    const id6 = jwtDecode(userIdGenerate('test6')).userId;
-    const id7 = jwtDecode(userIdGenerate('test7')).userId;
-    const id8 = jwtDecode(userIdGenerate('test8')).userId;
+    const userNumber = 10;
+    await testUtil.setTestUsers(userNumber);
 
-    // "I"は初期化した時の最初のピース
-    // 1:13,2:4,3:5,4:4,5:2,6:2,7:4,8:1
-    const result = [
-      'I', id1, id1, id1, id1, zero,
-      id1, id1, id2, id2, id2, id2,
-      id1, id3, id3, id3, zero, id4,
-      id4, id4, zero, id3, id5, id5,
-      id1, zero, id8, id1, zero, id6,
-      id1, id7, id7, zero, id7, id6,
+    const putPieces = [
+      ZERO00, ZERO00, ZERO000, ZERO00, ZERO000, ZERO000, ZERO000,
+      ZERO00, ZERO00, 'u0:15', 'u6:18', 'u7:19', 'u8:20', 'u7:21',
+      ZERO00, ZERO00, 'u3:04', 'u0:05', 'u4:06', 'u3:09', ZERO000,
+      ZERO00, ZERO00, 'u2:03', CENTERR, 'u5:07', 'u4:10', 'u2:14',
+      ZERO00, ZERO00, 'u1:02', 'u0:01', 'u6:08', 'u1:11', ZERO000,
+      ZERO00, ZERO00, 'u0:16', 'u5:17', ZERO000, 'u8:12', ZERO000,
+      ZERO00, ZERO00, ZERO000, ZERO000, ZERO000, 'u3:13', ZERO000,
     ];
-    // 上位何名まで反映するか
-    const number = 5;
 
-    const size = Math.sqrt(result.length);
-    result.forEach((elm, index) => {
-      if (elm !== 0) {
-        const ans = {
-          x: Math.floor(index % size),
-          y: Math.floor(index / size),
-          userId: elm,
-        };
-        PieceStore.addPiece(ans);
-      }
-    });
-    const matchers = await convertRanking(result, number);
+    const putJucgeMatches = await testUtil.setTestMatchers([
+      ZERO0000, ZERO0000, ZERO00000, ZERO00000, ZERO00000, ZERO00000, ZERO00000,
+      ZERO0000, ZERO0000, 'u0:15:T', 'u6:18:T', 'u7:19:T', 'u8:20:T', 'u7:21:T',
+      ZERO0000, ZERO0000, 'u3:04:T', 'u0:05:T', 'u4:06:T', 'u3:09:T', ZERO00000,
+      ZERO0000, ZERO0000, 'u2:03:T', CENTERRRR, 'u5:07:T', 'u4:10:T', 'u2:14:T',
+      ZERO0000, ZERO0000, 'u1:02:T', 'u0:01:T', 'u6:08:T', 'u1:11:T', ZERO00000,
+      ZERO0000, ZERO0000, 'u0:16:T', 'u5:17:T', ZERO00000, 'u8:12:T', ZERO00000,
+      ZERO0000, ZERO0000, ZERO00000, ZERO00000, ZERO00000, 'u3:13:T', ZERO00000,
+    ]);
 
-    const id1Jwt = userIdGenerate('test');
+    const pieceMatchers = testUtil.array2PieceMatchers([
+      ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO,
+      ZERO, ZERO, 'u0', 'u6', 'u7', 'u7', 'u7',
+      ZERO, ZERO, 'u0', 'u3', 'u3', 'u3', ZERO,
+      ZERO, ZERO, 'u0', 'u2', 'u2', 'u2', 'u2',
+      ZERO, ZERO, 'u0', 'u1', 'u1', 'u3', ZERO,
+      ZERO, ZERO, 'u0', 'u5', ZERO, 'u3', ZERO,
+      ZERO, ZERO, ZERO, ZERO, ZERO, 'u3', ZERO,
+    ]);
+
+    const topScoreMatchers = testUtil.array2RankMatchers([
+      { rank: 1, user: 'u3', score: 6 },
+      { rank: 2, user: 'u0', score: 5 },
+      { rank: 3, user: 'u2', score: 4 },
+      { rank: 4, user: 'u7', score: 3 },
+      { rank: 5, user: 'u1', score: 2 },
+    ]);
 
     // When
-    const response = await chai.request(app)
-      .get(`${basePath}/topScore`)
-      .query({ number })
-      .set('Authorization', id1Jwt);
+    const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
+    const testPieces = await testUtil.setTesPieces(putPieces);
+    const boardPieces = await testUtil.getBoardPieces('u0');
+
+    // 上位何名まで反映するか
+    const rankNum = 5;
+    const topScore = await testUtil.getTopScore(rankNum, 'u0');
 
     // Then
-    expect(response.body).toEqual(expect.arrayContaining(matchers));
+    expect(testPieces).toHaveLength(putJucgeMatches.length);
+    testPieces.forEach((result, i) => {
+      expect(result).toEqual(putJucgeMatches[i]);
+    });
+
+    expect(boardPieces.pieces).toHaveLength(pieceMatchers.length);
+    expect(boardPieces.pieces).toEqual(expect.arrayContaining(pieceMatchers));
+
+    await sleep(5000); // 2000ミリ秒待機
+    const boardhistory = await testUtil.getBoardHistory();
+    expect(boardhistory).toHaveLength(testMatchesDB.length);
+
+    // matchesから
+    testMatchesDB.forEach((t) => {
+      expect(boardhistory).toContainEqual(expect.objectContaining({ piece: t.piece }));
+    });
+
+    expect(topScore).toHaveLength(topScoreMatchers.length);
+    expect(topScore).toEqual(expect.arrayContaining(topScoreMatchers));
+
+    // Finish
+    testUtil.testPostProcess();
   });
 });
