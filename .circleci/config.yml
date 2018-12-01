@@ -11,23 +11,24 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-{{ checksum "yarn.lock" }}
             - v1-dependencies-
 
-      - run: npm install
+      - run: yarn
 
       - save_cache:
           paths:
             - ~/.mongodb-binaries
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
 
-      - run: npm run lint
-      - run: npm test
+      - run: yarn lint
+      - run: yarn test:api
+      - run: yarn test:client
       - run:
           command: |
             if [ $CIRCLE_BRANCH = "master" ] ; then
-              npm run coverage
+              yarn coverage
             fi
 
   server_deploy:
@@ -54,7 +55,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-{{ checksum "yarn.lock" }}
             - v1-dependencies-
 
       - run: npm install
@@ -62,7 +63,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
 
       - run: npm run generate
       - run: sudo apt-get update
