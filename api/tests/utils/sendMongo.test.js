@@ -1,5 +1,6 @@
 const chai = require('chai');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const PieceStore = require('../../src/models/v2/PieceStore.js');
 const array2Pieces = require('../../src/utils/array2Pieces.js');
 const array2Matchers = require('../../src/utils/array2Matchers.js');
@@ -8,11 +9,8 @@ const storePlayHistory = require('../../src/utils/storePlayHistory');
 const restoreMongo = require('../../src/utils/restoreMongo.js');
 const sendMongo = require('../../src/utils/sendMongo.js');
 
-const {
-  prepareDB,
-  deleteAllDataFromDB,
-  stopDB,
-} = require('../../src/utils/db.js');
+// const { prepareDB, deleteAllDataFromDB, stopDB } = require('../../src/utils/db.js');
+const BoardHistoryModel = require('../../src/models/v2/BoardHistoryModel.js');
 
 const generateToken = require('../../src/routes/api/v2/userIdGenerate/generateToken');
 
@@ -42,9 +40,26 @@ function searchIndex(jwtIds, jwtId) {
 }
 
 describe('MongoDB', () => {
-  beforeAll(prepareDB);
-  afterEach(deleteAllDataFromDB);
-  afterAll(stopDB);
+  // beforeAll(prepareDB);
+  // afterEach(deleteAllDataFromDB);
+  // afterAll(stopDB);
+
+  let connection;
+
+  beforeAll(async () => {
+    connection = await mongoose.connect(
+      global.__MONGO_URI__,
+      { dbName: global.__MONGO_DB_NAME__ },
+    );
+  });
+
+  afterEach(async () => {
+    await BoardHistoryModel.remove();
+  });
+
+  afterAll(async () => {
+    await connection.close();
+  });
 
   // MongoDBのデータを残して次のテストを行う
   describe('piece', () => {
@@ -67,20 +82,39 @@ describe('MongoDB', () => {
       //       0  , 4:4,   5:5,  7:10,  8:11,
       // ]
 
-      const pieces = array2Pieces.array2Pieces(
-        [
-          `${jwtIds[11].decode}:17`, `${jwtIds[10].decode}:16`, `${jwtIds[14].decode}:22`, `${jwtIds[15].decode}:23`, `${jwtIds[9].decode}:13`,
-          `${jwtIds[7].decode}:18`, `${jwtIds[4].decode}:15`, `${jwtIds[7].decode}:19`, `${jwtIds[12].decode}:20`, `${jwtIds[4].decode}:12`,
-          `${jwtIds[5].decode}:8`, `${jwtIds[4].decode}:6`, `${jwtIds[5].decode}:7`, `${jwtIds[6].decode}:9`, `${jwtIds[9].decode}:14`,
-          `${jwtIds[1].decode}:1`, `${jwtIds[2].decode}:2`, `${jwtIds[1].decode}:3`, `${jwtIds[15].decode}:24`, `${jwtIds[13].decode}:21`,
-          0, `${jwtIds[4].decode}:4`, `${jwtIds[5].decode}:5`, `${jwtIds[7].decode}:10`, `${jwtIds[8].decode}:11`,
-        ],
-      );
+      const pieces = array2Pieces.array2Pieces([
+        `${jwtIds[11].decode}:17`,
+        `${jwtIds[10].decode}:16`,
+        `${jwtIds[14].decode}:22`,
+        `${jwtIds[15].decode}:23`,
+        `${jwtIds[9].decode}:13`,
+        `${jwtIds[7].decode}:18`,
+        `${jwtIds[4].decode}:15`,
+        `${jwtIds[7].decode}:19`,
+        `${jwtIds[12].decode}:20`,
+        `${jwtIds[4].decode}:12`,
+        `${jwtIds[5].decode}:8`,
+        `${jwtIds[4].decode}:6`,
+        `${jwtIds[5].decode}:7`,
+        `${jwtIds[6].decode}:9`,
+        `${jwtIds[9].decode}:14`,
+        `${jwtIds[1].decode}:1`,
+        `${jwtIds[2].decode}:2`,
+        `${jwtIds[1].decode}:3`,
+        `${jwtIds[15].decode}:24`,
+        `${jwtIds[13].decode}:21`,
+        0,
+        `${jwtIds[4].decode}:4`,
+        `${jwtIds[5].decode}:5`,
+        `${jwtIds[7].decode}:10`,
+        `${jwtIds[8].decode}:11`,
+      ]);
 
       // MongoDBに送るだけの処理
       for (let i = 0; i < pieces.length; i += 1) {
         const index = searchIndex(jwtIds, pieces[i].piece.userId);
-        await chai.request(app)
+        await chai
+          .request(app)
           .post(basePath)
           .set('content-type', 'application/x-www-form-urlencoded')
           .set('Authorization', jwtIds[index].jwtId)
@@ -110,15 +144,33 @@ describe('MongoDB', () => {
 
       // Piecesに復元した盤面と照合するための期待値(下部でmatchesDBに再度変換)
       // 復元するときにjudgePieceしているので、めくり終えたあとの盤面を再現
-      const matches = array2Matchers.array2Matchers(
-        [
-          `${jwtIds[11].decode}:17`, `${jwtIds[10].decode}:16`, `${jwtIds[14].decode}:22`, `${jwtIds[15].decode}:23`, `${jwtIds[9].decode}:13`,
-          `${jwtIds[7].decode}:18`, `${jwtIds[7].decode}:15`, `${jwtIds[7].decode}:19`, `${jwtIds[15].decode}:20`, `${jwtIds[9].decode}:12`,
-          `${jwtIds[5].decode}:8`, `${jwtIds[7].decode}:6`, `${jwtIds[7].decode}:7`, `${jwtIds[15].decode}:9`, `${jwtIds[9].decode}:14`,
-          `${jwtIds[1].decode}:1`, `${jwtIds[4].decode}:2`, `${jwtIds[7].decode}:3`, `${jwtIds[15].decode}:24`, `${jwtIds[13].decode}:21`,
-          0, `${jwtIds[4].decode}:4`, `${jwtIds[5].decode}:5`, `${jwtIds[7].decode}:10`, `${jwtIds[8].decode}:11`,
-        ],
-      );
+      const matches = array2Matchers.array2Matchers([
+        `${jwtIds[11].decode}:17`,
+        `${jwtIds[10].decode}:16`,
+        `${jwtIds[14].decode}:22`,
+        `${jwtIds[15].decode}:23`,
+        `${jwtIds[9].decode}:13`,
+        `${jwtIds[7].decode}:18`,
+        `${jwtIds[7].decode}:15`,
+        `${jwtIds[7].decode}:19`,
+        `${jwtIds[15].decode}:20`,
+        `${jwtIds[9].decode}:12`,
+        `${jwtIds[5].decode}:8`,
+        `${jwtIds[7].decode}:6`,
+        `${jwtIds[7].decode}:7`,
+        `${jwtIds[15].decode}:9`,
+        `${jwtIds[9].decode}:14`,
+        `${jwtIds[1].decode}:1`,
+        `${jwtIds[4].decode}:2`,
+        `${jwtIds[7].decode}:3`,
+        `${jwtIds[15].decode}:24`,
+        `${jwtIds[13].decode}:21`,
+        0,
+        `${jwtIds[4].decode}:4`,
+        `${jwtIds[5].decode}:5`,
+        `${jwtIds[7].decode}:10`,
+        `${jwtIds[8].decode}:11`,
+      ]);
 
       // MongoDB確認のため、matchesからstatus: falseのオブジェクトを抜いた配列
       const matchesDB = matches.filter(m => m.status === true);
