@@ -9,7 +9,7 @@ module.exports = {
   // globalTeardown: '<rootDir>/tests/teardown.js',
   // setupFiles: ['<rootDir>/tests/setup.js'],
   // testEnvironment: '<rootDir>/tests/mongo-environment.js',
-  testEnvironment: ' node',
+  testEnvironment: 'node',
   testPathIgnorePatterns: jestIgnore,
   transform: {}, // Disable .babelrc
 };
