@@ -1,8 +1,8 @@
-const fsPromises = require('fs').promises;
-const { resolve } = require('path');
+const fs = require('fs');
+const path = require('path');
 const NodeEnvironment = require('jest-environment-node');
 
-const globalConfigPath = resolve(__dirname, 'globalConfig.json');
+const globalConfigPath = path.resolve(__dirname, 'globalConfig.json');
 
 module.exports = class MongoEnvironment extends NodeEnvironment {
   // eslint-disable-next-line no-useless-constructor
@@ -14,7 +14,7 @@ module.exports = class MongoEnvironment extends NodeEnvironment {
     // eslint-disable-next-line no-console
     console.log('Setup MongoDB Test Environment');
 
-    const globalConfig = JSON.parse(await fsPromises.readFile(globalConfigPath, 'utf-8'));
+    const globalConfig = JSON.parse(fs.readFileSync(globalConfigPath, 'utf-8'));
 
     this.global.__MONGO_URI__ = globalConfig.mongoUri;
     this.global.__MONGO_DB_NAME__ = globalConfig.mongoDBName;
