@@ -2,7 +2,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/node:10.13
+      - image: circleci/node:10.14
 
     working_directory: ~/repo
 
@@ -14,11 +14,11 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
 
+      - run: rm -rf ~/.mongodb-binaries/
       - run: npm install
 
       - save_cache:
           paths:
-            - ~/.mongodb-binaries
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
