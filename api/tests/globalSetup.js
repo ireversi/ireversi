@@ -13,7 +13,7 @@ module.exports = async () => {
   }
 
   const mongoConfig = {
-    mongoDBName: 'jest',
+    mongoDBName: 'ireversi',
     mongoUri: await mongod.getConnectionString(),
   };
 

@@ -23,9 +23,9 @@ jobs:
           key: v1-dependencies-{{ checksum "yarn.lock" }}
 
       # - run: yarn lint
-      - run: yarn test:api api/tests/example.test.js
-      - run: yarn test:api api/tests/utils/sendMongo.test.js
+      - run: yarn jest api/tests/simple.test.js
       - run: yarn test:api
+      - run: yarn test:api api/tests/utils/sendMongo.test.js
       # - run: yarn test:client
       # - run:
       #     command: |

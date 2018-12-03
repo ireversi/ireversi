@@ -26,7 +26,7 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint:fix": "npm run lint -- --fix",
     "test": "npm-run-all --serial test:*",
-    "test:api": "jest --config api/jest.config.js --coverage --runInBand --forceExit",
+    "test:api": "jest --config api/jest.config.js",
     "test:api:watch": "npm run test:api -- --watch",
     "test:client": "jest --runInBand --forceExit",
     "test:client:watch": "npm run test:client -- --watch",
