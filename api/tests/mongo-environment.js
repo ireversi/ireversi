@@ -7,6 +7,7 @@ const globalConfigPath = path.resolve(__dirname, 'globalConfig.json');
 module.exports = class MongoEnvironment extends NodeEnvironment {
   // eslint-disable-next-line no-useless-constructor
   constructor(config) {
+    console.log(21);
     super(config);
   }
 
@@ -30,6 +31,7 @@ module.exports = class MongoEnvironment extends NodeEnvironment {
   }
 
   runScript(script) {
+    console.log(22);
     return super.runScript(script);
   }
 };

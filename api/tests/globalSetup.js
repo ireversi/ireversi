@@ -8,16 +8,25 @@ const mongod = new MongoMemoryServer({
 });
 
 module.exports = async () => {
+  console.log(11);
   if (!mongod.isRunning) {
+    console.log(12);
     await mongod.start();
   }
 
+  console.log(13);
   const mongoConfig = {
     mongoDBName: 'ireversi',
     mongoUri: await mongod.getConnectionString(),
   };
 
-  fs.writeFileSync(globalConfigPath, JSON.stringify(mongoConfig));
-  global.__MONGOD__ = mongod;
-  // process.env.MONGO_URL = mongoConfig.mongoUri;
+  console.log(14);
+  try {
+    fs.writeFileSync(globalConfigPath, JSON.stringify(mongoConfig));
+    global.__MONGOD__ = mongod;
+    // process.env.MONGO_URL = mongoConfig.mongoUri;
+  } catch (error) {
+    console.log(15);
+    console.log(error);
+  }
 };

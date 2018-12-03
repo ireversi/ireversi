@@ -9,7 +9,10 @@ describe('Example of Jest using Mongoose', () => {
   beforeAll(async () => {
     connection = await mongoose.connect(
       global.__MONGO_URI__,
-      { dbName: global.__MONGO_DB_NAME__ },
+      {
+        dbName: global.__MONGO_DB_NAME__,
+        useNewUrlParser: true,
+      },
     );
   });
 

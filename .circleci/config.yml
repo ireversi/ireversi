@@ -2,7 +2,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/node:10.14
+      - image: circleci/node:10.13
 
     working_directory: ~/repo
 
@@ -24,7 +24,8 @@ jobs:
 
       # - run: yarn lint
       - run: yarn jest -c api/test.jest.config.js api/tests/simple.test.js
-      - run: yarn jest -c api/jest.config.js api/tests/example.test.js
+      - run: yarn jest -c api/jest.config.js api/tests/simple.test.js
+      - run: yarn jest -c api/jest.config.js api/tests/example.test.js --forceExit
       - run: yarn test:api api/tests/utils/sendMongo.test.js
       # - run: yarn test:client
       # - run:
