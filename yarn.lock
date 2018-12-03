@@ -7368,7 +7368,7 @@ mongodb-memory-server@2.7.4:
     tmp "^0.0.33"
     uuid "^3.2.1"
 
-mongodb@3.1.10:
+mongodb@3.1.10, mongodb@^3.1.10:
   version "3.1.10"
   resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-3.1.10.tgz#45ad9b74ea376f4122d0881b75e5489b9e504ed7"
   integrity sha512-Uml42GeFxhTGQVml1XQ4cD0o/rp7J2ROy0fdYUcVitoE7vFqEhKH4TYVqRDpQr/bXtCJVxJdNQC1ntRxNREkPQ==
