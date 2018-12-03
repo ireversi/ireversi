@@ -3,20 +3,18 @@ const path = require('path');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const globalConfigPath = path.resolve(__dirname, 'globalConfig.json');
-const mongod = new MongoMemoryServer({
-  autoStart: true,
-});
+const mongod = new MongoMemoryServer();
 
 module.exports = async () => {
   console.log(11);
-  if (!mongod.isRunning) {
-    console.log(12);
-    try {
-      await mongod.start();
-    } catch (error) {
-      console.log(999, error);
-    }
-  }
+  // if (!mongod.isRunning) {
+  //   console.log(12);
+  //   try {
+  //     await mongod.start();
+  //   } catch (error) {
+  //     console.log(999, error);
+  //   }
+  // }
 
   console.log(13);
   const mongoConfig = {
