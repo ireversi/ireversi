@@ -45,7 +45,7 @@ jobs:
 
   client_deploy:
     docker:
-      - image: circleci/node:10.13
+      - image: circleci/node:10.14
 
     working_directory: ~/repo
 

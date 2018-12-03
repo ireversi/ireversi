@@ -21,7 +21,7 @@ const basePath = '/api/v2/piece/';
 
 function genJwtArr(number) {
   const jwtIds = [];
-  for (i = 0; i < number; i += 1) {
+  for (let i = 0; i < number; i += 1) {
     const jwtElm = {};
     const tempJwt = generateToken.generate();
     jwtElm.jwtId = tempJwt;

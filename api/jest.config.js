@@ -6,7 +6,7 @@ module.exports = {
   coverageDirectory: '../coverage',
   coveragePathIgnorePatterns: ['<rootDir>/tests', '<rootDir>/src/utils/db.js'],
   setupFiles: ['<rootDir>/tests/setup.js'],
-  setupTestFrameworkScriptFile: '<rootDir>/tests/settings.js',
+  setupTestFrameworkScriptFile: '<rootDir>/tests/config.js',
   testEnvironment: 'node',
   testPathIgnorePatterns: jestIgnore,
   transform: {}, // Disable .babelrc
