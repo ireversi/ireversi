@@ -1,4 +1,3 @@
-
 const testUtil = require('../../../../../src/utils/testUtil');
 
 const ZERO = 0;
@@ -13,10 +12,6 @@ describe('piece', () => {
   beforeAll(testUtil.prepareDB);
   afterEach(testUtil.deleteAllDataFromDB);
   afterAll(testUtil.stopDB);
-
-  beforeEach(() => {
-    jest.setTimeout(20000);
-  });
 
   describe('check board pieces', () => {
   // 置いた駒が全て取得できることを確認

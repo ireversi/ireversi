@@ -20,10 +20,6 @@ describe('score', () => {
   afterEach(testUtil.deleteAllDataFromDB);
   afterAll(testUtil.stopDB);
 
-  beforeEach(() => {
-    jest.setTimeout(20000);
-  });
-
   // 一つ駒を置く
   it('gets score', async () => {
     // Reset

@@ -28,7 +28,7 @@ module.exports = {
       },
     },
     {
-      files: ['**/tests/**/*.test.js'],
+      files: ['**/tests/**/*.test.js', 'api/tests/config.js'],
       env: {
         jest: true,
       },
