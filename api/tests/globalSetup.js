@@ -11,7 +11,11 @@ module.exports = async () => {
   console.log(11);
   if (!mongod.isRunning) {
     console.log(12);
-    await mongod.start();
+    try {
+      await mongod.start();
+    } catch (error) {
+      console.log(999, error);
+    }
   }
 
   console.log(13);
