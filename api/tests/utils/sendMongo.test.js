@@ -1,6 +1,6 @@
 const chai = require('chai');
 const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const PieceStore = require('../../src/models/v2/PieceStore.js');
 const array2Pieces = require('../../src/utils/array2Pieces.js');
 const array2Matchers = require('../../src/utils/array2Matchers.js');
@@ -9,8 +9,8 @@ const storePlayHistory = require('../../src/utils/storePlayHistory');
 const restoreMongo = require('../../src/utils/restoreMongo.js');
 const sendMongo = require('../../src/utils/sendMongo.js');
 
-// const { prepareDB, deleteAllDataFromDB, stopDB } = require('../../src/utils/db.js');
-const BoardHistoryModel = require('../../src/models/v2/BoardHistoryModel.js');
+const { prepareDB, deleteAllDataFromDB, stopDB } = require('../../src/utils/db.js');
+// const BoardHistoryModel = require('../../src/models/v2/BoardHistoryModel.js');
 
 const generateToken = require('../../src/routes/api/v2/userIdGenerate/generateToken');
 
@@ -40,26 +40,26 @@ function searchIndex(jwtIds, jwtId) {
 }
 
 describe('MongoDB', () => {
-  // beforeAll(prepareDB);
-  // afterEach(deleteAllDataFromDB);
-  // afterAll(stopDB);
+  beforeAll(prepareDB);
+  afterEach(deleteAllDataFromDB);
+  afterAll(stopDB);
 
-  let connection;
+  // let connection;
 
-  beforeAll(async () => {
-    connection = await mongoose.connect(
-      global.__MONGO_URI__,
-      { dbName: global.__MONGO_DB_NAME__ },
-    );
-  });
+  // beforeAll(async () => {
+  //   connection = await mongoose.connect(
+  //     global.__MONGO_URI__,
+  //     { dbName: global.__MONGO_DB_NAME__ },
+  //   );
+  // });
 
-  afterEach(async () => {
-    await BoardHistoryModel.remove();
-  });
+  // afterEach(async () => {
+  //   await BoardHistoryModel.remove();
+  // });
 
-  afterAll(async () => {
-    await connection.close();
-  });
+  // afterAll(async () => {
+  //   await connection.close();
+  // });
 
   // MongoDBのデータを残して次のテストを行う
   describe('piece', () => {
