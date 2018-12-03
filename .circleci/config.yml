@@ -24,8 +24,8 @@ jobs:
 
       - run: yarn lint
       - run: yarn test:api api/tests/utils/sendMongo.test.js --forceExit
-      # - run: yarn test:api
-      # - run: yarn test:client
+      - run: yarn test:api
+      - run: yarn test:client
       # - run:
       #     command: |
       #       if [ $CIRCLE_BRANCH = "master" ] ; then
