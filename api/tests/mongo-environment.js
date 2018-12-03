@@ -31,7 +31,7 @@ module.exports = class MongoEnvironment extends NodeEnvironment {
   }
 
   runScript(script) {
-    console.log(22);
+    // console.log(22);
     return super.runScript(script);
   }
 };
