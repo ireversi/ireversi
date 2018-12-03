@@ -14,17 +14,19 @@ jobs:
             - v1-dependencies-{{ checksum "yarn.lock" }}
             - v1-dependencies-
 
+      - run: rm -rf node_modules/
+      - run: rm -rf ~/.mongodb-binaries/
       - run: yarn
 
-      - save_cache:
-          paths:
-            - ~/.mongodb-binaries
-            - node_modules
-          key: v1-dependencies-{{ checksum "yarn.lock" }}
+      # - save_cache:
+      #     paths:
+      #       - ~/.mongodb-binaries
+      #       - node_modules
+      #     key: v1-dependencies-{{ checksum "yarn.lock" }}
 
       # - run: yarn lint
       - run: yarn jest -c api/test.jest.config.js api/tests/simple.test.js
-      - run: yarn jest -c api/jest.config.js api/tests/simple.test.js
+      - run: yarn jest -c api/jest.config.js api/tests/simple.test.js --forceExit
       - run: yarn jest -c api/jest.config.js api/tests/example.test.js --forceExit
       - run: yarn test:api api/tests/utils/sendMongo.test.js
       # - run: yarn test:client
