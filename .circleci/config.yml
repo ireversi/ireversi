@@ -2,7 +2,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/node:10.13
+      - image: circleci/node:10.14
 
     working_directory: ~/repo
 
@@ -22,14 +22,15 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "yarn.lock" }}
 
-      - run: yarn lint
-      - run: yarn test:api
-      - run: yarn test:client
-      - run:
-          command: |
-            if [ $CIRCLE_BRANCH = "master" ] ; then
-              yarn coverage
-            fi
+      - run: yarn test api/tests/utils/sendMongo.test.js --forceExitt
+      # - run: yarn lint
+      # - run: yarn test:api
+      # - run: yarn test:client
+      # - run:
+      #     command: |
+      #       if [ $CIRCLE_BRANCH = "master" ] ; then
+      #         yarn coverage
+      #       fi
 
   server_deploy:
     docker:

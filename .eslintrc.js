@@ -46,5 +46,11 @@ module.exports = {
         'no-undef': 0,
       },
     },
+    {
+      files: ['**/tests/**/*.js'],
+      rules: {
+        'no-underscore-dangle': 'off',
+      },
+    },
   ],
 };
