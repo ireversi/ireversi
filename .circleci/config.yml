@@ -15,7 +15,7 @@ jobs:
             - v1-dependencies-
 
       # - run: rm -rf node_modules/
-      # - run: rm -rf ~/.mongodb-binaries/
+      - run: rm -rf ~/.mongodb-binaries/
       - run: yarn
 
       - save_cache:
