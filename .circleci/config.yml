@@ -23,7 +23,7 @@ jobs:
           key: v1-dependencies-{{ checksum "yarn.lock" }}
 
       # - run: yarn lint
-      - run: yarn test:api api/tests/utils/sendMongo.test.js --forceExit
+      - run: yarn test:api api/tests/utils/sendMongo.test.js
       - run: yarn test:api
       # - run: yarn test:client
       # - run:

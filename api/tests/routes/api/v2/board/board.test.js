@@ -1,4 +1,3 @@
-
 const testUtil = require('../../../../../src/utils/testUtil');
 
 const ZERO = 0;
@@ -14,14 +13,10 @@ describe('piece', () => {
   afterEach(testUtil.deleteAllDataFromDB);
   afterAll(testUtil.stopDB);
 
-  beforeEach(() => {
-    jest.setTimeout(20000);
-  });
-
   describe('check board pieces', () => {
-  // 置いた駒が全て取得できることを確認
+    // 置いた駒が全て取得できることを確認
     it('gets all', async () => {
-    // Reset
+      // Reset
       testUtil.testPreProcess();
 
       // Given
@@ -29,19 +24,59 @@ describe('piece', () => {
       await testUtil.setTestUsers(userNumber);
 
       const putPieces = [
-        ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
-        ZERO00, 'u0:8', 'u1:1', 'u2:2', ZERO00,
-        ZERO00, 'u3:7', CENTER, 'u4:3', ZERO00,
-        ZERO00, 'u5:6', 'u6:5', 'u7:4', ZERO00,
-        ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        'u0:8',
+        'u1:1',
+        'u2:2',
+        ZERO00,
+        ZERO00,
+        'u3:7',
+        CENTER,
+        'u4:3',
+        ZERO00,
+        ZERO00,
+        'u5:6',
+        'u6:5',
+        'u7:4',
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
       ];
 
       const pieceMatchers = testUtil.array2PieceMatchers([
-        ZERO, ZERO, ZERO, ZERO, ZERO,
-        ZERO, 'u0', 'u1', 'u2', ZERO,
-        ZERO, 'u3', INIT, 'u4', ZERO,
-        ZERO, 'u5', 'u6', 'u7', ZERO,
-        ZERO, ZERO, ZERO, ZERO, ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        'u0',
+        'u1',
+        'u2',
+        ZERO,
+        ZERO,
+        'u3',
+        INIT,
+        'u4',
+        ZERO,
+        ZERO,
+        'u5',
+        'u6',
+        'u7',
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
       ]);
 
       // When
@@ -59,7 +94,7 @@ describe('piece', () => {
 
   describe('check board pieces and candidates', () => {
     it('gets pieces after turnover some pieces', async () => {
-    // Reset
+      // Reset
       testUtil.testPreProcess();
 
       // Given
@@ -67,27 +102,87 @@ describe('piece', () => {
       await testUtil.setTestUsers(userNumber);
 
       const putPieces = [
-        ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
-        ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
-        ZERO00, ZERO00, CENTER, ZERO00, ZERO00,
-        ZERO00, ZERO00, 'u0:1', ZERO00, ZERO00,
-        ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        CENTER,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        'u0:1',
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
+        ZERO00,
       ];
 
       const pieceMatchers = testUtil.array2PieceMatchers([
-        ZERO, ZERO, ZERO, ZERO, ZERO,
-        ZERO, ZERO, ZERO, ZERO, ZERO,
-        ZERO, ZERO, INIT, ZERO, ZERO,
-        ZERO, ZERO, 'u0', ZERO, ZERO,
-        ZERO, ZERO, ZERO, ZERO, ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        INIT,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        'u0',
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
       ]);
 
       const candidateMatchers = testUtil.array2CandidateMatchers([
-        ZERO, ZERO, ZERO, ZERO, ZERO,
-        ZERO, ZERO, 'u1', ZERO, ZERO,
-        ZERO, 'u1', ZERO, 'u1', ZERO,
-        ZERO, 'u1', ZERO, 'u1', ZERO,
-        ZERO, ZERO, 'u1', ZERO, ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        ZERO,
+        'u1',
+        ZERO,
+        ZERO,
+        ZERO,
+        'u1',
+        ZERO,
+        'u1',
+        ZERO,
+        ZERO,
+        'u1',
+        ZERO,
+        'u1',
+        ZERO,
+        ZERO,
+        ZERO,
+        'u1',
+        ZERO,
+        ZERO,
       ]);
 
       // When
@@ -109,7 +204,7 @@ describe('piece', () => {
 
   describe('the number of online users', () => {
     it('gets updated the number of online users every 2 seconds', async () => {
-    // Init
+      // Init
       testUtil.testPreProcess();
 
       // Given
@@ -133,7 +228,7 @@ describe('piece', () => {
     });
 
     it('is reset the number of online users after 4 seconds from last request', async () => {
-    // Init
+      // Init
       testUtil.testPreProcess();
 
       // Given

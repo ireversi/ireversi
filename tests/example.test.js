@@ -1,7 +1,5 @@
 const { getStore, build, teardown } = require('./setup.js');
 
-jest.setTimeout(30000);
-
 describe('Example: Vuex test', () => {
   let store;
 

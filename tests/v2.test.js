@@ -4,8 +4,6 @@ const { port } = require('../api/src/config.js');
 const { prepareDB, deleteAllDataFromDB, stopDB } = require('../api/src/utils/db.js');
 const PieceStore = require('../api/src/models/v2/PieceStore.js');
 
-jest.setTimeout(30000);
-
 describe('V2 test', () => {
   let store;
 
