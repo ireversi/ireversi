@@ -7,15 +7,8 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint',
   },
-  extends: [
-    // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
-    // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
-    'plugin:vue/essential',
-    'airbnb-base',
-  ],
-  // required to lint *.vue files
+  extends: ['plugin:vue/essential', 'airbnb-base'],
   plugins: ['vue'],
-  // add your custom rules here
   rules: {
     'no-await-in-loop': 0,
   },
@@ -35,15 +28,9 @@ module.exports = {
       },
     },
     {
-      files: ['tests/**/*.test.js'],
+      files: ['**/tests/**/*.test.js'],
       env: {
         jest: true,
-      },
-    },
-    {
-      files: ['api/tests/**/*.js'],
-      rules: {
-        'no-undef': 0,
       },
     },
   ],
