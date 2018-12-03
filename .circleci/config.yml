@@ -23,8 +23,8 @@ jobs:
           key: v1-dependencies-{{ checksum "yarn.lock" }}
 
       # - run: yarn lint
-      - run: yarn jest api/tests/simple.test.js
-      - run: yarn test:api
+      - run: yarn jest -c api/test.jest.config.js api/tests/simple.test.js
+      - run: yarn jest -c api/jest.config.js api/tests/example.test.js
       - run: yarn test:api api/tests/utils/sendMongo.test.js
       # - run: yarn test:client
       # - run:
