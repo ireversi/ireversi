@@ -4,7 +4,7 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 
 const globalConfigPath = path.resolve(__dirname, 'globalConfig.json');
 const mongod = new MongoMemoryServer({
-  autoStart: false,
+  autoStart: true,
 });
 
 module.exports = async () => {
