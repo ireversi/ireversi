@@ -14,13 +14,13 @@ commands:
   restore_npm:
     steps:
       - restore_cache:
-          name: Restore npm dependencies (Cache version {{ .Environment.CACHE_VERSION_NPM }})
-          key: npm-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION_NPM }}
+          name: Restore npm dependencies
+          key: npm-v1-{{ checksum "package.json" }}
   save_npm:
     steps:
       - save_cache:
           name: Cache npm dependencies
-          key: npm-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION_NPM }}
+          key: npm-v1-{{ checksum "package.json" }}
           paths:
             - ~/repo/node_modules
 
