@@ -1,76 +1,68 @@
-version: 2
-jobs:
-  test:
+version: 2.1
+
+executors:
+  default:
+    working_directory: ~/repo
     docker:
       - image: circleci/node:10.14
-
+  python:
     working_directory: ~/repo
+    docker:
+      - image: circleci/python:3.6.4
 
+commands:
+  restore_npm:
+    steps:
+      - restore_cache:
+          name: Restore npm dependencies
+          key: npm-v1-{{ checksum "package.json" }}
+  save_npm:
+    steps:
+      - save_cache:
+          name: Cache npm dependencies
+          key: npm-v1-{{ checksum "package.json" }}
+          paths:
+            - ~/repo/node_modules
+
+jobs:
+  test:
+    executor:
+      name: default
     steps:
       - checkout
-
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-
-      - run: rm -rf ~/.mongodb-binaries/
+      - restore_npm
       - run: npm install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-
+      - save_npm
       - run: npm run lint
       - run: npm test
       - run:
+          name: Coverage upload
           command: |
             if [ $CIRCLE_BRANCH = "master" ] ; then
               npm run coverage
             fi
-
   server_deploy:
-    docker:
-      - image: circleci/python:3.6.4
-
-    working_directory: ~/repo
-
+    executor:
+      name: python
     steps:
       - run: sudo pip install awscli
       - run:
+          name: Deploy API server
           command: |
             [ $CIRCLE_BRANCH = "master" ] && group=$AWS_PROD_GROUP || group=$AWS_STG_GROUP
             aws deploy create-deployment --application-name $AWS_APP_NAME --deployment-group-name $group --github-location repository="$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME",commitId="$CIRCLE_SHA1"
-
   client_deploy:
-    docker:
-      - image: circleci/node:10.14
-
-    working_directory: ~/repo
-
+    executor:
+      name: default
     steps:
       - checkout
-
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-
-      - run: npm install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-
+      - restore_npm
       - run: npm run generate
       - run: sudo apt-get update
       - run: sudo apt-get install -y awscli
       - run: aws s3 sync dist s3://$AWS_BUCKET --delete
 
 workflows:
-  version: 2
   test_and_staging:
     jobs:
       - test
