@@ -304,10 +304,10 @@ export default {
       return (position) => {
         // カーソルの下にあるpieceの座標
         const targetPos = {
-          x: Math.round((this.moveDist.x + position.x - this.$window.width / 2)
-                        / this.calcGridWidth()),
-          y: Math.round((this.moveDist.y - position.y + this.$window.height / 2)
-                        / this.calcGridWidth()),
+          x: (this.moveDist.x + position.x - this.$window.width / 2)
+                        / this.calcGridWidth(),
+          y: (this.moveDist.y - position.y + this.$window.height / 2)
+                        / this.calcGridWidth(),
         };
 
         // pieceの中心とカーソルの位置との差分
