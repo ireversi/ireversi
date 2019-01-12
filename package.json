@@ -37,7 +37,6 @@
     "@nuxtjs/google-analytics": "2.0.2",
     "@nuxtjs/toast": "3.0.1",
     "dotenv": "6.0.0",
-    "element-ui": "2.2.1",
     "express": "4.16.3",
     "jsonwebtoken": "8.3.0",
     "klaw-sync": "6.0.0",
