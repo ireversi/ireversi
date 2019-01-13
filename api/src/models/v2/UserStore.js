@@ -10,8 +10,10 @@ module.exports = {
     const User = new UserModel(userData);
     await User.save();
   },
-  DeleteUserData() {
+  async deleteAllUserData() {
     users.length = 0;
+    const User = new UserModel();
+    await User.remove();
   },
   initUserData(userMongo) {
     userMongo.forEach((elm) => {
@@ -19,20 +21,13 @@ module.exports = {
     });
     return true;
   },
-  getUserData() {
-    return users;
-  },
-  searchDuplication(userId) {
-    let dup = 0;
-    let flag = false;
-    users.forEach((elm) => {
-      if (elm.userId === userId) {
-        dup += 1;
-      }
-    });
-    if (dup > 0) {
-      flag = true;
-    }
-    return flag;
+  // getUserData() {
+  getUserData(user) {
+    if (user === undefined) { return users; }
+    if (user.userId) { return users.find(u => u.userId === user.userId); }
+    if (user.userName) { return users.find(u => u.userName === user.userName); }
+    if (user.accessToken) { return users.find(u => u.accessToken === user.accessToken); }
+    return null;
+    // return users;
   },
 };

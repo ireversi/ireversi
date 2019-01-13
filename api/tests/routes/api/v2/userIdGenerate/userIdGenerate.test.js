@@ -1,45 +1,72 @@
-const chai = require('chai');
-// const jwt = require('jsonwebtoken');
-const app = require('../../../../../src/routes/app.js');
-// const PieceStore = require('../../../../../src/models/v2/PieceStore.js');
-const generateToken = require('../../../../../src/routes/api/v2/userIdGenerate/generateToken');
-
-const basePath = '/api/v2';
-
-function userIdGenerate() {
-  const token = generateToken.generate();
-  return token;
-}
+const testUtil = require('../../../../../src/utils/testUtil');
 
 describe('userId generate', () => {
+  // set DB
+  beforeAll(testUtil.prepareDB);
+  afterEach(testUtil.deleteAllDataFromDB);
+  afterAll(testUtil.stopDB);
+
   // 一つ駒を置く
   it('generates userId and request userName', async () => {
+    // Reset
+    testUtil.testPreProcess();
+
     // Given
-    const userIdJwt = userIdGenerate();
-    const username = 'testuser';
+    const userNumber = 10;
+    await testUtil.setTestUsers(userNumber);
 
     // When
-    const response = await chai.request(app)
-      .post(`${basePath}/user_id_generate`)
-      .set('content-type', 'application/x-www-form-urlencoded')
-      .send({ username });
-      // Then
-    expect(response.body.accessToken.length).toEqual(userIdJwt.length);
+    const testUsers = testUtil.getAllTestUserInfo();
+
+    // Then
+    expect(testUsers.length).toEqual(userNumber);
+
+    // Finish
+    testUtil.testPostProcess();
   });
 
+  it('generates userId and request special userName', async () => {
+    // Reset
+    testUtil.testPreProcess();
 
-  it('generates userId and request invalid userName', async () => {
     // Given
-    const username = 'test-kimkim';
+    const userList = [
+      'testuser1',
+      'testuser2',
+      'testuser3',
+      'testuser4',
+      'testuser5',
+    ];
+    await testUtil.setTestUsers(userList);
 
     // When
-    const response = await chai.request(app)
-      .post(`${basePath}/user_id_generate`)
-      .set('content-type', 'application/x-www-form-urlencoded')
-      .send({ username });
-      // Then
-    expect(response.body.accessToken).toEqual(null);
-    expect(response.body.userId).toEqual(null);
-    expect(response.body.username).toEqual(null);
+    const testUsers = testUtil.getAllTestUserInfo();
+
+    // Then
+    expect(testUsers.length).toEqual(userList.length);
+
+    // Finish
+    testUtil.testPostProcess();
+  });
+
+  it('generates userId and request invalid userName', async () => {
+    // Reset
+    testUtil.testPreProcess();
+
+    // Given
+    const userList = [
+      'TestUser',
+      'test-user',
+    ];
+    await testUtil.setTestUsers(userList);
+
+    // When
+    const testUsers = testUtil.getAllTestUserInfo();
+
+    // Then
+    expect(testUsers.length).toEqual(0);
+
+    // Finish
+    testUtil.testPostProcess();
   });
 });

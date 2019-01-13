@@ -21,9 +21,9 @@ const basePath = '/api/v2/piece/';
 
 function genJwtArr(number) {
   const jwtIds = [];
-  for (i = 0; i < number; i += 1) {
+  for (let i = 0; i < number; i += 1) {
     const jwtElm = {};
-    tempJwt = generateToken.generate();
+    const tempJwt = generateToken.generate();
     jwtElm.jwtId = tempJwt;
     jwtElm.decode = jwt.decode(tempJwt).userId;
     jwtIds.push(jwtElm);
@@ -51,7 +51,7 @@ describe('MongoDB', () => {
     // さらに多くのコマでテスト
     it('cannot be put on the same place3', async () => {
       // Reset
-      await chai.request(app).delete(`${basePath}`);
+      await chai.request(app).delete(basePath);
       await Promise.all([PieceStore.deletePieces(), storePlayHistory.deleteStandbySendMongo()]);
 
       // Mongoに送信開始
@@ -81,7 +81,7 @@ describe('MongoDB', () => {
       for (let i = 0; i < pieces.length; i += 1) {
         const index = searchIndex(jwtIds, pieces[i].piece.userId);
         await chai.request(app)
-          .post(`${basePath}`)
+          .post(basePath)
           .set('content-type', 'application/x-www-form-urlencoded')
           .set('Authorization', jwtIds[index].jwtId)
           .send(pieces[i].piece);
@@ -99,7 +99,7 @@ describe('MongoDB', () => {
       ここからサーバ・DBに再接続して、期待値を与えテストする
         */
 
-      await chai.request(app).delete(`${basePath}`);
+      await chai.request(app).delete(basePath);
 
       // When
       // MongoDBから値を取得して、judgePieceして、Piecesに入っていく

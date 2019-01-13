@@ -10,7 +10,7 @@ function searchUserName(userId) {
       name = 'origin';
     }
     if (elm.userId === userId) {
-      name = elm.username;
+      name = elm.userName;
     }
   });
   return name;
@@ -28,7 +28,7 @@ function convertRanking(result, number) {
   // userIdの各々について検索。score計算。
   idsArr.forEach(async (elm) => {
     let score = 0;
-    const username = searchUserName(elm);
+    const userName = searchUserName(elm);
     result.forEach((cnt) => {
       if (elm === cnt) {
         score += 1;
@@ -37,7 +37,7 @@ function convertRanking(result, number) {
     const idscore = {
       userId: elm,
       score,
-      username,
+      userName,
     };
     scores.push(idscore);
   });

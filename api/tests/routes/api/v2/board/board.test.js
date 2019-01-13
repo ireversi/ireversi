@@ -1,157 +1,154 @@
-const chai = require('chai');
-const jwt = require('jsonwebtoken');
-const app = require('../../../../../src/routes/app.js');
-const PieceStore = require('../../../../../src/models/v2/PieceStore.js');
-const generateToken = require('../../../../../src/routes/api/v2/userIdGenerate/generateToken');
+const testUtil = require('../../../../../src/utils/testUtil');
 
-const basePath = '/api/v2/board';
-const zero = 0;
+const ZERO = 0;
+const ZERO00 = 0;
+const INIT = 1;
+const CENTER = 0;
 
-function userIdGenerate() {
-  const token = generateToken.generate();
-  return token;
-}
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
-function jwtDecode(token) {
-  decoded = jwt.decode(token);
-  return decoded;
-}
+describe('piece', () => {
+  // set DB
+  beforeAll(testUtil.prepareDB);
+  afterEach(testUtil.deleteAllDataFromDB);
+  afterAll(testUtil.stopDB);
 
-function convertComparisonResult(result) {
-  const fPieces = [];
-  const size = Math.sqrt(result.length);
-  for (let i = 0; i < result.length; i += 1) {
-    if (result[i] !== 0) {
-      const x = Math.floor(i % size);
-      const y = Math.floor(i / size);
-      let userId = 0;
-      if (result[i] === 'I') {
-        userId = 1;
-      } else {
-        userId = result[i];
-      }
-      const piece = {
-        x,
-        y,
-        userId,
-      };
-      fPieces.push(piece);
-    }
-  }
-  return fPieces;
-}
+  describe('check board pieces', () => {
+  // 置いた駒が全て取得できることを確認
+    it('gets all', async () => {
+    // Reset
+      testUtil.testPreProcess();
 
-function convertComparisonMatchers(result, idSl) {
-  // 他のテストと違って原点を中心にずらしている。
-  const fPieces = [];
-  const size = Math.sqrt(result.length);
-  const half = Math.floor(size / 2);
-  for (let i = 0; i < result.length; i += 1) {
-    if (result[i] === idSl) {
-      const piece = {
-        x: Math.floor(i % size) - half,
-        y: Math.floor(i / size) - half,
-      };
-      fPieces.push(piece);
-    }
-  }
-  return fPieces;
-}
+      // Given
+      const userNumber = 10;
+      await testUtil.setTestUsers(userNumber);
 
-describe('board', () => {
-  // 一つ駒を置く
-  it('gets all', async () => {
-    await chai.request(app).delete(`${basePath}`);
-    PieceStore.initPieces();
+      const putPieces = [
+        ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
+        ZERO00, 'u0:8', 'u1:1', 'u2:2', ZERO00,
+        ZERO00, 'u3:7', CENTER, 'u4:3', ZERO00,
+        ZERO00, 'u5:6', 'u6:5', 'u7:4', ZERO00,
+        ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
+      ];
 
-    // Given
-    const idSelectedJwt = userIdGenerate();
-    const idSl = jwtDecode(idSelectedJwt).userId;
-    const id1 = jwtDecode(userIdGenerate()).userId;
-    const id2 = jwtDecode(userIdGenerate()).userId;
-    const id3 = jwtDecode(userIdGenerate()).userId;
-    const id4 = jwtDecode(userIdGenerate()).userId;
-    const id5 = jwtDecode(userIdGenerate()).userId;
-    const id6 = jwtDecode(userIdGenerate()).userId;
+      const pieceMatchers = testUtil.array2PieceMatchers([
+        ZERO, ZERO, ZERO, ZERO, ZERO,
+        ZERO, 'u0', 'u1', 'u2', ZERO,
+        ZERO, 'u3', INIT, 'u4', ZERO,
+        ZERO, 'u5', 'u6', 'u7', ZERO,
+        ZERO, ZERO, ZERO, ZERO, ZERO,
+      ]);
 
-    // "I"は初期化した時の最初のピース
-    const result = [
-      'I', idSl, zero, zero, zero,
-      zero, idSl, id1, idSl, zero,
-      id2, id3, id4, id5, idSl,
-      zero, id6, zero, id1, zero,
-      zero, zero, zero, zero, zero,
-    ];
-    const matchers = convertComparisonResult(result);
-    const size = Math.sqrt(result.length);
+      // When
+      await testUtil.setTesPieces(putPieces);
+      const boardPieces = await testUtil.getBoardPieces('u0');
 
-    result.forEach((elm, index) => {
-      if (elm !== 0 && elm !== 'I') {
-        const ans = {
-          x: Math.floor(index % size),
-          y: Math.floor(index / size),
-          userId: elm,
-        };
-        PieceStore.addPiece(ans);
-      }
+      // Then
+      expect(boardPieces.pieces).toHaveLength(pieceMatchers.length);
+      expect(boardPieces.pieces).toEqual(expect.arrayContaining(pieceMatchers));
+
+      // Finish
+      testUtil.testPostProcess();
     });
-
-    // When
-    const response = await chai.request(app)
-      .get(`${basePath}`)
-      .set('Authorization', idSelectedJwt);
-
-    // Then
-    expect(response.body.pieces).toHaveLength(matchers.length);
-    expect(response.body.pieces).toEqual(expect.arrayContaining(matchers));
   });
-});
 
-describe('board after turnover', () => {
-  // 一つ駒を置く
-  it('gets pieces after turnover some pieces', async () => {
-    await chai.request(app).delete(`${basePath}`);
-    PieceStore.deletePieces();
+  describe('check board pieces and candidates', () => {
+    it('gets pieces after turnover some pieces', async () => {
+    // Reset
+      testUtil.testPreProcess();
 
-    // Given
+      // Given
+      const userNumber = 10;
+      await testUtil.setTestUsers(userNumber);
 
-    // 2nd piece set
-    const id1Jwt = userIdGenerate();
-    const id1 = jwtDecode(id1Jwt).userId;
-    const resultFol = [
-      zero, zero, zero, zero,
-      id1, zero, zero, zero,
-      zero, zero, zero, zero,
-      zero, zero, zero, zero,
-    ];
-    // second_pieceを取り込み
-    const sizeFol = Math.sqrt(resultFol.length);
-    resultFol.forEach((elm, index) => {
-      if (elm !== 0) {
-        const ans = {
-          x: Math.floor(index % sizeFol),
-          y: Math.floor(index / sizeFol),
-          userId: elm,
-        };
-        PieceStore.addPiece(ans);
-      }
+      const putPieces = [
+        ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
+        ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
+        ZERO00, ZERO00, CENTER, ZERO00, ZERO00,
+        ZERO00, ZERO00, 'u0:1', ZERO00, ZERO00,
+        ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
+      ];
+
+      const pieceMatchers = testUtil.array2PieceMatchers([
+        ZERO, ZERO, ZERO, ZERO, ZERO,
+        ZERO, ZERO, ZERO, ZERO, ZERO,
+        ZERO, ZERO, INIT, ZERO, ZERO,
+        ZERO, ZERO, 'u0', ZERO, ZERO,
+        ZERO, ZERO, ZERO, ZERO, ZERO,
+      ]);
+
+      const candidateMatchers = testUtil.array2CandidateMatchers([
+        ZERO, ZERO, ZERO, ZERO, ZERO,
+        ZERO, ZERO, 'u1', ZERO, ZERO,
+        ZERO, 'u1', ZERO, 'u1', ZERO,
+        ZERO, 'u1', ZERO, 'u1', ZERO,
+        ZERO, ZERO, 'u1', ZERO, ZERO,
+      ]);
+
+      // When
+      await testUtil.setTesPieces(putPieces);
+      const boardPieces = await testUtil.getBoardPieces('u1');
+
+      // Then
+      // 置かれた駒のチェック
+      expect(boardPieces.pieces).toHaveLength(pieceMatchers.length);
+      expect(boardPieces.pieces).toEqual(expect.arrayContaining(pieceMatchers));
+      // セットされたtestUserに対する駒を置ける場所のチェック
+      expect(boardPieces.candidates).toHaveLength(candidateMatchers.length);
+      expect(boardPieces.candidates).toEqual(expect.arrayContaining(candidateMatchers));
+
+      // Finish
+      testUtil.testPostProcess();
     });
-    const idSelectedJwt = userIdGenerate();
-    const idSl = jwtDecode(idSelectedJwt).userId;
-    const matchers = convertComparisonMatchers([
-      zero, zero, zero, zero, zero,
-      zero, zero, idSl, zero, zero,
-      zero, idSl, 'I', idSl, zero,
-      zero, idSl, id1, idSl, zero,
-      zero, zero, idSl, zero, zero,
-    ], idSl);
+  });
 
-    // When
-    const response = await chai.request(app)
-      .get(`${basePath}`)
-      .set('Authorization', idSelectedJwt);
-    // Then
-    expect(response.body.candidates).toHaveLength(matchers.length);
-    expect(response.body.candidates).toEqual(expect.arrayContaining(matchers));
+  describe('the number of online users', () => {
+    it('gets updated the number of online users every 2 seconds', async () => {
+    // Init
+      testUtil.testPreProcess();
+
+      // Given
+      const userNumber = 10;
+      await testUtil.setTestUsers(userNumber);
+      const time = 2000;
+
+      for (let i = 0; i < userNumber; i += 1) {
+        await testUtil.getBoardPieces(`u${String(i)}`);
+      }
+
+      // When
+      await sleep(time);
+      const boardPieces = await testUtil.getBoardPieces('u0');
+
+      // Then
+      expect(boardPieces.userCounts).toEqual(userNumber);
+
+      // Finish
+      testUtil.testPostProcess();
+    });
+
+    it('is reset the number of online users after 4 seconds from last request', async () => {
+    // Init
+      testUtil.testPreProcess();
+
+      // Given
+      const userNumber = 10;
+      await testUtil.setTestUsers(userNumber);
+      const time = 4000;
+
+      for (let i = 0; i < userNumber; i += 1) {
+        await testUtil.getBoardPieces(`u${String(i)}`);
+      }
+
+      // When
+      await sleep(time);
+      const boardPieces = await testUtil.getBoardPieces('u9');
+
+      // Then
+      expect(boardPieces.userCounts).toEqual(0);
+
+      // Finish
+      testUtil.testPostProcess();
+    });
   });
 });

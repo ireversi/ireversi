@@ -116,6 +116,14 @@ module.exports = {
   deleteCandidates() {
     board.candidates.length = 0;
   },
+  resetAllData() {
+    board.pieces.clear();
+    board.standbys.length = 0;
+    board.candidates.length = 0;
+    board.score = 0;
+    board.size = {};
+    this.initPieces(); // 初期値を置く
+  },
   getPieces() {
     const pieces = [...board.pieces];
     for (let i = 0; i < pieces.length; i += 1) {
@@ -138,6 +146,7 @@ module.exports = {
         const remaining = StandbyStore.getRemaining(stbs[i].created);
         if (remaining <= 0) {
           board.standbys.splice(i, 1);
+          i -= 1;
         } else {
           board.standbys[i].remaining = remaining;
         }
