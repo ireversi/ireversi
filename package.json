@@ -1,6 +1,6 @@
 {
   "name": "ireversi",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Infinite Reversi",
   "repository": "https://github.com/ireversi/ireversi.git",
   "author": "m-mitsuhide",
