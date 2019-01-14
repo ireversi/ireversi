@@ -4,7 +4,7 @@ executors:
   default:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:10.14
+      - image: circleci/node:10.15
   python:
     working_directory: ~/repo
     docker:
