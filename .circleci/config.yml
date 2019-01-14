@@ -51,16 +51,6 @@ jobs:
           command: |
             [ $CIRCLE_BRANCH = "master" ] && group=$AWS_PROD_GROUP || group=$AWS_STG_GROUP
             aws deploy create-deployment --application-name $AWS_APP_NAME --deployment-group-name $group --github-location repository="$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME",commitId="$CIRCLE_SHA1"
-  client_deploy:
-    executor:
-      name: default
-    steps:
-      - checkout
-      - restore_npm
-      - run: npm run generate
-      - run: sudo apt-get update
-      - run: sudo apt-get install -y awscli
-      - run: aws s3 sync dist s3://$AWS_BUCKET --delete
 
 workflows:
   test_and_staging:
@@ -74,9 +64,3 @@ workflows:
               only:
                 - master
                 - develop
-      - client_deploy:
-          requires:
-            - test
-          filters:
-            branches:
-              only: master
