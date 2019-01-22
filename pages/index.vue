@@ -48,17 +48,18 @@
         />
 
         <!-- デバッグ用座標表示 -->
-        <text
-          v-for="(piece, i) in pieces"
-          v-if="!productionCheck"
-          :key="'text' + i"
-          :x="calcObjPos(piece).x"
-          :y="calcObjPos(piece).y"
-          :font-size="calcGridWidth() * 0.2"
-          style="fill: #fff; text-anchor: middle; dominant-baseline: central"
-        >
-          {{ piece.x }}, {{  piece.y }}
-        </text>
+        <template v-if="!productionCheck">
+          <text
+            v-for="(piece, i) in pieces"
+            :key="'text' + i"
+            :x="calcObjPos(piece).x"
+            :y="calcObjPos(piece).y"
+            :font-size="calcGridWidth() * 0.2"
+            style="fill: #fff; text-anchor: middle; dominant-baseline: central"
+          >
+            {{ piece.x }}, {{  piece.y }}
+          </text>
+        </template>
 
         <circle
           class="candidate"
@@ -86,7 +87,6 @@
       </svg>
       <Ranking />
       <Question  @open="openDeveloperInfo"/>
-      <!-- <LoadingIcon :loading="loading" /> -->
     </div>
     <div v-if="DeveloperInfo">
       <AboutDevelopers @close="closeDeveloperInfo"/>
@@ -98,7 +98,6 @@
 import Modal from '~/components/Modal.vue';
 import UserNameInput from '~/components/UserNameInput.vue';
 import Ranking from '~/components/Ranking.vue';
-import LoadingIcon from '~/components/LoadingIcon.vue';
 import Question from '~/components/Question.vue';
 import AboutDevelopers from '~/components/AboutDevelopers.vue';
 
@@ -124,7 +123,6 @@ export default {
   components: {
     Modal,
     Ranking,
-    LoadingIcon,
     UserNameInput,
     Question,
     AboutDevelopers,
