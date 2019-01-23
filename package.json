@@ -10,10 +10,9 @@
     "node": ">=10.13.0"
   },
   "scripts": {
-    "start": "npm run server",
-    "server": "node api/src/server.js",
+    "start": "node api/src/server.js",
     "dev": "npm-run-all --parallel dev:*",
-    "dev:api": "nodemon --watch api/src --watch api/swagger --ext js,yml --exec \"npm run server\"",
+    "dev:api": "nodemon",
     "dev:client": "nuxt",
     "deploy": "pm2 start api/src/server.js --name api",
     "restart": "pm2 restart api",
@@ -66,6 +65,14 @@
     "lint-staged": "8.1.0",
     "nodemon": "1.18.9",
     "npm-run-all": "4.1.5"
+  },
+  "nodemonConfig": {
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "ext": "js,yml",
+    "ignore": ["api/tests/", "api/jest.config.js"],
+    "watch": ["api/"]
   },
   "husky": {
     "hooks": {
