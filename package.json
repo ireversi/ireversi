@@ -67,13 +67,14 @@
     "nodemon": "1.18.9",
     "npm-run-all": "4.1.5"
   },
-  "nodemonConfig": {
+  "babel": {
     "env": {
-      "NODE_ENV": "development"
-    },
-    "ext": "js,yml",
-    "ignore": ["api/tests/", "api/jest.config.js"],
-    "watch": ["api/"]
+      "test": {
+        "presets": [
+          "env"
+        ]
+      }
+    }
   },
   "husky": {
     "hooks": {
@@ -83,6 +84,19 @@
   "lint-staged": {
     "*.{js,vue}": [
       "eslint -f codeframe"
+    ]
+  },
+  "nodemonConfig": {
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "ext": "js,yml",
+    "ignore": [
+      "api/tests/",
+      "api/jest.config.js"
+    ],
+    "watch": [
+      "api/"
     ]
   }
 }
