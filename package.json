@@ -10,27 +10,27 @@
     "node": ">=10.13.0"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=production npm run server",
-    "server": "node api/src/server.js",
+    "start": "node api/src/server.js",
     "dev": "npm-run-all --parallel dev:*",
-    "dev:api": "cross-env NODE_ENV=development nodemon --watch api/src --watch api/swagger --ext js,yml --exec \"npm run server\"",
-    "dev:client": "nuxt",
-    "deploy": "cross-env NODE_ENV=production pm2 start api/src/server.js --name api",
-    "restart": "pm2 restart api",
-    "stop": "pm2 stop api",
-    "delete": "pm2 delete api",
-    "update": "pm2 update",
-    "logs": "pm2 logs",
-    "monit": "pm2 monit",
-    "generate": "cross-env NODE_ENV=production nuxt generate",
+    "dev:api": "nodemon",
+    "dev:web": "nuxt",
+    "deploy": "pm2 start api/src/server.js --name api",
+    "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint:fix": "npm run lint -- --fix",
     "test": "npm-run-all --serial test:*",
     "test:api": "jest --config api/jest.config.js --coverage",
     "test:api:watch": "npm run test:api -- --watch",
-    "test:client": "jest --runInBand --forceExit",
-    "test:client:watch": "npm run test:client -- --watch",
-    "coverage": "codecov"
+    "test:web": "jest --runInBand --forceExit",
+    "test:web:watch": "npm run test:web -- --watch",
+    "coverage": "codecov",
+    "ps:restart": "pm2 restart api",
+    "ps:stop": "pm2 stop api",
+    "ps:delete": "pm2 delete api",
+    "ps:list": "pm2 list",
+    "ps:log": "pm2 logs",
+    "ps:monit": "pm2 monit",
+    "ps:update": "pm2 update"
   },
   "dependencies": {
     "@nuxtjs/axios": "5.3.6",
@@ -56,7 +56,6 @@
     "chai": "4.2.0",
     "chai-http": "4.2.1",
     "codecov": "3.1.0",
-    "cross-env": "5.2.0",
     "eslint": "5.12.1",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-loader": "2.1.1",
@@ -68,6 +67,15 @@
     "nodemon": "1.18.9",
     "npm-run-all": "4.1.5"
   },
+  "babel": {
+    "env": {
+      "test": {
+        "presets": [
+          "env"
+        ]
+      }
+    }
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -76,6 +84,19 @@
   "lint-staged": {
     "*.{js,vue}": [
       "eslint -f codeframe"
+    ]
+  },
+  "nodemonConfig": {
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "ext": "js,yml",
+    "ignore": [
+      "api/tests/",
+      "api/jest.config.js"
+    ],
+    "watch": [
+      "api/"
     ]
   }
 }

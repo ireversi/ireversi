@@ -5,24 +5,20 @@ executors:
     working_directory: ~/repo
     docker:
       - image: circleci/node:10.15
-  python:
-    working_directory: ~/repo
-    docker:
-      - image: circleci/python:3.6.4
 
 commands:
   restore_npm:
     steps:
       - restore_cache:
           name: Restore npm dependencies
-          key: npm-v1-{{ checksum "package.json" }}
+          key: yarn-packages-v1-{{ checksum "yarn.lock" }}
   save_npm:
     steps:
       - save_cache:
           name: Cache npm dependencies
-          key: npm-v1-{{ checksum "package.json" }}
+          key: yarn-packages-v1-{{ checksum "yarn.lock" }}
           paths:
-            - ~/repo/node_modules
+            - ~/.cache/yarn
 
 jobs:
   test:
@@ -31,21 +27,31 @@ jobs:
     steps:
       - checkout
       - restore_npm
-      - run: npm install
-      - save_npm
-      - run: npm run lint
-      - run: npm test
       - run:
-          name: Coverage upload
-          command: |
-            if [ $CIRCLE_BRANCH = "master" ] ; then
-              npm run coverage
-            fi
-  server_deploy:
+          name: Install npm dependencies
+          command: yarn install
+      - save_npm
+      - run:
+          name: Run lint
+          command: yarn lint
+      - run:
+          name: Run test
+          command: yarn test
+      - run:
+          name: Run a security audit
+          command: yarn audit
+      - run:
+          name: Report coverage results
+          command: yarn coverage
+  deploy_api:
     executor:
-      name: python
+      name: default
     steps:
-      - run: sudo pip install awscli
+      - run:
+          name: Install AWS CLI
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y awscli
       - run:
           name: Deploy API server
           command: |
@@ -53,10 +59,10 @@ jobs:
             aws deploy create-deployment --application-name $AWS_APP_NAME --deployment-group-name $group --github-location repository="$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME",commitId="$CIRCLE_SHA1"
 
 workflows:
-  test_and_staging:
+  test_and_deploy:
     jobs:
       - test
-      - server_deploy:
+      - deploy_api:
           requires:
             - test
           filters:
