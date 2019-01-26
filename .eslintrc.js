@@ -7,24 +7,24 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint',
   },
-  extends: ['plugin:vue/essential', 'airbnb-base'],
-  plugins: ['vue'],
+  extends: ['airbnb-base', 'plugin:vue/essential', 'plugin:prettier/recommended'],
+  plugins: ['vue', 'prettier'],
   rules: {
-    'no-await-in-loop': 0,
+    'no-await-in-loop': 'off',
   },
   overrides: [
     {
       files: ['*.{js,vue}'],
       rules: {
-        'import/no-unresolved': 0,
-        'import/no-extraneous-dependencies': 0,
+        'import/no-unresolved': 'off',
+        'import/no-extraneous-dependencies': 'off',
       },
     },
     {
       files: ['store/**/*.js'],
       rules: {
-        'no-shadow': 0,
-        'no-param-reassign': 0,
+        'no-shadow': 'off',
+        'no-param-reassign': 'off',
       },
     },
     {
