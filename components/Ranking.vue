@@ -25,11 +25,7 @@ import { mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState([
-      'score',
-      'userCounts',
-      'topScores',
-    ]),
+    ...mapState(['score', 'userCounts', 'topScores']),
     rankingColor() {
       return (i) => {
         if (i === 1) {
@@ -49,7 +45,7 @@ export default {
 </script>
 
 <style scoped>
-.ranking{
+.ranking {
   background: rgba(0, 40, 20, 0.8);
   width: 300px;
   position: fixed;
@@ -60,7 +56,7 @@ export default {
 
 .ranking > div {
   width: 100%;
-  display:flex;
+  display: flex;
   text-align: center;
   line-height: 40px;
   height: 40px;
@@ -84,7 +80,7 @@ export default {
 }
 
 .num {
-  display:inline-block;
+  display: inline-block;
   transform: rotate(-45deg);
 }
 
@@ -103,8 +99,8 @@ export default {
   border-top: 1px solid #fff;
 }
 
-@media screen and (max-width: 800px){
-  .ranking{
+@media screen and (max-width: 800px) {
+  .ranking {
     width: 150px;
   }
   .ranking > div {

@@ -10,20 +10,9 @@ const board = {
   size: {},
 };
 
-const dirXY = [
-  [0, 1],
-  [1, 0],
-  [0, -1],
-  [-1, 0],
-];
+const dirXY = [[0, 1], [1, 0], [0, -1], [-1, 0]];
 
-const dirAll = [
-  ...dirXY,
-  [-1, 1],
-  [1, 1],
-  [1, -1],
-  [-1, -1],
-];
+const dirAll = [...dirXY, [-1, 1], [1, 1], [1, -1], [-1, -1]];
 
 const waitTime = StandbyStore.getWaitTime();
 
@@ -50,17 +39,21 @@ module.exports = {
     // 盤面に自分と同じ ID のコマが存在するか判定
     if ([...board.pieces.values()].indexOf(userId) < 0) {
       // 存在しない場合 : 置きたいマスの上下左右にコマが存在するか判定
-      status = (dirXY.reduce((acc, cv) => {
-        const result = board.pieces.has([x + cv[0], y + cv[1]].join()) ? acc + 1 : acc;
-        return result;
-      }, 0) > 0);
+      status =
+        dirXY.reduce((acc, cv) => {
+          const result = board.pieces.has([x + cv[0], y + cv[1]].join()) ? acc + 1 : acc;
+          return result;
+        }, 0) > 0;
       if (status) board.pieces.set(coordinate, userId);
     } else {
       // 存在する場合 : 置きたいマスの周囲 8 方向に自分のコマにできるコマが存在するか判定
-      const coordinates = dirAll.reduce((acc, cv) => {
-        const result = acc.concat(judgeDirection(x, y, userId, cv));
-        return result;
-      }, [[x, y]]);
+      const coordinates = dirAll.reduce(
+        (acc, cv) => {
+          const result = acc.concat(judgeDirection(x, y, userId, cv));
+          return result;
+        },
+        [[x, y]],
+      );
       if (coordinates.length > 1) {
         for (let i = 0; i < coordinates.length; i += 1) {
           board.pieces.set([coordinates[i][0], coordinates[i][1]].join(), userId);
@@ -69,7 +62,8 @@ module.exports = {
       }
     }
     this.addSize(); // コマを置くと同時にsizeを増やす
-    if (status && !restore) { // mongoで復元するときには追加しない
+    if (status && !restore) {
+      // mongoで復元するときには追加しない
       storeHistory.addPieceMongo(x, y, userId, created); // プレイ情報をMongo準備に送信
     }
     return status;
@@ -92,19 +86,20 @@ module.exports = {
     const coordinate = [...board.pieces.keys()].pop().split(',');
     const x = +coordinate[0];
     const y = +coordinate[1];
-    board.size = Object.keys(board.size).length === 0
-      ? {
-        xMin: x,
-        xMax: x,
-        yMin: y,
-        yMax: y,
-      }
-      : {
-        xMin: Math.min(board.size.xMin, x),
-        xMax: Math.max(board.size.xMax, x),
-        yMin: Math.min(board.size.yMin, y),
-        yMax: Math.max(board.size.yMax, y),
-      };
+    board.size =
+      Object.keys(board.size).length === 0
+        ? {
+            xMin: x,
+            xMax: x,
+            yMin: y,
+            yMax: y,
+          }
+        : {
+            xMin: Math.min(board.size.xMin, x),
+            xMax: Math.max(board.size.xMax, x),
+            yMin: Math.min(board.size.yMin, y),
+            yMax: Math.max(board.size.yMax, y),
+          };
   },
   deletePieces() {
     board.pieces.clear();
@@ -173,7 +168,7 @@ module.exports = {
     return board;
   },
   seeNext(array, nextPieceX, nextPieceY) {
-    return array.find(p => p.x === nextPieceX && p.y === nextPieceY);
+    return array.find((p) => p.x === nextPieceX && p.y === nextPieceY);
   },
   getWaitTime() {
     return waitTime;

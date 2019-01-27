@@ -1,4 +1,3 @@
-
 const testUtil = require('../../../../../src/utils/testUtil');
 
 // const INIT = 1;
@@ -12,7 +11,7 @@ const CENTERR = 0;
 // const CENTERRR = 0;
 const CENTERRRR = 0;
 
-const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+const sleep = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 
 describe('score', () => {
   // set DB
@@ -29,6 +28,7 @@ describe('score', () => {
     const userNumber = 10;
     await testUtil.setTestUsers(userNumber);
 
+    // prettier-ignore
     const putPieces = [
       ZERO00, ZERO00, ZERO000, ZERO00, ZERO000, ZERO000, ZERO000,
       ZERO00, ZERO00, 'u0:15', 'u6:18', 'u7:19', 'u8:20', 'u7:21',
@@ -39,6 +39,7 @@ describe('score', () => {
       ZERO00, ZERO00, ZERO000, ZERO000, ZERO000, 'u3:13', ZERO000,
     ];
 
+    // prettier-ignore
     const putJucgeMatches = await testUtil.setTestMatchers([
       ZERO0000, ZERO0000, ZERO00000, ZERO00000, ZERO00000, ZERO00000, ZERO00000,
       ZERO0000, ZERO0000, 'u0:15:T', 'u6:18:T', 'u7:19:T', 'u8:20:T', 'u7:21:T',
@@ -49,6 +50,7 @@ describe('score', () => {
       ZERO0000, ZERO0000, ZERO00000, ZERO00000, ZERO00000, 'u3:13:T', ZERO00000,
     ]);
 
+    // prettier-ignore
     const pieceMatchers = testUtil.array2PieceMatchers([
       ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO,
       ZERO, ZERO, 'u0', 'u6', 'u7', 'u7', 'u7',
@@ -59,6 +61,7 @@ describe('score', () => {
       ZERO, ZERO, ZERO, ZERO, ZERO, 'u3', ZERO,
     ]);
 
+    // prettier-ignore
     const topScoreMatchers = testUtil.array2RankMatchers([
       { rank: 1, user: 'u3', score: 6 },
       { rank: 2, user: 'u0', score: 5 },
@@ -68,7 +71,7 @@ describe('score', () => {
     ]);
 
     // When
-    const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
+    const testMatchesDB = putJucgeMatches.filter((m) => m.status === true);
     const testPieces = await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
 

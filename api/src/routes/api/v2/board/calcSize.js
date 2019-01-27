@@ -30,7 +30,7 @@ exports.calc = function calcSize(pieces) {
       if (elm.y < yMin) {
         yMin = elm.y;
       }
-    // }
+      // }
     }
   });
   const ans = {

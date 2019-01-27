@@ -25,18 +25,21 @@ describe('direction', () => {
     const userNumber = 10;
     await testUtil.setTestUsers(userNumber);
 
+    // prettier-ignore
     const putFirstPieces = [
       ZERO00, ZERO00, ZERO00,
       ZERO00, CENTER, ZERO00,
       ZERO00, 'u0:1', 'u0:2',
     ];
 
+    // prettier-ignore
     const putFirstJudgeMatches = await testUtil.setTestMatchers([
       ZERO00, ZERO0000, ZERO0000,
       ZERO00, CENTERRR, ZERO0000,
       ZERO00, 'u0:1:T', 'u0:2:F',
     ]);
 
+    // prettier-ignore
     const standbyPieceMatchers = testUtil.array2StandbyPieceMatchers([
       ZERO, ZERO, ZERO,
       ZERO, INIT, ZERO,
@@ -71,6 +74,7 @@ describe('direction', () => {
     const userNumber = 10;
     await testUtil.setTestUsers(userNumber);
 
+    // prettier-ignore
     const putPieces = [
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
       ZERO00, ZERO00, 'u2:1', 'u3:2', ZERO00,
@@ -79,6 +83,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
     ];
 
+    // prettier-ignore
     const putFirstPieces = [
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
@@ -87,6 +92,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
     ];
 
+    // prettier-ignore
     const setPieceDirections = [
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO0000,
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO0000,
@@ -95,6 +101,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO0000,
     ];
 
+    // prettier-ignore
     const putJucgeMatches = await testUtil.setTestMatchers([
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
       ZERO00, ZERO00, 'u2:1:T', 'u3:2:T', ZERO00,
@@ -103,6 +110,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
     ]);
 
+    // prettier-ignore
     const putFirstJudgeMatches = await testUtil.setTestMatchers([
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
@@ -111,6 +119,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
     ]);
 
+    // prettier-ignore
     const pieceMatchers = testUtil.array2PieceMatchers([
       ZERO, ZERO, 'u1', ZERO, ZERO,
       ZERO, ZERO, 'u1', 'u3', ZERO,
@@ -119,6 +128,7 @@ describe('direction', () => {
       ZERO, ZERO, ZERO, ZERO, ZERO,
     ]);
 
+    // prettier-ignore
     const standbyPieceMatchers = testUtil.array2StandbyPieceMatchers([
       ZERO, ZERO, ZERO,
       ZERO, ZERO, ZERO,
@@ -168,6 +178,7 @@ describe('direction', () => {
     const userNumber = 10;
     await testUtil.setTestUsers(userNumber);
 
+    // prettier-ignore
     const putPieces = [
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
       ZERO00, ZERO00, 'u2:1', 'u3:2', ZERO00,
@@ -176,6 +187,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
     ];
 
+    // prettier-ignore
     const putFirstPieces = [
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
@@ -184,6 +196,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
     ];
 
+    // prettier-ignore
     const setPieceDirections = [
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO0000,
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO0000,
@@ -192,6 +205,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO0000,
     ];
 
+    // prettier-ignore
     const putJucgeMatches = await testUtil.setTestMatchers([
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
       ZERO00, ZERO00, 'u2:1:T', 'u3:2:T', ZERO00,
@@ -200,6 +214,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
     ]);
 
+    // prettier-ignore
     const putFirstJudgeMatches = await testUtil.setTestMatchers([
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
@@ -208,6 +223,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
     ]);
 
+    // prettier-ignore
     const pieceMatchers = testUtil.array2PieceMatchers([
       ZERO, ZERO, ZERO, ZERO, ZERO,
       ZERO, ZERO, 'u2', 'u3', ZERO,
@@ -216,6 +232,7 @@ describe('direction', () => {
       ZERO, ZERO, ZERO, ZERO, ZERO,
     ]);
 
+    // prettier-ignore
     const standbyPieceMatchers = testUtil.array2StandbyPieceMatchers([
       ZERO, ZERO, ZERO,
       ZERO, ZERO, ZERO,
@@ -265,6 +282,7 @@ describe('direction', () => {
     const userNumber = 10;
     await testUtil.setTestUsers(userNumber);
 
+    // prettier-ignore
     const putPieces = [
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
       ZERO00, ZERO00, 'u2:1', 'u3:2', ZERO00,
@@ -273,6 +291,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
     ];
 
+    // prettier-ignore
     const putFirstPieces = [
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
@@ -281,6 +300,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
     ];
 
+    // prettier-ignore
     const setPieceDirections = [
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO0000,
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO0000,
@@ -289,6 +309,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO0000,
     ];
 
+    // prettier-ignore
     const putJucgeMatches = await testUtil.setTestMatchers([
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
       ZERO00, ZERO00, 'u2:1:T', 'u3:2:T', ZERO00,
@@ -297,6 +318,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
     ]);
 
+    // prettier-ignore
     const putFirstJudgeMatches = await testUtil.setTestMatchers([
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
@@ -305,6 +327,7 @@ describe('direction', () => {
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
     ]);
 
+    // prettier-ignore
     const pieceMatchers = testUtil.array2PieceMatchers([
       ZERO, ZERO, 'u1', ZERO, ZERO,
       ZERO, ZERO, 'u1', 'u3', ZERO,
@@ -313,6 +336,7 @@ describe('direction', () => {
       ZERO, ZERO, ZERO, ZERO, ZERO,
     ]);
 
+    // prettier-ignore
     const standbyPieceMatchers = testUtil.array2StandbyPieceMatchers([
       ZERO, ZERO, ZERO,
       ZERO, ZERO, ZERO,

@@ -1,6 +1,6 @@
 const testUtil = require('../../../../../src/utils/testUtil');
 
-const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+const sleep = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 
 const INIT = 1;
 const ZERO = 0;
@@ -25,6 +25,7 @@ describe('piece', () => {
       const userNumber = 10;
       await testUtil.setTestUsers(userNumber);
 
+      // prettier-ignore
       const putPieces = [
         ZERO00, ZERO00, ZERO00, [ZERO00, ZERO00], ZERO00,
         ZERO00, ZERO00, ZERO00, [ZERO00, ZERO00], ZERO00,
@@ -33,6 +34,7 @@ describe('piece', () => {
         ZERO00, ZERO00, ZERO00, [ZERO00, ZERO00], ZERO00,
       ];
 
+      // prettier-ignore
       const putJucgeMatches = await testUtil.setTestMatchers([
         ZERO00, ZERO00, ZERO0000, [ZERO0000, ZERO0000], ZERO0000,
         ZERO00, ZERO00, ZERO0000, [ZERO0000, ZERO0000], ZERO0000,
@@ -41,6 +43,7 @@ describe('piece', () => {
         ZERO00, ZERO00, ZERO0000, [ZERO0000, ZERO0000], ZERO0000,
       ]);
 
+      // prettier-ignore
       const pieceMatchers = testUtil.array2PieceMatchers([
         ZERO, ZERO, ZERO, ZERO, ZERO,
         ZERO, ZERO, ZERO, ZERO, ZERO,
@@ -52,7 +55,7 @@ describe('piece', () => {
       // When
       const testPieces = await testUtil.setTesPieces(putPieces);
       const boardPieces = await testUtil.getBoardPieces('u0');
-      const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
+      const testMatchesDB = putJucgeMatches.filter((m) => m.status === true);
 
       // Then
       expect(testPieces).toHaveLength(putJucgeMatches.length);
@@ -76,7 +79,6 @@ describe('piece', () => {
     });
   });
 
-
   // ２駒目は他の駒を挟まないところには置けない
   it('is put', async () => {
     // Reset
@@ -86,6 +88,7 @@ describe('piece', () => {
     const userNumber = 10;
     await testUtil.setTestUsers(userNumber);
 
+    // prettier-ignore
     const putPieces = [
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
@@ -94,6 +97,7 @@ describe('piece', () => {
       ZERO00, ZERO00, ZERO00, 'u0:3', ZERO00,
     ];
 
+    // prettier-ignore
     const putJucgeMatches = await testUtil.setTestMatchers([
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO0000,
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO0000,
@@ -102,6 +106,7 @@ describe('piece', () => {
       ZERO00, ZERO00, ZERO0000, 'u0:3:F', ZERO0000,
     ]);
 
+    // prettier-ignore
     const pieceMatchers = testUtil.array2PieceMatchers([
       ZERO, ZERO, ZERO, ZERO, ZERO,
       ZERO, ZERO, ZERO, ZERO, ZERO,
@@ -110,11 +115,10 @@ describe('piece', () => {
       ZERO, ZERO, ZERO, ZERO, ZERO,
     ]);
 
-
     // When
     const testPieces = await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
-    const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
+    const testMatchesDB = putJucgeMatches.filter((m) => m.status === true);
 
     // Then
     expect(testPieces).toHaveLength(putJucgeMatches.length);
@@ -146,18 +150,21 @@ describe('piece', () => {
     const userNumber = 10;
     await testUtil.setTestUsers(userNumber);
 
+    // prettier-ignore
     const putPieces = [
       'u0:1', ZERO00, ZERO00,
       ZERO00, CENTER, 'u1:4',
       ZERO00, 'u1:3', 'u1:2',
     ];
 
+    // prettier-ignore
     const putJucgeMatches = await testUtil.setTestMatchers([
       'u0:1:F', ZERO0000, ZERO0000,
       ZERO0000, CENTERRR, 'u1:4:F',
       ZERO0000, 'u1:3:T', 'u1:2:F',
     ]);
 
+    // prettier-ignore
     const pieceMatchers = testUtil.array2PieceMatchers([
       ZERO, ZERO, ZERO,
       ZERO, INIT, ZERO,
@@ -167,7 +174,7 @@ describe('piece', () => {
     // When
     const testPieces = await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
-    const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
+    const testMatchesDB = putJucgeMatches.filter((m) => m.status === true);
 
     // Then
     expect(testPieces).toHaveLength(putJucgeMatches.length);
@@ -199,18 +206,21 @@ describe('piece', () => {
     const userNumber = 10;
     await testUtil.setTestUsers(userNumber);
 
+    // prettier-ignore
     const putPieces = [
       'u0:1', ZERO00, 'u1:2',
       ZERO00, CENTER, ZERO00,
       ZERO00, ZERO00, 'u1:3',
     ];
 
+    // prettier-ignore
     const putJucgeMatches = await testUtil.setTestMatchers([
       'u0:1:F', ZERO0000, 'u1:2:F',
       ZERO0000, CENTERRR, ZERO0000,
       ZERO0000, ZERO0000, 'u1:3:F',
     ]);
 
+    // prettier-ignore
     const pieceMatchers = testUtil.array2PieceMatchers([
       ZERO, ZERO, ZERO,
       ZERO, INIT, ZERO,
@@ -220,7 +230,7 @@ describe('piece', () => {
     // When
     const testPieces = await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
-    const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
+    const testMatchesDB = putJucgeMatches.filter((m) => m.status === true);
 
     // Then
     expect(testPieces).toHaveLength(putJucgeMatches.length);
@@ -252,18 +262,21 @@ describe('piece', () => {
     const userNumber = 10;
     await testUtil.setTestUsers(userNumber);
 
+    // prettier-ignore
     const putPieces = [
       'u0:5', ZERO00, ['u0:4', 'u4:7'],
       'u2:3', 'u3:2', [ZERO00, ZERO00],
       ZERO00, 'u1:1', ['u0:6', ZERO00],
     ];
 
+    // prettier-ignore
     const putJucgeMatches = await testUtil.setTestMatchers([
       'u0:5:T', ZERO0000, ['u0:4:F', 'u4:7:F'],
       'u2:3:T', 'u3:2:F', [ZERO0000, ZERO0000],
       ZERO0000, 'u1:1:T', ['u0:6:T', ZERO0000],
     ]);
 
+    // prettier-ignore
     const pieceMatchers = testUtil.array2PieceMatchers([
       'u0', ZERO, ZERO,
       'u2', 'u0', ZERO,
@@ -273,7 +286,7 @@ describe('piece', () => {
     // When
     const testPieces = await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
-    const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
+    const testMatchesDB = putJucgeMatches.filter((m) => m.status === true);
 
     // Then
     expect(testPieces).toHaveLength(putJucgeMatches.length);
@@ -305,18 +318,21 @@ describe('piece', () => {
     const userNumber = 10;
     await testUtil.setTestUsers(userNumber);
 
+    // prettier-ignore
     const putPieces = [
       'u0:1', ['u1:4', ZERO00], ZERO00,
       ZERO00, ['u2:3', 'u2:5'], ZERO00,
       ZERO00, [ZERO00, ZERO00], 'u1:2',
     ];
 
+    // prettier-ignore
     const putJucgeMatches = await testUtil.setTestMatchers([
       'u0:1:F', ['u1:4:T', ZERO0000], ZERO0000,
       ZERO0000, ['u2:3:F', 'u2:5:F'], ZERO0000,
       ZERO0000, [ZERO0000, ZERO0000], 'u1:2:F',
     ]);
 
+    // prettier-ignore
     const pieceMatchers = testUtil.array2PieceMatchers([
       ZERO, 'u1', ZERO,
       ZERO, INIT, ZERO,
@@ -326,7 +342,7 @@ describe('piece', () => {
     // When
     const testPieces = await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
-    const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
+    const testMatchesDB = putJucgeMatches.filter((m) => m.status === true);
 
     // Then
     expect(testPieces).toHaveLength(putJucgeMatches.length);
@@ -357,18 +373,21 @@ describe('piece', () => {
     const userNumber = 10;
     await testUtil.setTestUsers(userNumber);
 
+    // prettier-ignore
     const putPieces = [
       ZERO00, ZERO00, 'u0:4',
       ZERO00, 'u2:2', 'u3:3',
       ZERO00, 'u1:1', ZERO00,
     ];
 
+    // prettier-ignore
     const putJucgeMatches = await testUtil.setTestMatchers([
       ZERO00, ZERO0000, 'u0:4:T',
       ZERO00, 'u2:2:F', 'u3:3:T',
       ZERO00, 'u1:1:T', ZERO0000,
     ]);
 
+    // prettier-ignore
     const pieceMatchers = testUtil.array2PieceMatchers([
       ZERO, ZERO, 'u0',
       ZERO, INIT, 'u3',
@@ -378,7 +397,7 @@ describe('piece', () => {
     // When
     const testPieces = await testUtil.setTesPieces(putPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
-    const testMatchesDB = putJucgeMatches.filter(m => m.status === true);
+    const testMatchesDB = putJucgeMatches.filter((m) => m.status === true);
 
     // Then
     expect(testPieces).toHaveLength(putJucgeMatches.length);

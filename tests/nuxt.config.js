@@ -1,10 +1,5 @@
 const { resolve } = require('path');
-const {
-  axios,
-  env,
-  modules,
-  router,
-} = require('../nuxt.config.js');
+const { axios, env, modules, router } = require('../nuxt.config.js');
 
 const testComponent = {
   name: 'executer',

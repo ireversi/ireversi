@@ -4,7 +4,10 @@ const jwt = require('jsonwebtoken');
 // for CORS
 router.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+  );
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   next();
 });
@@ -40,7 +43,7 @@ router.use((req, res, next) => {
   try {
     const headerValue = req.headers.authorization;
     const accessToken = jwt.decode(headerValue);
-    const isUserId = (Object.keys(accessToken).indexOf('userId') !== -1);
+    const isUserId = Object.keys(accessToken).indexOf('userId') !== -1;
     if (isUserId) {
       next();
     } else {

@@ -61,6 +61,7 @@ describe('board/specified_size', () => {
     // const yMax = 3;
     let userId = jwtIds[0].decode;
 
+    // prettier-ignore
     const testCase = convertComparisonResult([
       0, 0, 0, 0, 0,
       0, userId, jwtIds[1].decode, 0, 0,

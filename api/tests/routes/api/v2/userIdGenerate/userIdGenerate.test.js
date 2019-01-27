@@ -30,13 +30,7 @@ describe('userId generate', () => {
     testUtil.testPreProcess();
 
     // Given
-    const userList = [
-      'testuser1',
-      'testuser2',
-      'testuser3',
-      'testuser4',
-      'testuser5',
-    ];
+    const userList = ['testuser1', 'testuser2', 'testuser3', 'testuser4', 'testuser5'];
     await testUtil.setTestUsers(userList);
 
     // When
@@ -54,10 +48,7 @@ describe('userId generate', () => {
     testUtil.testPreProcess();
 
     // Given
-    const userList = [
-      'TestUser',
-      'test-user',
-    ];
+    const userList = ['TestUser', 'test-user'];
     await testUtil.setTestUsers(userList);
 
     // When

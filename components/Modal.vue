@@ -1,12 +1,12 @@
 <template>
-    <transition name="modal">
-      <div v-if="overlay" class="modalLayer">
-        <div class="initMsg">
-          <div class="title">iReversi</div>
-          <div class="startBtn" @click="closeOverLayer">START</div>
-        </div>
+  <transition name="modal">
+    <div v-if="overlay" class="modalLayer">
+      <div class="initMsg">
+        <div class="title">iReversi</div>
+        <div class="startBtn" @click="closeOverLayer">START</div>
       </div>
-    </transition>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -45,7 +45,7 @@ export default {
   text-align: center;
 }
 
-.title{
+.title {
   color: #fff;
   font-size: 80px;
   font-weight: bold;
@@ -81,7 +81,7 @@ export default {
   transition: opacity 1s;
 } */
 
-@media screen and (max-width: 800px){
+@media screen and (max-width: 800px) {
   .startBtn {
     width: 40%;
   }

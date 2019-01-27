@@ -1,25 +1,14 @@
 function seeNext(pieces, nextX, nextY) {
-  const ans = pieces.find(p => p.x === nextX && p.y === nextY);
+  const ans = pieces.find((p) => p.x === nextX && p.y === nextY);
   return ans;
 }
 
 exports.calc = function calcCandidate(userId, pieces) {
   const candidates = [];
   // x軸方向、y軸方向を定義
-  const dirXY = [
-    [0, 1],
-    [1, 0],
-    [0, -1],
-    [-1, 0],
-  ];
+  const dirXY = [[0, 1], [1, 0], [0, -1], [-1, 0]];
 
-  const dirAll = [
-    ...dirXY,
-    [1, 1],
-    [1, -1],
-    [-1, -1],
-    [-1, 1],
-  ];
+  const dirAll = [...dirXY, [1, 1], [1, -1], [-1, -1], [-1, 1]];
 
   // 全piece検索して、おいたpieceが初出かどうか取得
   let flag = false;
@@ -29,7 +18,7 @@ exports.calc = function calcCandidate(userId, pieces) {
     }
   });
   if (flag === false) {
-  // id初出時
+    // id初出時
     pieces.forEach((elm) => {
       for (let i = 0; i < dirXY.length; i += 1) {
         // x軸方向、y軸方向に検索
@@ -71,7 +60,7 @@ exports.calc = function calcCandidate(userId, pieces) {
       }
     });
   } else {
-  // id既出時
+    // id既出時
     pieces.forEach((elm) => {
       if (elm.userId === userId) {
         for (let i = 0; i < dirAll.length; i += 1) {
@@ -89,7 +78,7 @@ exports.calc = function calcCandidate(userId, pieces) {
           const toY = elm.y + dirY * dist;
 
           // 検索セルとしてパッケージ
-          let dirPiece = pieces.find(p => p.x === toX && p.y === toY);
+          let dirPiece = pieces.find((p) => p.x === toX && p.y === toY);
           let nextPiece = {
             x: 0,
             y: 0,

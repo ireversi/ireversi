@@ -29,6 +29,7 @@ describe('calcSize', () => {
   // 一つ駒を置く
   it('calcs size', async () => {
     // Given
+    // prettier-ignore
     const testCase = convertComparisonResult(
       [
         0, 0, 0, 0, 0,

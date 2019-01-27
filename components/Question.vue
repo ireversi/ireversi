@@ -96,7 +96,8 @@ export default {
   margin-top: 10px;
 }
 
-.message > a, .message > a:visited{
+.message > a,
+.message > a:visited {
   position: relative;
   display: inline-block;
   text-decoration: none;
@@ -112,7 +113,7 @@ export default {
   background: #fff;
   transform: scale(0, 1);
   transform-origin: center top;
-  transition: transform .3s;
+  transition: transform 0.3s;
 }
 .message > a:hover::after {
   transform: scale(1, 1);
@@ -125,5 +126,4 @@ export default {
 .menu-leave-active, .menu-enter-active {
   transition: all 1s;
 } */
-
 </style>

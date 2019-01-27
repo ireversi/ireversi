@@ -1,17 +1,13 @@
 require('dotenv').config();
 
-const {
-  NODE_ENV,
-  AXIOS_BASE,
-  GOOGLE_ANALYTICS,
-} = process.env;
+const { NODE_ENV, AXIOS_BASE, GOOGLE_ANALYTICS } = process.env;
 
 module.exports = {
   mode: 'spa',
 
   /*
-  ** Headers of the page
-  */
+   ** Headers of the page
+   */
   head: {
     title: 'iReversi',
     meta: [
@@ -23,23 +19,23 @@ module.exports = {
   },
 
   /*
-  ** Customize the progress-bar color
-  */
+   ** Customize the progress-bar color
+   */
   loading: false,
 
   /*
-  ** Global CSS
-  */
+   ** Global CSS
+   */
   css: [],
 
   /*
-  ** Plugins to load before mounting the App
-  */
+   ** Plugins to load before mounting the App
+   */
   plugins: ['@/plugins/axios', '@/plugins/window-state', '@/plugins/vue-touch'],
 
   /*
-  ** Nuxt.js modules
-  */
+   ** Nuxt.js modules
+   */
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
@@ -47,8 +43,8 @@ module.exports = {
     ...(GOOGLE_ANALYTICS ? [['@nuxtjs/google-analytics', { id: GOOGLE_ANALYTICS }]] : []),
   ],
   /*
-  ** Axios module configuration
-  */
+   ** Axios module configuration
+   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
   },
@@ -60,12 +56,12 @@ module.exports = {
     middleware: 'baseURL',
   },
   /*
-  ** Build configuration
-  */
+   ** Build configuration
+   */
   build: {
     /*
-    ** You can extend webpack config here
-    */
+     ** You can extend webpack config here
+     */
     extend(config, ctx) {
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {
@@ -79,7 +75,7 @@ module.exports = {
     },
   },
   toast: {
-    position: 'top-center', /* トーストの表示位置 */
+    position: 'top-center' /* トーストの表示位置 */,
     // duration: 3000, /* トーストの表示されている時間（今回は2秒に設定） */
   },
 };

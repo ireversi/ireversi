@@ -1,24 +1,24 @@
 <template>
-    <transition name="modal">
-      <div v-if="overlay" class="modalLayer">
-        <div class="initMsg">
-          <div class="title">{{ showTitle }}</div>
-          <div class="contents">
-            <div v-for="(n, i) in profiles" :key="i">
-              <div class="card" :style="`background: center/cover url(${n.img})`"></div>
-              <div class="info">
-                <div class="name">{{ n.name }}</div>
-                <div class="task">{{ n.task }}</div>
-                <div class="twitter">
-                  <a :href="twitterUrl(n.twitter)" target="_blank">{{ n.twitter }}</a>
-                </div>
+  <transition name="modal">
+    <div v-if="overlay" class="modalLayer">
+      <div class="initMsg">
+        <div class="title">{{ showTitle }}</div>
+        <div class="contents">
+          <div v-for="(n, i) in profiles" :key="i">
+            <div class="card" :style="`background: center/cover url(${n.img})`"></div>
+            <div class="info">
+              <div class="name">{{ n.name }}</div>
+              <div class="task">{{ n.task }}</div>
+              <div class="twitter">
+                <a :href="twitterUrl(n.twitter)" target="_blank">{{ n.twitter }}</a>
               </div>
             </div>
           </div>
-          <div class="startBtn" @click="closeOverLayer">CLOSE</div>
         </div>
+        <div class="startBtn" @click="closeOverLayer">CLOSE</div>
       </div>
-    </transition>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -120,7 +120,7 @@ export default {
   text-align: center;
 }
 
-.title{
+.title {
   color: #fff;
   font-size: 80px;
   font-weight: bold;
@@ -145,7 +145,7 @@ export default {
 
 .info {
   opacity: 0;
-  position:absolute;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -154,7 +154,7 @@ export default {
   min-width: 100%;
   color: #fff;
   padding: auto;
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
@@ -170,11 +170,14 @@ export default {
   opacity: 1;
 }
 
-.name, .task, .twitter {
+.name,
+.task,
+.twitter {
   width: 100%;
 }
 
-.twitter > a, .twitter > a:visited {
+.twitter > a,
+.twitter > a:visited {
   cursor: pointer;
   text-decoration: underline;
   display: inline-block;
@@ -202,7 +205,7 @@ export default {
   background: #fff;
 }
 
-@media screen and (max-width: 800px){
+@media screen and (max-width: 800px) {
   .title {
     font-size: 60px;
   }
@@ -219,7 +222,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
   .title {
     font-size: 40px;
   }
