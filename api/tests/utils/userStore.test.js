@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const UserStore = require('../../src/models/v2/UserStore');
 const generateToken = require('../../src/routes/api/v2/userIdGenerate/generateToken');
 
-const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+const sleep = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 
 describe('users', () => {
   // 初期化
@@ -29,7 +29,6 @@ describe('users', () => {
     expect(response[0].userId).toEqual(id1);
     expect(response[0].userName).toEqual(userName1);
   });
-
 
   // 次のプレイヤー分登録する。
   it('can get and add userData 2nd', async () => {

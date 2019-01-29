@@ -5,7 +5,7 @@ const ZERO00 = 0;
 const INIT = 1;
 const CENTER = 0;
 
-const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
 describe('piece', () => {
   // set DB
@@ -14,15 +14,16 @@ describe('piece', () => {
   afterAll(testUtil.stopDB);
 
   describe('check board pieces', () => {
-  // 置いた駒が全て取得できることを確認
+    // 置いた駒が全て取得できることを確認
     it('gets all', async () => {
-    // Reset
+      // Reset
       testUtil.testPreProcess();
 
       // Given
       const userNumber = 10;
       await testUtil.setTestUsers(userNumber);
 
+      // prettier-ignore
       const putPieces = [
         ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
         ZERO00, 'u0:8', 'u1:1', 'u2:2', ZERO00,
@@ -31,6 +32,7 @@ describe('piece', () => {
         ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
       ];
 
+      // prettier-ignore
       const pieceMatchers = testUtil.array2PieceMatchers([
         ZERO, ZERO, ZERO, ZERO, ZERO,
         ZERO, 'u0', 'u1', 'u2', ZERO,
@@ -54,13 +56,14 @@ describe('piece', () => {
 
   describe('check board pieces and candidates', () => {
     it('gets pieces after turnover some pieces', async () => {
-    // Reset
+      // Reset
       testUtil.testPreProcess();
 
       // Given
       const userNumber = 10;
       await testUtil.setTestUsers(userNumber);
 
+      // prettier-ignore
       const putPieces = [
         ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
         ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
@@ -69,6 +72,7 @@ describe('piece', () => {
         ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
       ];
 
+      // prettier-ignore
       const pieceMatchers = testUtil.array2PieceMatchers([
         ZERO, ZERO, ZERO, ZERO, ZERO,
         ZERO, ZERO, ZERO, ZERO, ZERO,
@@ -77,6 +81,7 @@ describe('piece', () => {
         ZERO, ZERO, ZERO, ZERO, ZERO,
       ]);
 
+      // prettier-ignore
       const candidateMatchers = testUtil.array2CandidateMatchers([
         ZERO, ZERO, ZERO, ZERO, ZERO,
         ZERO, ZERO, 'u1', ZERO, ZERO,
@@ -104,7 +109,7 @@ describe('piece', () => {
 
   describe('the number of online users', () => {
     it('gets updated the number of online users every 2 seconds', async () => {
-    // Init
+      // Init
       testUtil.testPreProcess();
 
       // Given
@@ -128,7 +133,7 @@ describe('piece', () => {
     });
 
     it('is reset the number of online users after 4 seconds from last request', async () => {
-    // Init
+      // Init
       testUtil.testPreProcess();
 
       // Given

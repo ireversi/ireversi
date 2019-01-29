@@ -8,15 +8,11 @@ const storePlayHistory = require('../../src/utils/storePlayHistory');
 const restoreMongo = require('../../src/utils/restoreMongo.js');
 const sendMongo = require('../../src/utils/sendMongo.js');
 
-const {
-  prepareDB,
-  deleteAllDataFromDB,
-  stopDB,
-} = require('../../src/utils/db.js');
+const { prepareDB, deleteAllDataFromDB, stopDB } = require('../../src/utils/db.js');
 
 const generateToken = require('../../src/routes/api/v2/userIdGenerate/generateToken');
 
-const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+const sleep = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 const basePath = '/api/v2/piece/';
 
 function genJwtArr(number) {
@@ -67,6 +63,7 @@ describe('MongoDB', () => {
       //       0  , 4:4,   5:5,  7:10,  8:11,
       // ]
 
+      // prettier-ignore
       const pieces = array2Pieces.array2Pieces(
         [
           `${jwtIds[11].decode}:17`, `${jwtIds[10].decode}:16`, `${jwtIds[14].decode}:22`, `${jwtIds[15].decode}:23`, `${jwtIds[9].decode}:13`,
@@ -80,7 +77,8 @@ describe('MongoDB', () => {
       // MongoDBに送るだけの処理
       for (let i = 0; i < pieces.length; i += 1) {
         const index = searchIndex(jwtIds, pieces[i].piece.userId);
-        await chai.request(app)
+        await chai
+          .request(app)
           .post(basePath)
           .set('content-type', 'application/x-www-form-urlencoded')
           .set('Authorization', jwtIds[index].jwtId)
@@ -110,6 +108,7 @@ describe('MongoDB', () => {
 
       // Piecesに復元した盤面と照合するための期待値(下部でmatchesDBに再度変換)
       // 復元するときにjudgePieceしているので、めくり終えたあとの盤面を再現
+      // prettier-ignore
       const matches = array2Matchers.array2Matchers(
         [
           `${jwtIds[11].decode}:17`, `${jwtIds[10].decode}:16`, `${jwtIds[14].decode}:22`, `${jwtIds[15].decode}:23`, `${jwtIds[9].decode}:13`,
@@ -121,7 +120,7 @@ describe('MongoDB', () => {
       );
 
       // MongoDB確認のため、matchesからstatus: falseのオブジェクトを抜いた配列
-      const matchesDB = matches.filter(m => m.status === true);
+      const matchesDB = matches.filter((m) => m.status === true);
 
       // 1ピースずつ確認
       for (let i = 0; i < matchesDB.length; i += 1) {

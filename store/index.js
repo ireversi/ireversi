@@ -40,14 +40,7 @@ export const plugins = [
 ];
 
 export const mutations = {
-  setBoard(state, {
-    pieces,
-    candidates,
-    standbys,
-    size,
-    score,
-    userCounts,
-  }) {
+  setBoard(state, { pieces, candidates, standbys, size, score, userCounts }) {
     state.pieces = pieces;
     state.candidates = candidates;
     state.standbys = standbys;
@@ -58,26 +51,30 @@ export const mutations = {
   zoomout(state, { targetPos, adjustPos }) {
     if (state.gridX + 1 >= GRID_MIN && state.gridX + 1 <= GRID_MAX) {
       // gridX変更分位置調整
-      state.moveDist.x -= (window.innerWidth * targetPos.x) / (state.gridX * (state.gridX + 1))
-      // piece中心とカーソル位置との差分調整
-                          + adjustPos.x * (state.gridX / (state.gridX + 1));
+      state.moveDist.x -=
+        (window.innerWidth * targetPos.x) / (state.gridX * (state.gridX + 1)) +
+        // piece中心とカーソル位置との差分調整
+        adjustPos.x * (state.gridX / (state.gridX + 1));
       // gridX変更分位置調整調整
-      state.moveDist.y -= (window.innerWidth * targetPos.y) / (state.gridX * (state.gridX + 1))
-      // piece中心とカーソル位置との差分調整
-                          + adjustPos.y * (state.gridX / (state.gridX + 1));
+      state.moveDist.y -=
+        (window.innerWidth * targetPos.y) / (state.gridX * (state.gridX + 1)) +
+        // piece中心とカーソル位置との差分調整
+        adjustPos.y * (state.gridX / (state.gridX + 1));
     }
     state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX + 1));
   },
   zoomin(state, { targetPos, adjustPos }) {
     if (state.gridX - 1 >= GRID_MIN && state.gridX - 1 <= GRID_MAX) {
       // gridX変更分位置調整
-      state.moveDist.x += (window.innerWidth * targetPos.x) / (state.gridX * (state.gridX - 1))
-      // piece中心とカーソル位置との差分調整
-                          - adjustPos.x * (state.gridX / (state.gridX - 1));
+      state.moveDist.x +=
+        (window.innerWidth * targetPos.x) / (state.gridX * (state.gridX - 1)) -
+        // piece中心とカーソル位置との差分調整
+        adjustPos.x * (state.gridX / (state.gridX - 1));
       // gridX変更分位置調整
-      state.moveDist.y += (window.innerWidth * targetPos.y) / (state.gridX * (state.gridX - 1))
-      // piece中心とカーソル位置との差分調整
-                          - adjustPos.y * (state.gridX / (state.gridX - 1));
+      state.moveDist.y +=
+        (window.innerWidth * targetPos.y) / (state.gridX * (state.gridX - 1)) -
+        // piece中心とカーソル位置との差分調整
+        adjustPos.y * (state.gridX / (state.gridX - 1));
     }
     state.gridX = Math.max(GRID_MIN, Math.min(GRID_MAX, state.gridX - 1));
   },
@@ -113,7 +110,8 @@ export const mutations = {
       // }
     }
   },
-  resetInitPos(state) { // touchend
+  resetInitPos(state) {
+    // touchend
     state.pinchInit = 0;
     state.dragFlg = false;
     state.touchTime = new Date().getTime();
@@ -165,9 +163,9 @@ export const actions = {
     const cellWidth = window.innerWidth / state.gridX;
 
     if (Math.abs(distance - state.pinchInit) > cellWidth) {
-      if ((distance - state.pinchInit) > 0) {
+      if (distance - state.pinchInit > 0) {
         commit('zoomin', { targetPos, adjustPos });
-      } else if ((distance - state.pinchInit) < 0) {
+      } else if (distance - state.pinchInit < 0) {
         commit('zoomout', { targetPos, adjustPos });
       }
     }

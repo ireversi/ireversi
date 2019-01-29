@@ -1,12 +1,13 @@
 <template>
   <div class="main">
-    <Modal @judgename='judgeUserName'/>
+    <Modal @judgename="judgeUserName" />
 
     <div v-if="!token" class="userInputScreen">
-      <UserNameInput :nameInput="nameInput"/>
+      <UserNameInput :nameInput="nameInput" />
     </div>
 
-    <div class="board"
+    <div
+      class="board"
       v-else
       @touchstart="onTouchStart"
       @mousedown="setInitPos"
@@ -21,7 +22,7 @@
           class="border-x"
           v-for="i in calcGridY() + 2"
           :key="'borderX' + i"
-          x1=0
+          x1="0"
           :x2="$window.width"
           :y1="calcBorderPos(i).y"
           :y2="calcBorderPos(i).y"
@@ -33,7 +34,7 @@
           :key="'borderY' + i"
           :x1="calcBorderPos(i).x"
           :x2="calcBorderPos(i).x"
-          y1=0
+          y1="0"
           :y2="$window.height"
         />
 
@@ -57,7 +58,7 @@
             :font-size="calcGridWidth() * 0.2"
             style="fill: #fff; text-anchor: middle; dominant-baseline: central"
           >
-            {{ piece.x }}, {{  piece.y }}
+            {{ piece.x }}, {{ piece.y }}
           </text>
         </template>
 
@@ -83,13 +84,12 @@
           @mouseup="checkElapsedTime(candidate)"
           @touchend="checkElapsedTime(candidate)"
         />
-
       </svg>
       <Ranking />
-      <Question  @open="openDeveloperInfo"/>
+      <Question @open="openDeveloperInfo" />
     </div>
     <div v-if="DeveloperInfo">
-      <AboutDevelopers @close="closeDeveloperInfo"/>
+      <AboutDevelopers @close="closeDeveloperInfo" />
     </div>
   </div>
 </template>
@@ -128,7 +128,7 @@ export default {
     AboutDevelopers,
   },
   mounted() {
-    const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+    const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
     (async () => {
       let toastStatus = false;
@@ -139,19 +139,18 @@ export default {
         if (this.token) {
           // eslint-disable-next-line
           await this.getBoard().then(() => { // 成功時
-            toastStatus = false;
-            toastCount = 0;
-            Vue.toasted.clear();
-          // eslint-disable-next-line
+              toastStatus = false;
+              toastCount = 0;
+              Vue.toasted.clear();
+              // eslint-disable-next-line
           }).catch((error) => { // 失敗時
-            toastCount += 1;
-            toastStatus = true;
-            if (toastStatus && toastCount === 1) {
-              Vue.toasted.error(error);
-            }
-          });
-          await this.getTopScores().catch(() => {
-          });
+              toastCount += 1;
+              toastStatus = true;
+              if (toastStatus && toastCount === 1) {
+                Vue.toasted.error(error);
+              }
+            });
+          await this.getTopScores().catch(() => {});
         }
       }
     })();
@@ -243,22 +242,24 @@ export default {
       return (i) => {
         const gridWidth = this.calcGridWidth();
         return {
-          x: this.calcCenterPos().x // 中心座標
-              // Gridの中心が座標となるよう修正
-              - gridWidth / 2
-              // 画面サイズとグリッド幅から始点計算
-              - (Math.ceil((this.$window.width / 2) / gridWidth)) * gridWidth
-              // 移動量調整
-              - (this.moveDist.x % gridWidth)
-              + (gridWidth * (i - 1)),
-          y: this.calcCenterPos().y // 中心座標
-              // Gridの中心が座標となるよう修正
-              - gridWidth / 2
-              // 画面サイズとグリッド幅から始点
-              - (Math.ceil((this.$window.height / 2) / gridWidth)) * gridWidth
-              // 移動量調整
-              + (this.moveDist.y % gridWidth)
-              + (gridWidth * (i - 1)),
+          x:
+            this.calcCenterPos().x - // 中心座標
+            // Gridの中心が座標となるよう修正
+            gridWidth / 2 -
+            // 画面サイズとグリッド幅から始点計算
+            Math.ceil(this.$window.width / 2 / gridWidth) * gridWidth -
+            // 移動量調整
+            (this.moveDist.x % gridWidth) +
+            gridWidth * (i - 1),
+          y:
+            this.calcCenterPos().y - // 中心座標
+            // Gridの中心が座標となるよう修正
+            gridWidth / 2 -
+            // 画面サイズとグリッド幅から始点
+            Math.ceil(this.$window.height / 2 / gridWidth) * gridWidth +
+            // 移動量調整
+            (this.moveDist.y % gridWidth) +
+            gridWidth * (i - 1),
         };
       };
     },
@@ -267,12 +268,12 @@ export default {
         const gridWidth = this.calcGridWidth();
         const centerPos = this.calcCenterPos();
         return {
-          x: centerPos.x // 中心座標
-             + (gridWidth * object.x
-             - this.moveDist.x), // 原点移動量調整
-          y: centerPos.y // 中心座標
-             - (gridWidth * object.y
-             - this.moveDist.y), // 原点移動量調整
+          x:
+            centerPos.x + // 中心座標
+            (gridWidth * object.x - this.moveDist.x), // 原点移動量調整
+          y:
+            centerPos.y - // 中心座標
+            (gridWidth * object.y - this.moveDist.y), // 原点移動量調整
         };
       };
     },
@@ -295,17 +296,15 @@ export default {
         const y2 = touches[1].pageY;
 
         // pinch距離算出
-        return Math.sqrt(((x2 - x1) ** 2) + ((y2 - y1) ** 2));
+        return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
       };
     },
     zoomTarget() {
       return (position) => {
         // カーソルの下にあるpieceの座標
         const targetPos = {
-          x: (this.moveDist.x + position.x - this.$window.width / 2)
-                        / this.calcGridWidth(),
-          y: (this.moveDist.y - position.y + this.$window.height / 2)
-                        / this.calcGridWidth(),
+          x: (this.moveDist.x + position.x - this.$window.width / 2) / this.calcGridWidth(),
+          y: (this.moveDist.y - position.y + this.$window.height / 2) / this.calcGridWidth(),
         };
 
         // pieceの中心とカーソルの位置との差分
@@ -335,7 +334,7 @@ export default {
           alphabets.push(String.fromCodePoint(n));
         }
         // アルファベット大文字配列
-        const ALPHABETS = alphabets.map(el => el.toUpperCase());
+        const ALPHABETS = alphabets.map((el) => el.toUpperCase());
         // 62通りの文字配列
         const letterArray = [...numArray, ...alphabets, ...ALPHABETS];
         const LETTERARRAY_LENGTH = letterArray.length;
@@ -347,8 +346,9 @@ export default {
         const COLOR_RANGE = 360;
         const firstLetterNum = obj[p.userId.split('')[0]];
         const secondLetterNum = obj[p.userId.split('')[1]];
-        const hue = COLOR_RANGE / (LETTERARRAY_LENGTH ** 2)
-                    * (firstLetterNum * LETTERARRAY_LENGTH + secondLetterNum);
+        const hue =
+          (COLOR_RANGE / LETTERARRAY_LENGTH ** 2) *
+          (firstLetterNum * LETTERARRAY_LENGTH + secondLetterNum);
         const color = `hsl(${hue}, 100%, 50% )`;
         return color;
       };
@@ -363,7 +363,17 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['increment', 'zoomout', 'zoomin', 'changeCurrentUser', 'setHalf', 'setInitPos', 'gridMove', 'resetInitPos', 'pinchStart']),
+    ...mapMutations([
+      'increment',
+      'zoomout',
+      'zoomin',
+      'changeCurrentUser',
+      'setHalf',
+      'setInitPos',
+      'gridMove',
+      'resetInitPos',
+      'pinchStart',
+    ]),
     ...mapActions(['getBoard', 'putPiece', 'getTopScores', 'pinchMove']),
     onTouchStart(e) {
       // ダブルタップ無効化
@@ -453,39 +463,40 @@ body {
 }
 </style>
 
-
 <style scoped>
 .userInputScreen {
   position: fixed;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: center/cover url('../assets/image/board.png');
 }
 .main {
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: #00552e;
 }
 
 .board {
   position: absolute;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
-.border-x, .border-y {
+.border-x,
+.border-y {
   stroke: #121;
   stroke-width: 0.5px;
 }
 
-.piece, .candidate {
+.piece,
+.candidate {
   fill: #fff;
 }
 
@@ -498,5 +509,4 @@ body {
   text-anchor: middle;
   fill: #444;
 }
-
 </style>

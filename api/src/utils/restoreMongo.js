@@ -3,7 +3,6 @@ const UserModel = require('../models/v2/UserModel');
 const PieceStore = require('../models/v2/PieceStore.js');
 const UserStore = require('../models/v2/UserStore');
 
-
 const propFilter = '-__v';
 const restore = true;
 

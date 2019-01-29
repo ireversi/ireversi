@@ -1,4 +1,3 @@
-
 const testUtil = require('../../../../../src/utils/testUtil');
 
 const waitTime = testUtil.getWaitTime();
@@ -10,7 +9,7 @@ const ZERO0000 = 0;
 const CENTER = 0;
 const CENTERRR = 0;
 
-const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+const sleep = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 
 describe('piece', () => {
   // set DB
@@ -27,6 +26,7 @@ describe('piece', () => {
     const userNumber = 10;
     await testUtil.setTestUsers(userNumber);
 
+    // prettier-ignore
     const putFirstPieces = [
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
       ZERO00, ZERO00, ZERO00, ZERO00, ZERO00,
@@ -35,6 +35,7 @@ describe('piece', () => {
       ZERO00, ZERO00, 'u1:3', ZERO00, ZERO00,
     ];
 
+    // prettier-ignore
     const putFirstJudgeMatches = await testUtil.setTestMatchers([
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
       ZERO00, ZERO00, ZERO0000, ZERO0000, ZERO00,
@@ -43,6 +44,7 @@ describe('piece', () => {
       ZERO00, ZERO00, 'u1:3:F', ZERO0000, ZERO00,
     ]);
 
+    // prettier-ignore
     const standbyPieceMatchers = testUtil.array2StandbyPieceMatchers([
       ZERO, ZERO, ZERO,
       ZERO, ZERO, ZERO,
@@ -52,7 +54,7 @@ describe('piece', () => {
     // When
     const testFirstPieces = await testUtil.setTestFirstPieces(putFirstPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
-    const testMatchesDB = putFirstJudgeMatches.filter(m => m.status === true);
+    const testMatchesDB = putFirstJudgeMatches.filter((m) => m.status === true);
 
     // Then
     testFirstPieces.forEach((result, i) => {
@@ -89,6 +91,7 @@ describe('piece', () => {
     const userNumber = 10;
     await testUtil.setTestUsers(userNumber);
 
+    // prettier-ignore
     const putFirstPieces = [
       ZERO00, [ZERO00, ZERO00], ZERO00, ZERO00, ZERO00,
       ZERO00, ['u0:1', ZERO00], ZERO00, 'u3:4', ZERO00,
@@ -97,6 +100,7 @@ describe('piece', () => {
       ZERO00, [ZERO00, ZERO00], ZERO00, ZERO00, ZERO00,
     ];
 
+    // prettier-ignore
     const putFirstJudgeMatches = await testUtil.setTestMatchers([
       ZERO00, [ZERO0000, ZERO0000], ZERO0000, ZERO0000, ZERO00,
       ZERO00, ['u0:1:F', ZERO0000], ZERO0000, 'u3:4:F', ZERO00,
@@ -105,6 +109,7 @@ describe('piece', () => {
       ZERO00, [ZERO0000, ZERO0000], ZERO0000, ZERO0000, ZERO00,
     ]);
 
+    // prettier-ignore
     const standbyPieceMatchers = testUtil.array2StandbyPieceMatchers([
       ZERO, ZERO, ZERO,
       'u2', ZERO, 'u4',
@@ -114,7 +119,7 @@ describe('piece', () => {
     // When
     const testFirstPieces = await testUtil.setTestFirstPieces(putFirstPieces);
     const boardPieces = await testUtil.getBoardPieces('u0');
-    const testMatchesDB = putFirstJudgeMatches.filter(m => m.status === true);
+    const testMatchesDB = putFirstJudgeMatches.filter((m) => m.status === true);
 
     // Then
     testFirstPieces.forEach((result, i) => {

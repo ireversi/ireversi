@@ -2,10 +2,7 @@ const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const BoardHistoryModel = require('../../src/models/v2/BoardHistoryModel.js');
 
-const {
-  nodeEnv,
-  mongoURI,
-} = require('../config.js');
+const { nodeEnv, mongoURI } = require('../config.js');
 
 let isDBPrepared = false;
 let mongod;

@@ -5,7 +5,8 @@ const config = require('../../../../config.js');
 const PieceStore = require('../../../../models/v2/PieceStore.js');
 const db = require('../../../../utils/db.js');
 
-router.route('/')
+router
+  .route('/')
   .post((req, res) => {
     const jwtId = req.headers.authorization;
     const { userId } = jwt.decode(jwtId);

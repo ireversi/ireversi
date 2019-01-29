@@ -1,7 +1,7 @@
 const storePlayHistory = require('./storePlayHistory');
 const BoardHistoryModel = require('../models/v2/BoardHistoryModel.js');
 
-const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+const sleep = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 
 let enabled = false;
 

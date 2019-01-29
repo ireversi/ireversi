@@ -6,7 +6,8 @@ const calcCandidate = require('./calcCandidate.js');
 const calcScore = require('./calcScore.js');
 router.use('/specified_range', require('./specified_size.js'));
 
-router.route('/')
+router
+  .route('/')
   .get(async (req, res) => {
     // userIdを取得
     const jwtId = req.headers.authorization;

@@ -1,38 +1,39 @@
 <template>
-    <transition name="modal">
-      <div v-if="nameInput" class="modalLayer">
-        <transition name="instruction">
-          <div class="initMsg">
-            <div class="title">{{ templates[language].t }}</div>
-            <div class="condition">{{ templates[language].c }}</div>
-            <div class="attention">{{ templates[language].a }}</div>
-            <form class="form" @submit.prevent="sendName">
-              <input type="text"
-                class="input"
-                v-model="name"
-                minlength="4"
-                maxlength="10"
-                pattern="^[a-z0-9]([_a-z0-9]){2,13}[a-z0-9]$"
-                required
-              >
-              <div class="sendBtn" @click="sendName">
-                {{ templates[language].b }}
-              </div>
-            </form>
-            <nav>
-              <ul>
-                <li v-for="(i, n) in languages" :key="i.code">
-                  <a href="#" @click.prevent="ChangeLanguage(i.code)" class="lang">
-                    <img :src="`${getFlag(n)}`" class="flag"><br>
-                    {{ i.language }}
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </transition>
-      </div>
-    </transition>
+  <transition name="modal">
+    <div v-if="nameInput" class="modalLayer">
+      <transition name="instruction">
+        <div class="initMsg">
+          <div class="title">{{ templates[language].t }}</div>
+          <div class="condition">{{ templates[language].c }}</div>
+          <div class="attention">{{ templates[language].a }}</div>
+          <form class="form" @submit.prevent="sendName">
+            <input
+              type="text"
+              class="input"
+              v-model="name"
+              minlength="4"
+              maxlength="10"
+              pattern="^[a-z0-9]([_a-z0-9]){2,13}[a-z0-9]$"
+              required
+            />
+            <div class="sendBtn" @click="sendName">
+              {{ templates[language].b }}
+            </div>
+          </form>
+          <nav>
+            <ul>
+              <li v-for="(i, n) in languages" :key="i.code">
+                <a href="#" @click.prevent="ChangeLanguage(i.code)" class="lang">
+                  <img :src="`${getFlag(n)}`" class="flag" /><br />
+                  {{ i.language }}
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </transition>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -43,9 +44,7 @@ import usImg from '@/assets/image/en.png';
 import indonesiaImg from '@/assets/image/in.png';
 
 export default {
-  props: [
-    'nameInput',
-  ],
+  props: ['nameInput'],
   data() {
     return {
       name: '',
@@ -86,7 +85,7 @@ export default {
   },
   computed: {
     getFlag() {
-      return n => ([usImg, koreaImg, indonesiaImg, japanImg][n]);
+      return (n) => [usImg, koreaImg, indonesiaImg, japanImg][n];
     },
   },
   methods: {
@@ -121,7 +120,7 @@ export default {
   text-align: center;
 }
 
-.title{
+.title {
   color: #fff;
   height: 60px;
   font-size: 40px;
@@ -149,9 +148,9 @@ export default {
   text-align: center;
 }
 
-.errorMsg{
+.errorMsg {
   font-size: 18px;
-  color:red;
+  color: red;
 }
 
 .input {
@@ -198,7 +197,7 @@ export default {
   opacity: 1;
 }
 
-.modal-enter-active{
+.modal-enter-active {
   transition: opacity 2s;
 }
 
@@ -225,7 +224,7 @@ ul {
   width: 40px;
 }
 
-@media screen and (max-width: 800px){
+@media screen and (max-width: 800px) {
   .startBtn {
     width: 40%;
   }

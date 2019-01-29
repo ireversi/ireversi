@@ -29,6 +29,7 @@ describe('calcCandidate', () => {
   // 一つ駒を置く
   it('calcs candidates', async () => {
     // Given
+    // prettier-ignore
     const testCase = convertComparisonResult(
       [
         1, 1, 2,

@@ -41,6 +41,7 @@ describe('calcCandidate', () => {
     // Given
     const userId = 10;
 
+    // prettier-ignore
     const testCase = convertComparisonResult(
       [
         0, 0, 0, 0,
@@ -50,6 +51,7 @@ describe('calcCandidate', () => {
       ],
     );
 
+    // prettier-ignore
     const matchers = convertCandidateList(
       [
         0, userId, userId, 0,
@@ -76,6 +78,8 @@ describe('calcCandidate', () => {
   it('calcs candidates for first piece', async () => {
     // Given
     const userId = 10;
+
+    // prettier-ignore
     const testCase = convertComparisonResult(
       [
         0, 0, 0, 0,
@@ -85,6 +89,7 @@ describe('calcCandidate', () => {
       ],
     );
 
+    // prettier-ignore
     const matchers = convertCandidateList(
       [
         0, userId, 0, 0,
@@ -104,9 +109,10 @@ describe('calcCandidate', () => {
 
 describe('calcCandidate', () => {
   it('calcs candidates for more than two pieces', async () => {
-  // Given
+    // Given
     const userId = 2;
 
+    // prettier-ignore
     const testCase = convertComparisonResult(
       [
         0, 0, 0, 0,
@@ -116,6 +122,7 @@ describe('calcCandidate', () => {
       ],
     );
 
+    // prettier-ignore
     const matchers = convertCandidateList(
       [
         userId, 0, 0, 0,
@@ -136,9 +143,10 @@ describe('calcCandidate', () => {
 
 describe('calcCandidate', () => {
   it('calcs candidates to resolve Ando-san issue', async () => {
-  // Given
+    // Given
     const userId = 2;
 
+    // prettier-ignore
     const testCase = convertComparisonResult(
       [
         0, 0, 0, 0, 0, 0, 0,
@@ -151,6 +159,7 @@ describe('calcCandidate', () => {
       ],
     );
 
+    // prettier-ignore
     const matchers = convertCandidateList(
       [
         0, 0, 0, 0, 0, 0, 0,

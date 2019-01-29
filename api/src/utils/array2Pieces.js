@@ -15,13 +15,18 @@ module.exports = {
         sourceExist.push(g);
       }
     }
-    const playOrder = sourceExist.sort((a, b) => (parseInt(a[1].slice(a[1].indexOf(':') + 1), 10)) - (parseInt(b[1].slice(b[1].indexOf(':') + 1), 10)));
+    const playOrder = sourceExist.sort(
+      (a, b) =>
+        parseInt(a[1].slice(a[1].indexOf(':') + 1), 10) -
+        parseInt(b[1].slice(b[1].indexOf(':') + 1), 10),
+    );
     let n = 0;
     let elm = {};
-    for (let i = 0; i < playOrder.length; i += 1) { // x, y, userIdを生成する
+    for (let i = 0; i < playOrder.length; i += 1) {
+      // x, y, userIdを生成する
       const order = playOrder[i][0];
       const x = order % sqrt;
-      const y = Math.floor(((source.length - 1) - order) / sqrt);
+      const y = Math.floor((source.length - 1 - order) / sqrt);
       let userId = playOrder[n][1].slice(0, playOrder[n][1].indexOf(':'));
       if (!Number.isNaN(Number(userId))) {
         userId = Number(userId);
