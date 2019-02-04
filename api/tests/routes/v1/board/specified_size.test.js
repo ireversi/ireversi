@@ -1,12 +1,10 @@
 const chai = require('chai');
 const jwt = require('jsonwebtoken');
-const app = require('../../../../../src/routes/app.js');
-const PieceStore = require('../../../../../src/models/v2/PieceStore.js');
-// const calcCandidates = require('../../../../../src/routes/api/v2/board/calcCandidate');
-// const calcScore = require('../../../../../src/routes/api/v2/board/calcScore');
-const generateToken = require('../../../../../src/routes/api/v2/userIdGenerate/generateToken');
+const app = require('../../../../routes/app.js');
+const PieceStore = require('../../../../models/v1/PieceStore.js');
+const generateToken = require('../../../../routes/v1/userIdGenerate/generateToken.js');
 
-const basePath = '/api/v2';
+const basePath = '/api/v1';
 
 function genJwtArr(number) {
   const jwtIds = [];

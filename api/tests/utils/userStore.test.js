@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const UserStore = require('../../src/models/v2/UserStore');
-const generateToken = require('../../src/routes/api/v2/userIdGenerate/generateToken');
+const UserStore = require('../../models/v1/UserStore.js');
+const generateToken = require('../../routes/v1/userIdGenerate/generateToken.js');
 
 const sleep = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 

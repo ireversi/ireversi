@@ -1,15 +1,15 @@
 const chai = require('chai');
-const storePlayHistory = require('../utils/storePlayHistory');
-const sendMongo = require('../utils/sendMongo.js');
-const PieceStore = require('../models/v2/PieceStore.js');
-const StandbyStore = require('../models/v2/StandbyStore.js');
-const UserStore = require('../models/v2/UserStore.js');
-const BoardStore = require('../models/v2/BoardStore.js');
+const storePlayHistory = require('./storePlayHistory.js');
+const sendMongo = require('./sendMongo.js');
+const PieceStore = require('../models/v1/PieceStore.js');
+const StandbyStore = require('../models/v1/StandbyStore.js');
+const UserStore = require('../models/v1/UserStore.js');
+const BoardStore = require('../models/v1/BoardStore.js');
 const app = require('../routes/app.js');
 
-const { prepareDB, deleteAllDataFromDB, stopDB } = require('../utils/db.js');
+const { prepareDB, deleteAllDataFromDB, stopDB } = require('./db.js');
 
-const basePath = '/api/v2';
+const basePath = '/api/v1';
 
 async function putPieces(pieceOrder) {
   const putResult = [];

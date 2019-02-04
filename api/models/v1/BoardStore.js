@@ -1,5 +1,5 @@
 const PieceStore = require('./PieceStore.js');
-const calcScore = require('../../routes/api/v2/board/calcScore.js');
+const calcScore = require('../../routes/v1/board/calcScore.js');
 
 const onlineUsers = [];
 let userCounts = 0;

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
-const PieceStore = require('../../../../models/v2/PieceStore.js');
-const storeHistory = require('../../../../utils/storePlayHistory.js');
+const PieceStore = require('../../../models/v1/PieceStore.js');
+const storeHistory = require('../../../utils/storePlayHistory.js');
 
 const dirList = {
   nw: [-1, 1],

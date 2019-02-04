@@ -1,4 +1,4 @@
-const testUtil = require('../../../../../src/utils/testUtil');
+const testUtil = require('../../../../utils/testUtil.js');
 
 const ZERO = 0;
 const ZERO00 = 0;

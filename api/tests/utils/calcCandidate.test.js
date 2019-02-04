@@ -1,5 +1,4 @@
-const calcCandidate = require('../../src/routes/api/v2/board/calcCandidate.js');
-// const boardStore = require('../../src/models/v2/BoardStore.js');
+const calcCandidate = require('../../routes/v1/board/calcCandidate.js');
 
 function convertComparisonResult(result) {
   const pieces = [];

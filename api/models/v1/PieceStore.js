@@ -1,6 +1,6 @@
 const StandbyStore = require('./StandbyStore.js');
-const calcScore = require('../../routes/api/v2/board/calcScore.js');
-const storeHistory = require('../../utils/storePlayHistory');
+const calcScore = require('../../routes/v1/board/calcScore.js');
+const storeHistory = require('../../utils/storePlayHistory.js');
 
 const board = {
   pieces: new Map(),

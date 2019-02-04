@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
-const generateToken = require('./generateToken');
-const UserStore = require('../../../../../src/models/v2/UserStore');
+const generateToken = require('./generateToken.js');
+const UserStore = require('../../../models/v1/UserStore.js');
 
 router.route('/').post((req, res) => {
   const ans = {};

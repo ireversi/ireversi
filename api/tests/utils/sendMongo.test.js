@@ -1,19 +1,17 @@
 const chai = require('chai');
 const jwt = require('jsonwebtoken');
-const PieceStore = require('../../src/models/v2/PieceStore.js');
-const array2Pieces = require('../../src/utils/array2Pieces.js');
-const array2Matchers = require('../../src/utils/array2Matchers.js');
-const app = require('../../src/routes/app.js');
-const storePlayHistory = require('../../src/utils/storePlayHistory');
-const restoreMongo = require('../../src/utils/restoreMongo.js');
-const sendMongo = require('../../src/utils/sendMongo.js');
-
-const { prepareDB, deleteAllDataFromDB, stopDB } = require('../../src/utils/db.js');
-
-const generateToken = require('../../src/routes/api/v2/userIdGenerate/generateToken');
+const PieceStore = require('../../models/v1/PieceStore.js');
+const array2Pieces = require('../../utils/array2Pieces.js');
+const array2Matchers = require('../../utils/array2Matchers.js');
+const app = require('../../routes/app.js');
+const storePlayHistory = require('../../utils/storePlayHistory');
+const restoreMongo = require('../../utils/restoreMongo.js');
+const sendMongo = require('../../utils/sendMongo.js');
+const { prepareDB, deleteAllDataFromDB, stopDB } = require('../../utils/db.js');
+const generateToken = require('../../routes/v1/userIdGenerate/generateToken');
 
 const sleep = (msec) => new Promise((resolve) => setTimeout(resolve, msec));
-const basePath = '/api/v2/piece/';
+const basePath = '/api/v1/piece/';
 
 function genJwtArr(number) {
   const jwtIds = [];

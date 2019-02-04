@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const PieceStore = require('../../../../models/v2/PieceStore.js');
-const StandbyStore = require('../../../../models/v2/StandbyStore.js');
-const storeHistory = require('../../../../utils/storePlayHistory.js');
+const PieceStore = require('../../../models/v1/PieceStore.js');
+const StandbyStore = require('../../../models/v1/StandbyStore.js');
+const storeHistory = require('../../../utils/storePlayHistory.js');
 
 const calcScore = require('../board/calcScore.js');
 

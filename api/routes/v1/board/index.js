@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
-const PieceStore = require('../../../../models/v2/PieceStore.js');
-const BoardStore = require('../../../../models/v2/BoardStore.js');
+const PieceStore = require('../../../models/v1/PieceStore.js');
+const BoardStore = require('../../../models/v1/BoardStore.js');
 const calcCandidate = require('./calcCandidate.js');
 const calcScore = require('./calcScore.js');
 router.use('/specified_range', require('./specified_size.js'));

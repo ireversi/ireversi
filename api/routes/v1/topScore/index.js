@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const PieceStore = require('../../../../../src/models/v2/PieceStore.js');
-const UserStore = require('../../../../../src/models/v2/UserStore');
+const PieceStore = require('../../../models/v1/PieceStore.js');
+const UserStore = require('../../../models/v1/UserStore.js');
 
 function searchUserName(userId) {
   const users = UserStore.getUserData();

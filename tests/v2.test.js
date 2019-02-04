@@ -1,12 +1,12 @@
 const { getStore, build, teardown } = require('./setup.js');
-const app = require('../api/src/routes/app.js');
-const { port } = require('../api/src/config.js');
-const { prepareDB, deleteAllDataFromDB, stopDB } = require('../api/src/utils/db.js');
-const PieceStore = require('../api/src/models/v2/PieceStore.js');
+const app = require('../api/routes/app.js');
+const { port } = require('../api/config.js');
+const { prepareDB, deleteAllDataFromDB, stopDB } = require('../api/utils/db.js');
+const PieceStore = require('../api/models/v1/PieceStore.js');
 
 jest.setTimeout(30000);
 
-describe('V2 test', () => {
+describe('V1 test', () => {
   let store;
 
   beforeAll(async () => {

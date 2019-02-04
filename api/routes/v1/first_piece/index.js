@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const PieceStore = require('../../../../models/v2/PieceStore.js');
+const PieceStore = require('../../../models/v1/PieceStore.js');
 
 router.use('/direction', require('./direction.js'));
 router.use('/position', require('./position.js'));

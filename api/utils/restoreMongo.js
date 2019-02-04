@@ -1,7 +1,7 @@
-const BoardHistoryModel = require('../models/v2/BoardHistoryModel.js');
-const UserModel = require('../models/v2/UserModel');
-const PieceStore = require('../models/v2/PieceStore.js');
-const UserStore = require('../models/v2/UserStore');
+const BoardHistoryModel = require('../models/v1/BoardHistoryModel.js');
+const UserModel = require('../models/v1/UserModel');
+const PieceStore = require('../models/v1/PieceStore.js');
+const UserStore = require('../models/v1/UserStore');
 
 const propFilter = '-__v';
 const restore = true;

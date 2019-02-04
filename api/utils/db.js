@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const BoardHistoryModel = require('../../src/models/v2/BoardHistoryModel.js');
+const BoardHistoryModel = require('../models/v1/BoardHistoryModel.js');
 
 const { nodeEnv, mongoURI } = require('../config.js');
 

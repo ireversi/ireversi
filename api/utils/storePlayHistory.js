@@ -1,4 +1,4 @@
-const BoardHistoryModel = require('../models/v2/BoardHistoryModel.js');
+const BoardHistoryModel = require('../models/v1/BoardHistoryModel.js');
 
 const standbySendMongo = [];
 const propFilter = '-_id -__v';

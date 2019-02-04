@@ -1,4 +1,4 @@
-const testUtil = require('../../../../../src/utils/testUtil');
+const testUtil = require('../../../../utils/testUtil.js');
 
 const waitTime = testUtil.getWaitTime();
 

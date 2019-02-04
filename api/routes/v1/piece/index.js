@@ -1,9 +1,8 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
-const config = require('../../../../config.js');
-
-const PieceStore = require('../../../../models/v2/PieceStore.js');
-const db = require('../../../../utils/db.js');
+const config = require('../../../config.js');
+const PieceStore = require('../../../models/v1/PieceStore.js');
+const db = require('../../../utils/db.js');
 
 router
   .route('/')
