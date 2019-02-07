@@ -69,4 +69,4 @@ PORT=3025
 
 ### API documents
 
-[Document for iReversi API v2](https://server.ireversi.io/api-docs/v2/). (Using [Swagger](https://swagger.io/docs/))
+[Document for iReversi API v1](https://server.ireversi.io/api-docs/v1/). (Using [Swagger](https://swagger.io/docs/))

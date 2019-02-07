@@ -1,10 +1,4 @@
-// const chai = require('chai');
-
-// const app = require('../../src/routes/app.js');
-
-// const basePath = '/api/v2';
-
-const calcScore = require('../../src/routes/api/v2/board/calcSize.js');
+const calcScore = require('../../routes/v1/board/calcSize.js');
 
 function convertComparisonResult(result) {
   const pieces = [];

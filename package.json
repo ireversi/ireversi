@@ -10,11 +10,11 @@
     "node": ">=10.13.0"
   },
   "scripts": {
-    "start": "node api/src/server.js",
+    "start": "node api/server.js",
     "dev": "npm-run-all --parallel dev:*",
     "dev:api": "nodemon",
     "dev:web": "nuxt",
-    "deploy": "pm2 start api/src/server.js --name api",
+    "deploy": "pm2 start api/server.js --name api",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint:fix": "npm run lint -- --fix",
