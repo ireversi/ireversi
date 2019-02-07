@@ -42,19 +42,21 @@ module.exports = {
     '@nuxtjs/toast',
     ...(GOOGLE_ANALYTICS ? [['@nuxtjs/google-analytics', { id: GOOGLE_ANALYTICS }]] : []),
   ],
+
   /*
    ** Axios module configuration
    */
   axios: {
-    // See https://github.com/nuxt-community/axios-module#options
+    baseURL: NODE_ENV !== 'test' && AXIOS_BASE ? AXIOS_BASE : 'http://localhost:10000/api/v1',
   },
+
+  /*
+   ** Environment variable
+   */
   env: {
     NODE_ENV,
-    AXIOS_BASE: NODE_ENV !== 'test' && AXIOS_BASE ? AXIOS_BASE : 'http://localhost:10000/api',
   },
-  router: {
-    middleware: 'baseURL',
-  },
+
   /*
    ** Build configuration
    */
