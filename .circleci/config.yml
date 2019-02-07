@@ -37,9 +37,9 @@ jobs:
       - run:
           name: Run test
           command: yarn test
-      # - run:
-      #     name: Run a security audit
-      #     command: yarn audit
+      - run:
+          name: Run a security audit
+          command: yarn audit
       - run:
           name: Report coverage results
           command: yarn coverage
